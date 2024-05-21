@@ -34,7 +34,7 @@ public class Player : KinematicBody
         Velocity.z = -FORWARD_SPEED;
     }
 
-    public override async void _PhysicsProcess(float delta)
+    public override void _PhysicsProcess(float delta)
     {
         UpdateFallDirection();
         HandleButtonRelease();
@@ -66,26 +66,13 @@ public class Player : KinematicBody
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
             gravityWheel.Show();
-            gravityWheel.StartTimer();
+            gravityWheel.Start();
             // Velocity.x = 0;
             // Velocity.y = 0;
         }
         if (Input.IsActionJustReleased("shift"))
         {
-            Velocity.x = 0;
-            Velocity.y = 0;
-            Engine.TimeScale = 1f;
-            float angle = GetMouseAngle();
-            Input.MouseMode = Input.MouseModeEnum.Captured;
-            // Rotation = new Vector3(Rotation.x, Rotation.y, GetMouseAngle());
-            tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
-                    Rotation.y, Rotation.z - angle), 0.3f, Tween.TransitionType.Sine, 
-                    Tween.EaseType.Out);
-            tween.Start();
-            await ToSignal(tween, "tween_completed");
-            // Transform = Transform.Rotated(Vector3.Forward, GetMouseAngle());
-            gravityWheel.Hide();
-            shifting = false;
+            RotateOutOfShift();
         }
 
         if (shifting)
@@ -181,9 +168,26 @@ public class Player : KinematicBody
 
     private void sig_GravityWheelTimeout()
     {
-        shifting = false;
+        RotateOutOfShift();
+    }
+
+    public async void RotateOutOfShift()
+    {
+        float angle = GetMouseAngle();
+        Velocity.x = 0;
+        Velocity.y = 0;
         Engine.TimeScale = 1f;
         Input.MouseMode = Input.MouseModeEnum.Captured;
+        gravityWheel.Lock();
+
+        tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
+                Rotation.y, Rotation.z - angle), 0.3f, Tween.TransitionType.Sine, 
+                Tween.EaseType.Out);
+        tween.Start();
+
+        await ToSignal(tween, "tween_completed");
+
         gravityWheel.Hide();
+        shifting = false;
     }
 }

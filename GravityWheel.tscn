@@ -8,6 +8,7 @@ code = "shader_type canvas_item;
 
 uniform float angle;
 uniform float timeAngle = 0;
+uniform bool timeColorGreen = false;
 
 void fragment()
 {
@@ -21,7 +22,16 @@ void fragment()
 	float timeTheta = atan(centeredUV.x, centeredUV.y) + 3.14;
 	if (timeTheta > 6.28 - timeAngle && radiusSquared < 0.065)
 	{
-		COLOR = vec4(1, 0, 0, 1);
+		if (timeColorGreen)
+		{
+			// Green
+			COLOR = vec4(0, 0.7, 0, 1);
+		}
+		else
+		{
+			// Red
+			COLOR = vec4(1, 0, 0, 1);
+		}
 	}
 	
 }"
@@ -30,6 +40,7 @@ void fragment()
 shader = SubResource( 1 )
 shader_param/angle = 0.0
 shader_param/timeAngle = 0.0
+shader_param/timeColorGreen = false
 
 [node name="GravityWheel" type="Node2D"]
 script = ExtResource( 2 )
@@ -47,7 +58,7 @@ position = Vector2( 960, 540 )
 texture = ExtResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.15
 one_shot = true
 
 [connection signal="timeout" from="Timer" to="." method="sig_TimerTimeout"]

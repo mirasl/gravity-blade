@@ -29,13 +29,20 @@ public class GravityWheel : Node2D
                 (1-timer.TimeLeft/timer.WaitTime) * Mathf.Pi*2);
     }
 
-    public void StartTimer()
+    public void Start()
     {
         timer.Start();
+        colorRect.Material.Set("shader_param/timeColorGreen", false);
     }
 
     public void sig_TimerTimeout()
     {
-        EmitSignal("timeout");
+        EmitSignal("Timeout");
+    }
+
+    public void Lock()
+    {
+        colorRect.Material.Set("shader_param/timeColorGreen", true);
+        timer.Stop();
     }
 }
