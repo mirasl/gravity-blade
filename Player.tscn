@@ -13,6 +13,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
+far = 2000.0
 
 [node name="UI" type="CanvasLayer" parent="."]
 

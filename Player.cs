@@ -28,7 +28,7 @@ public class Player : KinematicBody
         Input.MouseMode = Input.MouseModeEnum.Captured;
         UpdateFallDirection();
 
-        Velocity.z = -10;
+        Velocity.z = -35;
     }
 
     public override async void _PhysicsProcess(float delta)
@@ -52,11 +52,13 @@ public class Player : KinematicBody
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
             gravityWheel.Show();
-            Velocity.x = 0;
-            Velocity.y = 0;
+            // Velocity.x = 0;
+            // Velocity.y = 0;
         }
         if (Input.IsActionJustReleased("shift"))
         {
+            Velocity.x = 0;
+            Velocity.y = 0;
             Engine.TimeScale = 1f;
             float angle = GetMouseAngle();
             Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -74,8 +76,8 @@ public class Player : KinematicBody
         if (shifting)
         {
             gravityWheel.GravityAngle = GetMouseAngle() + Mathf.Pi;
-            Velocity.x = 0;
-            Velocity.y = 0;
+            // Velocity.x = 0;
+            // Velocity.y = 0;
         }
 
         if (!shifting)
