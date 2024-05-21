@@ -15,6 +15,7 @@ public class Player : KinematicBody
     bool jumpButtonPressed = false;
     bool spinButtonPressed = false;
     bool shifting = false;
+    bool snapped = false;
 
     GravityWheel gravityWheel;
     Tween tween;
@@ -38,7 +39,7 @@ public class Player : KinematicBody
         UpdateFallDirection();
         HandleButtonRelease();
 
-        if (IsOnFloor())
+        if (IsOnFloor() && !snapped)
         {
             SnapToPlatform();
         }
@@ -65,6 +66,7 @@ public class Player : KinematicBody
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
             gravityWheel.Show();
+            gravityWheel.StartTimer();
             // Velocity.x = 0;
             // Velocity.y = 0;
         }
@@ -105,6 +107,8 @@ public class Player : KinematicBody
 
     private void Jump()
     {
+        snapped = false;
+        
         Velocity = new Vector3(-fallDirection.x * JUMPFORCE, -fallDirection.y * JUMPFORCE,
                 Velocity.z);
         jumpButtonPressed = true;
@@ -150,16 +154,36 @@ public class Player : KinematicBody
 
     private void SnapToPlatform()
     {
+        snapped = true;
+
         Velocity.x = 0;
         Velocity.y = 0;
 
         Vector3 normal = GetSlideCollision(0).Normal;
-        float angle = Mathf.Atan2(normal.x, normal.y);
+        float angle = -Mathf.Atan2(normal.x, normal.y);
+
+        // Eliminates unwanted barrel roll animation when normal points straight down:
+        if (angle > 3.14 && Rotation.z < 0)
+        {
+            angle -= Mathf.Pi*2;
+        }
+        if (angle < -3.14 && Rotation.z > 0)
+        {
+            angle += Mathf.Pi*2;
+        }
+
         tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
-                Rotation.y, -angle), 0.05f, Tween.TransitionType.Sine, 
+                Rotation.y, angle), 0.05f, Tween.TransitionType.Sine, 
                 Tween.EaseType.Out);
         tween.Start();
-        // Rotation = new Vector3(Rotation.x, Rotation.y, -angle);
         UpdateFallDirection();
+    }
+
+    private void sig_GravityWheelTimeout()
+    {
+        shifting = false;
+        Engine.TimeScale = 1f;
+        Input.MouseMode = Input.MouseModeEnum.Captured;
+        gravityWheel.Hide();
     }
 }

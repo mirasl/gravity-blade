@@ -21,3 +21,5 @@ far = 2000.0
 [node name="GravityWheel" parent="UI" instance=ExtResource( 2 )]
 
 [node name="Tween" type="Tween" parent="."]
+
+[connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
