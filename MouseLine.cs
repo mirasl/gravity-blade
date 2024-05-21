@@ -35,11 +35,16 @@ public class MouseLine : Line2D
 
     public void FinishSlice()
     {
-        GD.Print(RegressedSlope(Points));
+        GD.Print(RegressedSlopeAngle(Points));
+    }
+
+    public bool IsDrawnToRight(Vector2[] points)
+    {
+        return Points[Points.Length - 1].x > Points[0].x;
     }
 
     // Calculates slope of array of points with a linear regression:
-    public float RegressedSlope(Vector2[] points)
+    public float RegressedSlopeAngle(Vector2[] points)
     {
         // Calculate means:
         float xMean = 0;
@@ -60,6 +65,17 @@ public class MouseLine : Line2D
             sumXYDiff += (point.x - xMean) * (point.y - yMean);
             sumXDiffSquared += (point.x - xMean) * (point.x - xMean);
         }
-        return -sumXYDiff / sumXDiffSquared;
+        float angle = Mathf.Atan2(-sumXYDiff, sumXDiffSquared);
+
+        // Scale angle to range from 0 to 2pi:
+        if (!IsDrawnToRight(points))
+        {
+            angle += Mathf.Pi;
+        }
+        if (angle < 0)
+        {
+            angle += Mathf.Pi*2;
+        }
+        return angle;
     }
 }
