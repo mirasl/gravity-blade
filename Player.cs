@@ -19,12 +19,14 @@ public class Player : KinematicBody
 
     GravityWheel gravityWheel;
     Tween tween;
+    RayCast floorCast;
 
 
     public override void _Ready()
     {
         gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
         tween = GetNode<Tween>("Tween");
+        floorCast = GetNode<RayCast>("FloorCast");
 
         gravityWheel.Hide();
 
@@ -44,7 +46,7 @@ public class Player : KinematicBody
             SnapToPlatform();
         }
 
-        if (Input.IsActionJustPressed("jump") && IsOnFloor())
+        if (Input.IsActionJustPressed("jump") && OnFloor())
         {
             Jump();
         }
@@ -90,6 +92,11 @@ public class Player : KinematicBody
         Velocity += inputVelocity;
         Velocity = MoveAndSlide(Velocity, -fallDirection);
         Velocity -= inputVelocity;
+    }
+
+    private bool OnFloor()
+    {
+        return floorCast.IsColliding(); 
     }
 
     private void Jump()

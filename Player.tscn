@@ -22,4 +22,8 @@ far = 2000.0
 
 [node name="Tween" type="Tween" parent="."]
 
+[node name="FloorCast" type="RayCast" parent="."]
+enabled = true
+cast_to = Vector3( 0, -1.2, 0 )
+
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
