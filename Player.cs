@@ -28,7 +28,7 @@ public class Player : KinematicBody
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
 
-        gravityWheel.Hide();
+        gravityWheel.SetWheelVisibility(false);
 
         // Input.MouseMode = Input.MouseModeEnum.Captured;
         Input.MouseMode = Input.MouseModeEnum.Confined;
@@ -69,10 +69,10 @@ public class Player : KinematicBody
             shifting = true;
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
-            gravityWheel.Show();
+            gravityWheel.SetWheelVisibility(true);
             gravityWheel.Start();
         }
-        if (Input.IsActionJustReleased("shift"))
+        if (Input.IsActionJustReleased("shift") && shifting)
         {
             RotateOutOfShift();
         }
@@ -192,7 +192,7 @@ public class Player : KinematicBody
 
         await ToSignal(tween, "tween_completed");
 
-        gravityWheel.Hide();
+        gravityWheel.SetWheelVisibility(false);
         shifting = false;
     }
 }

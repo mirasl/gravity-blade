@@ -14,6 +14,7 @@ public class GravityWheel : Node2D
     protected ColorRect colorRect;
     protected Timer timer;
     protected Tween tween;
+    protected CPUParticles2D arrowParticles;
 
 
     public override void _Ready()
@@ -22,6 +23,9 @@ public class GravityWheel : Node2D
         colorRect = GetNode<ColorRect>("ColorRect");
         timer = GetNode<Timer>("Timer");
         tween = GetNode<Tween>("Tween");
+        arrowParticles = GetNode<CPUParticles2D>("GravityCircleArrow/CPUParticles2D");
+
+        arrowParticles.Emitting = true;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -36,6 +40,8 @@ public class GravityWheel : Node2D
 
     public void Start()
     {
+        arrowParticles.Emitting = true;
+        arrowParticles.SpeedScale = 6;
         overrideGravityAngle = false;
         timer.Start();
         colorRect.Material.Set("shader_param/timeColorGreen", false);
@@ -46,13 +52,26 @@ public class GravityWheel : Node2D
         EmitSignal("Timeout");
     }
 
-    public void Lock()
+    public async void Lock()
     {
+        arrowParticles.SpeedScale = 3;
+        timer.Stop();
         overrideGravityAngle = true;
         colorRect.Material.Set("shader_param/timeColorGreen", true);
+
         tween.InterpolateProperty(gravityCircleArrow, "rotation", gravityCircleArrow.Rotation, 
                 Mathf.Pi, 0.3f, Tween.TransitionType.Sine, Tween.EaseType.Out);
         tween.Start();
-        timer.Stop();
+
+        await ToSignal(tween, "tween_completed");
+
+        arrowParticles.Emitting = false;
+    }
+
+    public void SetWheelVisibility(bool visible)
+    {
+        colorRect.Visible = visible;
+        float alpha = visible ? 1 : 0;
+        gravityCircleArrow.SelfModulate = new Color(0, 0, 0, alpha);
     }
 }
