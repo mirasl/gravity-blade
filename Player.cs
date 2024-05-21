@@ -15,22 +15,26 @@ public class Player : KinematicBody
     bool shifting = false;
 
     GravityWheel gravityWheel;
+    Tween tween;
 
 
     public override void _Ready()
     {
         gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
+        tween = GetNode<Tween>("Tween");
 
         gravityWheel.Hide();
 
         Input.MouseMode = Input.MouseModeEnum.Captured;
         UpdateFallDirection();
+
+        Velocity.z = -10;
     }
 
-    public override void _PhysicsProcess(float delta)
+    public override async void _PhysicsProcess(float delta)
     {
-        HandleButtonRelease();
         UpdateFallDirection();
+        HandleButtonRelease();
 
         if (Input.IsActionJustPressed("jump") && IsOnFloor())
         {
@@ -48,26 +52,37 @@ public class Player : KinematicBody
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
             gravityWheel.Show();
+            Velocity.x = 0;
+            Velocity.y = 0;
         }
         if (Input.IsActionJustReleased("shift"))
         {
-            shifting = false;
             Engine.TimeScale = 1f;
-            // Rotation = new Vector3(Rotation.x, Rotation.y, GetMouseAngle());
-            Transform = Transform.Rotated(Vector3.Forward, GetMouseAngle());
-            Velocity.x = 0;
-            Velocity.y = 0;
+            float angle = GetMouseAngle();
             Input.MouseMode = Input.MouseModeEnum.Captured;
+            // Rotation = new Vector3(Rotation.x, Rotation.y, GetMouseAngle());
+            tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
+                    Rotation.y, Rotation.z - angle), 0.3f, Tween.TransitionType.Sine, 
+                    Tween.EaseType.Out);
+            tween.Start();
+            await ToSignal(tween, "tween_completed");
+            // Transform = Transform.Rotated(Vector3.Forward, GetMouseAngle());
             gravityWheel.Hide();
+            shifting = false;
         }
 
         if (shifting)
         {
             gravityWheel.GravityAngle = GetMouseAngle() + Mathf.Pi;
+            Velocity.x = 0;
+            Velocity.y = 0;
         }
 
-        Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
-                GRAVITY_MAGNITUDE, 0);
+        if (!shifting)
+        {
+            Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
+                    GRAVITY_MAGNITUDE, 0);
+        }
         Velocity = MoveAndSlide(Velocity, -fallDirection);
     }
 
