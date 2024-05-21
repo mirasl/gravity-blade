@@ -7,3 +7,4 @@
 /home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.csproj.CoreCompileInputs.cache
 /home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.dll
 /home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.pdb
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.sourcelink.json

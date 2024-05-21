@@ -12,10 +12,18 @@ public class Player : KinematicBody
 
     bool jumpButtonPressed = false;
     bool spinButtonPressed = false;
+    bool shifting = false;
+
+    GravityWheel gravityWheel;
 
 
     public override void _Ready()
     {
+        gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
+
+        gravityWheel.Hide();
+
+        Input.MouseMode = Input.MouseModeEnum.Captured;
         UpdateFallDirection();
     }
 
@@ -36,13 +44,26 @@ public class Player : KinematicBody
         // SHIFT
         if (Input.IsActionJustPressed("shift"))
         {
+            shifting = true;
+            Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
+            gravityWheel.Show();
         }
         if (Input.IsActionJustReleased("shift"))
         {
+            shifting = false;
             Engine.TimeScale = 1f;
             // Rotation = new Vector3(Rotation.x, Rotation.y, GetMouseAngle());
             Transform = Transform.Rotated(Vector3.Forward, GetMouseAngle());
+            Velocity.x = 0;
+            Velocity.y = 0;
+            Input.MouseMode = Input.MouseModeEnum.Captured;
+            gravityWheel.Hide();
+        }
+
+        if (shifting)
+        {
+            gravityWheel.GravityAngle = GetMouseAngle() + Mathf.Pi;
         }
 
         Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
