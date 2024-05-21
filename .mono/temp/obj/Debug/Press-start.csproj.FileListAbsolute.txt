@@ -1,0 +1,9 @@
+/home/mira/Documents/godot/press-start/.mono/temp/bin/Debug/Press-start.dll
+/home/mira/Documents/godot/press-start/.mono/temp/bin/Debug/Press-start.pdb
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.csproj.AssemblyReference.cache
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.GeneratedMSBuildEditorConfig.editorconfig
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.AssemblyInfoInputs.cache
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.AssemblyInfo.cs
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.csproj.CoreCompileInputs.cache
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.dll
+/home/mira/Documents/godot/press-start/.mono/temp/obj/Debug/Press-start.pdb
