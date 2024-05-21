@@ -8,18 +8,21 @@ public class Player : KinematicBody
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 10;
     const float FORWARD_SPEED = 70;
+    const float MOUSE_SENSITIVITY = 1.1f;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
+    private Vector2 lookDirection = Vector2.Zero;
 
     bool jumpButtonPressed = false;
     bool spinButtonPressed = false;
     bool shifting = false;
     bool snapped = false;
 
-    GravityWheel gravityWheel;
-    Tween tween;
-    RayCast floorCast;
+    protected GravityWheel gravityWheel;
+    protected Tween tween;
+    protected RayCast floorCast;
+    protected Camera camera;
 
 
     public override void _Ready()
@@ -27,6 +30,7 @@ public class Player : KinematicBody
         gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
+        camera = GetNode<Camera>("Camera");
 
         gravityWheel.SetWheelVisibility(false);
 
@@ -67,6 +71,7 @@ public class Player : KinematicBody
         if (Input.IsActionJustPressed("shift"))
         {
             shifting = true;
+            // camera.Rotation = new Vector3(0, 0, 0);
             Input.MouseMode = Input.MouseModeEnum.Confined;
             Engine.TimeScale = 0.2f;
             gravityWheel.SetWheelVisibility(true);
@@ -110,6 +115,19 @@ public class Player : KinematicBody
     {
         spinButtonPressed = true;
         Transform = Transform.Rotated(Vector3.Forward, ROTATION_SPEED * delta);
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        // if (@event is InputEventMouseMotion && Input.MouseMode == Input.MouseModeEnum.Captured)
+        // {
+        //     lookDirection = ((InputEventMouseMotion)@event).Relative * 0.001f;
+        //     camera.Rotation = new Vector3(
+        //             Mathf.Clamp(camera.Rotation.x - lookDirection.y * MOUSE_SENSITIVITY, -0.9f, 0.9f), 
+        //             camera.Rotation.y - lookDirection.x * MOUSE_SENSITIVITY, 
+        //             camera.Rotation.z
+        //     );
+        // }
     }
 
     private void HandleButtonRelease()

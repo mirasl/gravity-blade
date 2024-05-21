@@ -25,7 +25,7 @@ public class GravityWheel : Node2D
         tween = GetNode<Tween>("Tween");
         arrowParticles = GetNode<CPUParticles2D>("GravityCircleArrow/CPUParticles2D");
 
-        arrowParticles.Emitting = true;
+        arrowParticles.Emitting = false;
     }
 
     public override void _PhysicsProcess(float delta)
