@@ -6,6 +6,7 @@ public class Player : KinematicBody
     const float GRAVITY_MAGNITUDE = 0.4f;
     const float JUMPFORCE = 20f;
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
+    const float STRAFE_SPEED = 10;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection;
@@ -44,6 +45,12 @@ public class Player : KinematicBody
         {
             Spin(delta);
         }
+
+        float strafeAxis = (Input.GetActionStrength("left") - Input.GetActionStrength("right")) * 
+                STRAFE_SPEED;
+        Vector3 strafeDirection = fallDirection.Rotated(Vector3.Forward, Mathf.Pi*0.5f).Normalized();
+        Vector3 inputVelocity = new Vector3(strafeDirection.x*strafeAxis, 
+                strafeDirection.y*strafeAxis, 0);
 
         // SHIFT
         if (Input.IsActionJustPressed("shift"))
@@ -85,7 +92,9 @@ public class Player : KinematicBody
             Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
                     GRAVITY_MAGNITUDE, 0);
         }
+        Velocity += inputVelocity;
         Velocity = MoveAndSlide(Velocity, -fallDirection);
+        Velocity -= inputVelocity;
     }
 
     private void Jump()
