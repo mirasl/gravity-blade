@@ -7,6 +7,7 @@ public class Player : KinematicBody
     const float JUMPFORCE = 20f;
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 10;
+    const float FORWARD_SPEED = 70;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection;
@@ -29,13 +30,18 @@ public class Player : KinematicBody
         Input.MouseMode = Input.MouseModeEnum.Captured;
         UpdateFallDirection();
 
-        Velocity.z = -35;
+        Velocity.z = -FORWARD_SPEED;
     }
 
     public override async void _PhysicsProcess(float delta)
     {
         UpdateFallDirection();
         HandleButtonRelease();
+
+        if (IsOnFloor())
+        {
+            SnapToPlatform();
+        }
 
         if (Input.IsActionJustPressed("jump") && IsOnFloor())
         {
@@ -140,5 +146,20 @@ public class Player : KinematicBody
         Vector2 center = GetViewport().Size / 2;
         Vector2 relativeMousePos = GetViewport().GetMousePosition() - center;
         return -Mathf.Atan2(relativeMousePos.x, relativeMousePos.y);
+    }
+
+    private void SnapToPlatform()
+    {
+        Velocity.x = 0;
+        Velocity.y = 0;
+
+        Vector3 normal = GetSlideCollision(0).Normal;
+        float angle = Mathf.Atan2(normal.x, normal.y);
+        tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
+                Rotation.y, -angle), 0.05f, Tween.TransitionType.Sine, 
+                Tween.EaseType.Out);
+        tween.Start();
+        // Rotation = new Vector3(Rotation.x, Rotation.y, -angle);
+        UpdateFallDirection();
     }
 }
