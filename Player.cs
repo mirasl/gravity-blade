@@ -79,7 +79,7 @@ public class Player : KinematicBody
         }
         if (Input.IsActionJustReleased("shift") && shifting)
         {
-            RotateOutOfShift();
+            RotateShift(GetMouseAngle());
         }
 
         if (shifting)
@@ -191,12 +191,11 @@ public class Player : KinematicBody
 
     private void sig_GravityWheelTimeout()
     {
-        RotateOutOfShift();
+        RotateShift(GetMouseAngle());
     }
 
-    public async void RotateOutOfShift()
+    public async void RotateShift(float angle)
     {
-        float angle = GetMouseAngle();
         Velocity.x = 0;
         Velocity.y = 0;
         Engine.TimeScale = 1f;
@@ -212,5 +211,10 @@ public class Player : KinematicBody
 
         gravityWheel.SetWheelVisibility(false);
         shifting = false;
+    }
+
+    public void sig_GravityLineDrawn(float angle)
+    {
+        RotateShift(GetMouseAngle());
     }
 }

@@ -3,13 +3,10 @@ using System;
 
 public class MouseLine : Line2D
 {
+    [Signal] delegate void GravityLineDrawn(float angle);
+
     bool slicing = false;
 
-
-    public override void _Ready()
-    {
-        
-    }
 
     public override void _Process(float delta)
     {
@@ -35,7 +32,7 @@ public class MouseLine : Line2D
 
     public void FinishSlice()
     {
-        GD.Print(RegressedSlopeAngle(Points));
+        EmitSignal("GravityLineDrawn", RegressedSlopeAngle(Points));
     }
 
     public bool IsDrawnToRight(Vector2[] points)

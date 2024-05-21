@@ -38,3 +38,4 @@ default_color = Color( 1, 1, 1, 1 )
 script = ExtResource( 3 )
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
+[connection signal="GravityLineDrawn" from="SliceCanvas/MouseLine" to="." method="sig_GravityLineDrawn"]
