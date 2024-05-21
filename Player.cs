@@ -10,7 +10,7 @@ public class Player : KinematicBody
     const float FORWARD_SPEED = 70;
 
     public Vector3 Velocity = Vector3.Zero;
-    private Vector3 fallDirection;
+    private Vector3 fallDirection = Vector3.Down;
 
     bool jumpButtonPressed = false;
     bool spinButtonPressed = false;
@@ -30,7 +30,9 @@ public class Player : KinematicBody
 
         gravityWheel.Hide();
 
-        Input.MouseMode = Input.MouseModeEnum.Captured;
+        // Input.MouseMode = Input.MouseModeEnum.Captured;
+        Input.MouseMode = Input.MouseModeEnum.Confined;
+        Rotation = Vector3.Zero;
         UpdateFallDirection();
 
         Velocity.z = -FORWARD_SPEED;
@@ -69,8 +71,6 @@ public class Player : KinematicBody
             Engine.TimeScale = 0.2f;
             gravityWheel.Show();
             gravityWheel.Start();
-            // Velocity.x = 0;
-            // Velocity.y = 0;
         }
         if (Input.IsActionJustReleased("shift"))
         {
@@ -80,8 +80,6 @@ public class Player : KinematicBody
         if (shifting)
         {
             gravityWheel.GravityAngle = GetMouseAngle() + Mathf.Pi;
-            // Velocity.x = 0;
-            // Velocity.y = 0;
         }
 
         if (!shifting)
@@ -184,7 +182,7 @@ public class Player : KinematicBody
         Velocity.x = 0;
         Velocity.y = 0;
         Engine.TimeScale = 1f;
-        Input.MouseMode = Input.MouseModeEnum.Captured;
+        // Input.MouseMode = Input.MouseModeEnum.Captured;
         gravityWheel.Lock();
 
         tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
