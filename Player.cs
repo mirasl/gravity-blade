@@ -226,6 +226,6 @@ public class Player : KinematicBody
 
     public void sig_GravityLineDrawn(float angle)
     {
-        RotateShift(GetMouseAngle());
+        RotateShift(angle);
     }
 }

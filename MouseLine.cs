@@ -101,8 +101,7 @@ public class MouseLine : Line2D
             sumXYDiff += (point.x - xMean) * (point.y - yMean);
             sumXDiffSquared += (point.x - xMean) * (point.x - xMean);
         }
-        float angle = Mathf.Atan2(-sumXYDiff, sumXDiffSquared);
-        GD.Print(angle);
+        float angle = Mathf.Atan2(sumXDiffSquared * 9, -sumXYDiff * 16);
 
         // Scale angle to range from 0 to 2pi:
         if (!IsDrawnToRight(points))
@@ -113,6 +112,7 @@ public class MouseLine : Line2D
         {
             angle += Mathf.Pi*2;
         }
+        // angle = Mathf.Stepify(angle, Mathf.Pi*0.25f);
         return angle;
     }
 
