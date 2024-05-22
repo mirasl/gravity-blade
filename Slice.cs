@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class MouseLine : Line2D
+public class Slice : Line2D
 {
     [Signal] delegate void GravityLineDrawn(float angle);
 
@@ -120,7 +120,7 @@ public class MouseLine : Line2D
         // {
         //     angle += Mathf.Pi*2;
         // }
-        GD.Print(angle);
+        // GD.Print(angle);
         // angle = Mathf.Stepify(angle, Mathf.Pi*0.25f);
         return angle;
     }

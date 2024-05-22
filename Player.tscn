@@ -32,10 +32,10 @@ collision_mask = 5
 [node name="SliceCanvas" type="CanvasLayer" parent="."]
 
 [node name="GravitySlice" parent="SliceCanvas" instance=ExtResource( 4 )]
+Gravity = true
 
 [node name="NormalSlice" parent="SliceCanvas" instance=ExtResource( 4 )]
 default_color = Color( 1, 1, 1, 1 )
-Gravity = false
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
 [connection signal="GravityLineDrawn" from="SliceCanvas/GravitySlice" to="." method="sig_GravityLineDrawn"]

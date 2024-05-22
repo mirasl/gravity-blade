@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://MouseLine.cs" type="Script" id=1]
+[ext_resource path="res://Slice.cs" type="Script" id=1]
 [ext_resource path="res://ASSETS/SPRITES/GravityCircleArrow.png" type="Texture" id=2]
 
 [sub_resource type="Curve" id=2]
@@ -69,7 +69,6 @@ width = 20.0
 width_curve = SubResource( 2 )
 default_color = Color( 0, 0.882353, 1, 1 )
 script = ExtResource( 1 )
-Gravity = true
 
 [node name="Tween" type="Tween" parent="."]
 
