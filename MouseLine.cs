@@ -38,9 +38,7 @@ public class MouseLine : Line2D
         {
             if (Gravity)
             {
-                arrowParticles.Emitting = true;
-                arrow.Show();
-                arrowAP.Play("point");
+
             }
             slicing = true;
             AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540));
@@ -63,14 +61,24 @@ public class MouseLine : Line2D
         }
     }
 
-    public void FinishSlice()
+    public async void FinishSlice()
     {
         slicing = false;
         canSlice = false;
         if (Gravity)
         {
+            arrowParticles.Emitting = true;
+            arrow.Show();
+            arrowAP.Play("point");
+            float angle = RegressedSlopeAngle(Points);
+            EmitSignal("GravityLineDrawn", angle);
+
+            tween.InterpolateProperty(pivot, "rotation", angle, 0, 0.3f, Tween.TransitionType.Sine, Tween.EaseType.Out);
+            tween.Start();
+
+            await ToSignal(tween, "tween_completed");
+
             arrowParticles.Emitting = false;
-            EmitSignal("GravityLineDrawn", RegressedSlopeAngle(Points));
         }
     }
 
@@ -106,15 +114,15 @@ public class MouseLine : Line2D
         // Scale angle to range from 0 to 2pi:
         if (IsDrawnToRight(points))
         {
-            angle = Mathf.Pi - angle;
+            angle = (Mathf.Pi - angle)*-1;
         }
         // if (angle < 0)
         // {
         //     angle += Mathf.Pi*2;
         // }
-        GD.Print(-angle);
+        GD.Print(angle);
         // angle = Mathf.Stepify(angle, Mathf.Pi*0.25f);
-        return -angle;
+        return angle;
     }
 
     public void sig_ArrowAPFinished(string animName)
