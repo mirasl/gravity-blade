@@ -1,14 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Player.cs" type="Script" id=1]
 [ext_resource path="res://GravityWheel.tscn" type="PackedScene" id=2]
-[ext_resource path="res://MouseLine.cs" type="Script" id=3]
+[ext_resource path="res://Slice.tscn" type="PackedScene" id=4]
 
 [sub_resource type="SphereShape" id=1]
 radius = 0.981067
-
-[sub_resource type="Curve" id=2]
-_data = [ Vector2( 0.0045045, 0.3 ), 0.0, 0.0, 0, 0, Vector2( 0.504505, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.995495, 0.272727 ), 0.0, 0.0, 0, 0 ]
 
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
@@ -32,10 +29,12 @@ cast_to = Vector3( 0, -1.2, 0 )
 
 [node name="SliceCanvas" type="CanvasLayer" parent="."]
 
-[node name="MouseLine" type="Line2D" parent="SliceCanvas"]
-width_curve = SubResource( 2 )
+[node name="GravitySlice" parent="SliceCanvas" instance=ExtResource( 4 )]
+
+[node name="NormalSlice" parent="SliceCanvas" instance=ExtResource( 4 )]
 default_color = Color( 1, 1, 1, 1 )
-script = ExtResource( 3 )
+Gravity = false
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
-[connection signal="GravityLineDrawn" from="SliceCanvas/MouseLine" to="." method="sig_GravityLineDrawn"]
+[connection signal="GravityLineDrawn" from="SliceCanvas/GravitySlice" to="." method="sig_GravityLineDrawn"]
+[connection signal="GravityLineDrawn" from="SliceCanvas/NormalSlice" to="." method="sig_GravityLineDrawn"]

@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://MouseLine.cs" type="Script" id=1]
+[ext_resource path="res://ASSETS/SPRITES/GravityCircleArrow.png" type="Texture" id=2]
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0.190909 ), 0.0, 0.0, 0, 0, Vector2( 0.315315, 0.518182 ), 1.92208, 1.92208, 0, 0, Vector2( 0.504505, 0.872727 ), 0.0, 0.0, 0, 0, Vector2( 0.671171, 0.518182 ), -2.56154, -2.56154, 0, 0, Vector2( 1, 0.181818 ), -0.082939, 0.0, 0, 0 ]
+
+[node name="Slice" type="Line2D"]
+position = Vector2( 960, 540 )
+width = 20.0
+width_curve = SubResource( 2 )
+default_color = Color( 0, 0.882353, 1, 1 )
+script = ExtResource( 1 )
+Gravity = true
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="Pivot" type="Node2D" parent="."]
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Pivot"]
+position = Vector2( -0.000976562, -1293 )
+rotation = 3.14159
+scale = Vector2( 0.89761, 1.18064 )
+amount = 20
+lifetime = 1.1
+speed_scale = 2.0
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 960, 1 )
+direction = Vector2( 0, -1 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 2000.0
+scale_amount = 0.4
+color = Color( 1, 1, 1, 0.443137 )
+
+[node name="Arrow" type="Sprite" parent="Pivot"]
+rotation = -3.14159
+texture = ExtResource( 2 )

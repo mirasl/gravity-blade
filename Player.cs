@@ -23,6 +23,7 @@ public class Player : KinematicBody
     protected Tween tween;
     protected RayCast floorCast;
     protected Camera camera;
+    // protected MouseLine mouseLine;
 
 
     public override void _Ready()
@@ -31,6 +32,7 @@ public class Player : KinematicBody
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
+        // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
 
@@ -205,6 +207,8 @@ public class Player : KinematicBody
         tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
                 Rotation.y, Rotation.z - angle), 0.3f, Tween.TransitionType.Sine, 
                 Tween.EaseType.Out);
+        // tween.InterpolateProperty(mouseLine, "rotation", mouseLine.Rotation, -angle, 0.3f, 
+        //         Tween.TransitionType.Sine, Tween.EaseType.Out);
         tween.Start();
 
         await ToSignal(tween, "tween_completed");
