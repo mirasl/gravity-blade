@@ -7,12 +7,16 @@ public class MouseLine : Line2D
 
     [Export] bool Gravity = false;
 
+    const float MAX_POINTS = 45;
+
     bool slicing = false;
+    bool canSlice = true;
 
     protected Sprite arrow;
     protected Tween tween;
     protected Node2D pivot;
     protected CPUParticles2D arrowParticles;
+    protected AnimationPlayer arrowAP;
 
 
     public override void _Ready()
@@ -21,6 +25,7 @@ public class MouseLine : Line2D
         pivot = GetNode<Node2D>("Pivot");
         arrowParticles = GetNode<CPUParticles2D>("Pivot/CPUParticles2D");
         arrow = GetNode<Sprite>("Pivot/Arrow");
+        arrowAP = GetNode<AnimationPlayer>("Pivot/Arrow/AnimationPlayer");
 
         arrowParticles.Emitting = false;
         arrow.Hide();
@@ -29,11 +34,13 @@ public class MouseLine : Line2D
     public override void _Process(float delta)
     {
         int mouseButton = Gravity ? 2 : 1;
-        if (Input.IsMouseButtonPressed(mouseButton))
+        if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice)
         {
             if (Gravity)
             {
                 arrowParticles.Emitting = true;
+                arrow.Show();
+                arrowAP.Play("point");
             }
             slicing = true;
             AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540));
@@ -42,7 +49,6 @@ public class MouseLine : Line2D
         {
             if (slicing)
             {
-                slicing = false;
                 FinishSlice();
             }
         }
@@ -50,11 +56,17 @@ public class MouseLine : Line2D
         if (Points.Length > 0 && !slicing)
         {
             RemovePoint(0);
+            if (Points.Length == 0)
+            {
+                canSlice = true;
+            }
         }
     }
 
     public void FinishSlice()
     {
+        slicing = false;
+        canSlice = false;
         if (Gravity)
         {
             arrowParticles.Emitting = false;
@@ -89,7 +101,8 @@ public class MouseLine : Line2D
             sumXYDiff += (point.x - xMean) * (point.y - yMean);
             sumXDiffSquared += (point.x - xMean) * (point.x - xMean);
         }
-        float angle = Mathf.Atan2(-sumXYDiff * 9, sumXDiffSquared * 16);
+        float angle = Mathf.Atan2(-sumXYDiff, sumXDiffSquared);
+        GD.Print(angle);
 
         // Scale angle to range from 0 to 2pi:
         if (!IsDrawnToRight(points))
@@ -101,5 +114,13 @@ public class MouseLine : Line2D
             angle += Mathf.Pi*2;
         }
         return angle;
+    }
+
+    public void sig_ArrowAPFinished(string animName)
+    {
+        if (animName == "point")
+        {
+            arrow.Hide();
+        }
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://MouseLine.cs" type="Script" id=1]
 [ext_resource path="res://ASSETS/SPRITES/GravityCircleArrow.png" type="Texture" id=2]
@@ -6,8 +6,65 @@
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 0.190909 ), 0.0, 0.0, 0, 0, Vector2( 0.315315, 0.518182 ), 1.92208, 1.92208, 0, 0, Vector2( 0.504505, 0.872727 ), 0.0, 0.0, 0, 0, Vector2( 0.671171, 0.518182 ), -2.56154, -2.56154, 0, 0, Vector2( 1, 0.181818 ), -0.082939, 0.0, 0, 0 ]
 
+[sub_resource type="Animation" id=4]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, -24 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "point"
+length = 0.7
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6 ),
+"transitions": PoolRealArray( 0.5, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -102 ), Vector2( 0, -102 ), Vector2( 0, 110 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.15, 0.2, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
 [node name="Slice" type="Line2D"]
 position = Vector2( 960, 540 )
+points = PoolVector2Array( 5, 75, 3, 28 )
 width = 20.0
 width_curve = SubResource( 2 )
 default_color = Color( 0, 0.882353, 1, 1 )
@@ -36,5 +93,12 @@ scale_amount = 0.4
 color = Color( 1, 1, 1, 0.443137 )
 
 [node name="Arrow" type="Sprite" parent="Pivot"]
+position = Vector2( 0, -24 )
 rotation = -3.14159
 texture = ExtResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Pivot/Arrow"]
+anims/RESET = SubResource( 4 )
+anims/point = SubResource( 3 )
+
+[connection signal="animation_finished" from="Pivot/Arrow/AnimationPlayer" to="." method="sig_ArrowAPFinished"]

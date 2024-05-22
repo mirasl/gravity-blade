@@ -9,6 +9,7 @@ public class Player : KinematicBody
     const float STRAFE_SPEED = 10;
     const float FORWARD_SPEED = 70;
     const float MOUSE_SENSITIVITY = 1.1f;
+    const float BOOST_SPEED = 100;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
@@ -52,6 +53,12 @@ public class Player : KinematicBody
         if (IsOnFloor() && !snapped)
         {
             SnapToPlatform();
+        }
+
+        if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(2))
+        {
+            GD.Print(((StaticBody)floorCast.GetCollider()).CollisionLayer);
+            Velocity.z -= BOOST_SPEED*delta;
         }
 
         if (Input.IsActionJustPressed("jump") && OnFloor())
