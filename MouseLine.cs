@@ -104,16 +104,17 @@ public class MouseLine : Line2D
         float angle = Mathf.Atan2(sumXDiffSquared * 9, -sumXYDiff * 16);
 
         // Scale angle to range from 0 to 2pi:
-        if (!IsDrawnToRight(points))
+        if (IsDrawnToRight(points))
         {
-            angle += Mathf.Pi;
+            angle = Mathf.Pi - angle;
         }
-        if (angle < 0)
-        {
-            angle += Mathf.Pi*2;
-        }
+        // if (angle < 0)
+        // {
+        //     angle += Mathf.Pi*2;
+        // }
+        GD.Print(-angle);
         // angle = Mathf.Stepify(angle, Mathf.Pi*0.25f);
-        return angle;
+        return -angle;
     }
 
     public void sig_ArrowAPFinished(string animName)
