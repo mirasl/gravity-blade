@@ -248,10 +248,6 @@ public class Player : KinematicBody
         Vector2[] newPoints = points;
         bool upright = (stepifiedAngle == 0 || stepifiedAngle == Mathf.Pi);
 
-        GD.Print(upright);
-        // GD.Print(angle);
-        // GD.Print(stepifiedAngle);
-
         for (int i = 0; i < newPoints.Length; i++)
         {
             newPoints[i] += new Vector2(960, 540);
@@ -266,12 +262,12 @@ public class Player : KinematicBody
         {
             // Unproject enemy position and radius:
             Vector2 enemyPosition = camera.UnprojectPosition(enemy.Translation);
-            if (upright)
-            {
-                enemyPosition = new Vector2(enemyPosition.x, -enemyPosition.y);
-            }
             float enemyRadius = Mathf.Abs(enemyPosition.x - camera.UnprojectPosition(
                     enemy.Translation + new Vector3(enemy.Radius, 0, 0)).x);
+            if (upright)
+            {
+                enemyPosition = new Vector2(enemyPosition.y, -enemyPosition.x);
+            }
 
             for (int i = 0; i < newPoints.Length - 1; i++)
             {
