@@ -7,7 +7,7 @@ public class Player : KinematicBody
     const float JUMPFORCE = 20f;
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 10;
-    const float FORWARD_SPEED = 70;
+    const float FORWARD_SPEED = 15;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_SPEED = 100;
 
@@ -24,6 +24,7 @@ public class Player : KinematicBody
     protected Tween tween;
     protected RayCast floorCast;
     protected Camera camera;
+    protected PackedScene test;
     // protected MouseLine mouseLine;
 
 
@@ -33,6 +34,7 @@ public class Player : KinematicBody
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
+        test = GD.Load<PackedScene>("res://Test.tscn");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
@@ -224,8 +226,31 @@ public class Player : KinematicBody
         shifting = false;
     }
 
-    public void sig_GravityLineDrawn(float angle)
+    public void sig_LineDrawn(bool gravity, float angle, Vector2[] points)
     {
-        RotateShift(angle);
+        GD.Print(GetParent().GetNode<StaticBody>("Spatial/StaticBody").GetInstanceId());
+        if (gravity)
+        {
+            RotateShift(angle);
+        }
+        foreach (Vector2 point in points)
+        {
+            Vector2 translatedPoint = point + new Vector2(1920/2, 1080/2);
+            Vector3 from = camera.ProjectRayOrigin(translatedPoint);
+            GD.Print(from);
+            Vector3 to = from + camera.ProjectRayNormal(translatedPoint) * 100;
+
+            MeshInstance testInstance = test.Instance<MeshInstance>();
+            GetParent().AddChild(testInstance);
+            testInstance.GlobalTranslation = to;
+
+            PhysicsDirectSpaceState spaceState = GetWorld().DirectSpaceState;
+            Godot.Collections.Dictionary result = spaceState.IntersectRay(from, to);
+
+            if (result.Count > 0)
+            {
+                // GD.Print(result);
+            }
+        }
     }
 }

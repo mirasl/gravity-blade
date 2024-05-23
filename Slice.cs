@@ -3,7 +3,7 @@ using System;
 
 public class Slice : Line2D
 {
-    [Signal] delegate void GravityLineDrawn(float angle);
+    [Signal] delegate void LineDrawn(bool gravity, float angle, Vector2[] points);
 
     [Export] bool Gravity = false;
 
@@ -28,6 +28,7 @@ public class Slice : Line2D
         arrowAP = GetNode<AnimationPlayer>("Pivot/Arrow/AnimationPlayer");
 
         arrowParticles.Emitting = false;
+        // arrowParticles.Hide();
         arrow.Hide();
     }
 
@@ -36,10 +37,6 @@ public class Slice : Line2D
         int mouseButton = Gravity ? 2 : 1;
         if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice)
         {
-            if (Gravity)
-            {
-
-            }
             slicing = true;
             AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540));
         }
@@ -68,17 +65,24 @@ public class Slice : Line2D
         if (Gravity)
         {
             arrowParticles.Emitting = true;
+            // arrowParticles.Show();
             arrow.Show();
             arrowAP.Play("point");
             float angle = RegressedSlopeAngle(Points);
-            EmitSignal("GravityLineDrawn", angle);
+            EmitSignal("LineDrawn", true, angle, Points);
 
-            tween.InterpolateProperty(pivot, "rotation", angle, 0, 0.3f, Tween.TransitionType.Sine, Tween.EaseType.Out);
+            tween.InterpolateProperty(pivot, "rotation", angle, 0, 0.3f, Tween.TransitionType.Sine, 
+                    Tween.EaseType.Out);
             tween.Start();
 
             await ToSignal(tween, "tween_completed");
 
             arrowParticles.Emitting = false;
+            // arrowParticles.Hide();
+        }
+        else
+        {
+            EmitSignal("LineDrawn", false, 0, Points);
         }
     }
 

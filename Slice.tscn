@@ -4,7 +4,8 @@
 [ext_resource path="res://ASSETS/SPRITES/GravityCircleArrow.png" type="Texture" id=2]
 
 [sub_resource type="Curve" id=2]
-_data = [ Vector2( 0, 0.190909 ), 0.0, 0.0, 0, 0, Vector2( 0.315315, 0.518182 ), 1.92208, 1.92208, 0, 0, Vector2( 0.504505, 0.872727 ), 0.0, 0.0, 0, 0, Vector2( 0.671171, 0.518182 ), -2.56154, -2.56154, 0, 0, Vector2( 1, 0.181818 ), -0.082939, 0.0, 0, 0 ]
+max_value = 11.0
+_data = [ Vector2( 0, 0.190909 ), 0.0, 0.0, 0, 0, Vector2( 0.311346, 0.3 ), 1.92208, 1.92208, 0, 0, Vector2( 0.511873, 0.3 ), 0.0, 0.0, 0, 0, Vector2( 0.671171, 0.518182 ), -2.56154, -2.56154, 0, 0, Vector2( 0.804749, 0.4 ), 1.44156, 992.946, 0, 0, Vector2( 0.810026, 11 ), -53.3407, -53.3407, 0, 0, Vector2( 1, 0 ), -60.9696, 0.0, 0, 0 ]
 
 [sub_resource type="Animation" id=4]
 length = 0.001
@@ -59,7 +60,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.7 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+"values": [ Color( 0, 0.882353, 1, 1 ), Color( 0, 0.882353, 1, 0 ) ]
 }
 
 [node name="Slice" type="Line2D"]
@@ -89,7 +90,7 @@ spread = 0.0
 gravity = Vector2( 0, 0 )
 initial_velocity = 2000.0
 scale_amount = 0.4
-color = Color( 1, 1, 1, 0.443137 )
+color = Color( 0, 0, 0, 0.443137 )
 
 [node name="Arrow" type="Sprite" parent="Pivot"]
 position = Vector2( 0, -24 )
