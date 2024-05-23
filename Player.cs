@@ -10,6 +10,9 @@ public class Player : KinematicBody
     const float FORWARD_SPEED = 15;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_SPEED = 100;
+    const float BRUSH_RADIUS_SQUARED = 400; // should be a bit larger than actual brush radius 
+            //squared to account for spread out points on the line
+    const float BRUSH_WIDTH = 10;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
@@ -226,30 +229,119 @@ public class Player : KinematicBody
         shifting = false;
     }
 
-    public void sig_LineDrawn(bool gravity, float angle, Vector2[] points)
+    public void sig_LineDrawn(bool gravity, float angle, float slope, Vector2[] points)
     {
-        GD.Print(GetParent().GetNode<StaticBody>("Spatial/StaticBody").GetInstanceId());
         if (gravity)
         {
             RotateShift(angle);
         }
+
+        SliceCollisionViaQuadrangulation(points, angle);
+        // SliceCollisionViaCircles(points);
+        // SliceCollisionViaRaycast(points);
+    }
+
+    private void SliceCollisionViaQuadrangulation(Vector2[] points, float angle)
+    {
+        // Rotates entire points array by 90 degrees if the line of best fit is more upright:
+        float stepifiedAngle = Mathf.Stepify(angle, Mathf.Pi/2);
+        Vector2[] newPoints = points;
+        bool upright = (stepifiedAngle == 0 || stepifiedAngle == Mathf.Pi);
+
+        GD.Print(upright);
+        // GD.Print(angle);
+        // GD.Print(stepifiedAngle);
+
+        for (int i = 0; i < newPoints.Length; i++)
+        {
+            newPoints[i] += new Vector2(960, 540);
+            if (upright)
+            {
+                // Rotate entire points array by 90 degrees:
+                newPoints[i] = new Vector2(newPoints[i].y, -newPoints[i].x);
+            }
+        }
+
+        foreach (Enemy enemy in GetParent().GetNode<Spatial>("Enemies").GetChildren())
+        {
+            // Unproject enemy position and radius:
+            Vector2 enemyPosition = camera.UnprojectPosition(enemy.Translation);
+            if (upright)
+            {
+                enemyPosition = new Vector2(enemyPosition.x, -enemyPosition.y);
+            }
+            float enemyRadius = Mathf.Abs(enemyPosition.x - camera.UnprojectPosition(
+                    enemy.Translation + new Vector3(enemy.Radius, 0, 0)).x);
+
+            for (int i = 0; i < newPoints.Length - 1; i++)
+            {
+                Vector2 thisPoint = newPoints[i];
+                Vector2 nextPoint = newPoints[i + 1];
+
+                // if enemy position is NOT between this point x and next point x:
+                if (!(enemyPosition.x > thisPoint.x && enemyPosition.x < nextPoint.x) &&
+                        !(enemyPosition.x > thisPoint.x && enemyPosition.x < nextPoint.x))
+                {
+                    // GD.Print(enemyPosition.x - thisPoint.x);
+                    // GD.Print(1);
+                    continue;
+                }
+                // if enemy position is NOT within the correct y range:
+                if (Mathf.Abs(enemyPosition.y - thisPoint.y) > BRUSH_WIDTH + enemyRadius)
+                {
+                    // GD.Print(2);
+                    // GD.Print(enemyPosition.y - thisPoint.y);
+                    // GD.Print(BRUSH_WIDTH + enemyRadius);
+                    // GD.Print();
+                    continue;
+                }
+                enemy.QueueFree();
+                break;
+            }
+        }
+    }
+
+    private void SliceCollisionViaCircles(Vector2[] points)
+    {
+        foreach (Enemy enemy in GetParent().GetNode<Spatial>("Enemies").GetChildren())
+        {
+            // Unproject enemy position and radius:
+            Vector2 enemyPosition = camera.UnprojectPosition(enemy.Translation);
+            float enemyRadius = Mathf.Abs(enemyPosition.x - camera.UnprojectPosition(
+                    enemy.Translation + new Vector3(enemy.Radius, 0, 0)).x);
+
+            foreach (Vector2 point in points)
+            {
+                Vector2 translatedPoint = point + new Vector2(960, 540);
+                if (enemyPosition.DistanceSquaredTo(translatedPoint) < BRUSH_RADIUS_SQUARED + 
+                        enemyRadius*enemyRadius)
+                {
+                    enemy.QueueFree();
+                }
+            }
+        }
+    }
+
+    private void SliceCollisionViaRaycast(Vector2[] points)
+    {
         foreach (Vector2 point in points)
         {
             Vector2 translatedPoint = point + new Vector2(1920/2, 1080/2);
             Vector3 from = camera.ProjectRayOrigin(translatedPoint);
             GD.Print(from);
-            Vector3 to = from + camera.ProjectRayNormal(translatedPoint) * 100;
+            Vector3 to = from + camera.ProjectRayNormal(translatedPoint) * 200;
 
             MeshInstance testInstance = test.Instance<MeshInstance>();
             GetParent().AddChild(testInstance);
             testInstance.GlobalTranslation = to;
 
             PhysicsDirectSpaceState spaceState = GetWorld().DirectSpaceState;
-            Godot.Collections.Dictionary result = spaceState.IntersectRay(from, to);
+            Godot.Collections.Dictionary result = spaceState.IntersectRay(from, to, 
+                    collisionMask:8);
 
             if (result.Count > 0)
             {
-                // GD.Print(result);
+                ((Godot.Node)result["collider"]).QueueFree();
             }
         }
     }

@@ -55,6 +55,7 @@ shift={
 3d_physics/layer_1="Platform"
 3d_physics/layer_2="Player"
 3d_physics/layer_3="SpeedPlatform"
+3d_physics/layer_4="Enemy"
 
 [mono]
 
