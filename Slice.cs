@@ -118,7 +118,7 @@ public class Slice : Line2D
             sumXDiffSquared += (point.x - xMean) * (point.x - xMean);
         }
         float slope = sumXYDiff / sumXDiffSquared;
-        float angle = Mathf.Atan2(sumXDiffSquared * 9, -sumXYDiff * 16);
+        float angle = Mathf.Atan2(sumXDiffSquared, -sumXYDiff);
 
         // Scale angle to range from 0 to 2pi:
         if (IsDrawnToRight(points))

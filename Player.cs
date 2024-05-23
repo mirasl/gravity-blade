@@ -7,12 +7,13 @@ public class Player : KinematicBody
     const float JUMPFORCE = 20f;
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 10;
-    const float FORWARD_SPEED = 15;
+    const float FORWARD_SPEED = 140;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_SPEED = 100;
     const float BRUSH_RADIUS_SQUARED = 400; // should be a bit larger than actual brush radius 
             //squared to account for spread out points on the line
-    const float BRUSH_WIDTH = 10;
+    const float BRUSH_WIDTH = 20;
+    const float ENEMY_RANGE = 300;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
@@ -28,6 +29,7 @@ public class Player : KinematicBody
     protected RayCast floorCast;
     protected Camera camera;
     protected PackedScene test;
+    protected PackedScene enemyExplosionScene;
     // protected MouseLine mouseLine;
 
 
@@ -38,6 +40,7 @@ public class Player : KinematicBody
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
         test = GD.Load<PackedScene>("res://Test.tscn");
+        enemyExplosionScene = GD.Load<PackedScene>("res://EnemyExplosion.tscn");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
@@ -243,10 +246,12 @@ public class Player : KinematicBody
 
     private void SliceCollisionViaQuadrangulation(Vector2[] points, float angle)
     {
+        GD.Print(angle);
         // Rotates entire points array by 90 degrees if the line of best fit is more upright:
         float stepifiedAngle = Mathf.Stepify(angle, Mathf.Pi/2);
         Vector2[] newPoints = points;
-        bool upright = (stepifiedAngle == 0 || stepifiedAngle == Mathf.Pi);
+        bool upright = (stepifiedAngle == 0 || stepifiedAngle == Mathf.Pi|| 
+                stepifiedAngle == -Mathf.Pi);
 
         for (int i = 0; i < newPoints.Length; i++)
         {
@@ -260,10 +265,15 @@ public class Player : KinematicBody
 
         foreach (Enemy enemy in GetParent().GetNode<Spatial>("Enemies").GetChildren())
         {
+            if (Mathf.Abs(enemy.Translation.z - Translation.z) > ENEMY_RANGE)
+            {
+                continue;
+            }
             // Unproject enemy position and radius:
             Vector2 enemyPosition = camera.UnprojectPosition(enemy.Translation);
             float enemyRadius = Mathf.Abs(enemyPosition.x - camera.UnprojectPosition(
                     enemy.Translation + new Vector3(enemy.Radius, 0, 0)).x);
+            Vector2 unrotatedEnemyPosition = enemyPosition;
             if (upright)
             {
                 enemyPosition = new Vector2(enemyPosition.y, -enemyPosition.x);
@@ -276,22 +286,21 @@ public class Player : KinematicBody
 
                 // if enemy position is NOT between this point x and next point x:
                 if (!(enemyPosition.x > thisPoint.x && enemyPosition.x < nextPoint.x) &&
-                        !(enemyPosition.x > thisPoint.x && enemyPosition.x < nextPoint.x))
+                        !(enemyPosition.x < thisPoint.x && enemyPosition.x > nextPoint.x))
                 {
-                    // GD.Print(enemyPosition.x - thisPoint.x);
-                    // GD.Print(1);
                     continue;
                 }
                 // if enemy position is NOT within the correct y range:
                 if (Mathf.Abs(enemyPosition.y - thisPoint.y) > BRUSH_WIDTH + enemyRadius)
                 {
-                    // GD.Print(2);
                     // GD.Print(enemyPosition.y - thisPoint.y);
-                    // GD.Print(BRUSH_WIDTH + enemyRadius);
-                    // GD.Print();
                     continue;
                 }
                 enemy.QueueFree();
+                EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
+                enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
+                enemyExplosion.Position = unrotatedEnemyPosition;
+                GetParent().AddChild(enemyExplosion);
                 break;
             }
         }
