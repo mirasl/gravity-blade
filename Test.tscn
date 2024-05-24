@@ -3,7 +3,6 @@
 [sub_resource type="SphereMesh" id=1]
 
 [sub_resource type="SpatialMaterial" id=2]
-flags_unshaded = true
 albedo_color = Color( 0.0509804, 0.733333, 1, 1 )
 
 [node name="Test" type="MeshInstance"]

@@ -7,13 +7,13 @@ public class Player : KinematicBody
     const float JUMPFORCE = 20f;
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 10;
-    const float FORWARD_SPEED = 140;
+    const float FORWARD_SPEED = 100;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_SPEED = 100;
     const float BRUSH_RADIUS_SQUARED = 400; // should be a bit larger than actual brush radius 
             //squared to account for spread out points on the line
     const float BRUSH_WIDTH = 20;
-    const float ENEMY_RANGE = 300;
+    const float ENEMY_RANGE = 1000;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
@@ -61,6 +61,10 @@ public class Player : KinematicBody
         if (IsOnFloor() && !snapped)
         {
             SnapToPlatform();
+        }
+        else if (snapped && !IsOnFloor())
+        {
+            snapped = false;
         }
 
         if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(2))
@@ -110,7 +114,17 @@ public class Player : KinematicBody
                     GRAVITY_MAGNITUDE, 0);
         }
         Velocity += inputVelocity;
-        Velocity = MoveAndSlide(Velocity, -fallDirection);
+        if (snapped)
+        {
+            Velocity.z += Velocity.y*0.3f;
+            GD.Print(Velocity.z);
+
+            Velocity = MoveAndSlideWithSnap(Velocity, fallDirection.Normalized()*2, -fallDirection);
+        }
+        else
+        {
+            Velocity = MoveAndSlide(Velocity, -fallDirection);
+        }
         Velocity -= inputVelocity;
     }
 
@@ -240,6 +254,17 @@ public class Player : KinematicBody
         }
 
         SliceCollisionViaQuadrangulation(points, angle);
+
+        // foreach (Vector2 point in points)
+        // {
+        //     Vector2 translatedPoint = point + new Vector2(1920/2, 1080/2);
+        //     Vector3 from = camera.ProjectRayOrigin(translatedPoint);
+        //     Vector3 to = from + camera.ProjectRayNormal(translatedPoint) * 30;
+
+        //     MeshInstance testInstance = test.Instance<MeshInstance>();
+        //     testInstance.GlobalTranslation = to;
+        //     GetParent().AddChild(testInstance);
+        // }
         // SliceCollisionViaCircles(points);
         // SliceCollisionViaRaycast(points);
     }
