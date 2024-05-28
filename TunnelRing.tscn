@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://RESOURCES/betterTorus.tres" type="ArrayMesh" id=1]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+render_mode unshaded;
+
+
+void fragment()
+{
+	float grayscale = UV.x + sin(TIME);
+	ALBEDO = vec3(grayscale);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[node name="TunnelRing" type="MeshInstance"]
+transform = Transform( 37.8089, 0, 0, 0, -1.7664e-05, -37.8089, 0, 404.105, -1.65268e-06, 0, 0, 0 )
+mesh = ExtResource( 1 )
+material/0 = SubResource( 2 )

@@ -6,15 +6,20 @@ public class World : Spatial
     const float BASE_PLATFORM_DISTANCE = 140;
     const float BASE_ACCELERATOR_DISTANCE = 140;
     const float JUMP_HEIGHT = 8.33f;
+    const int RING_INTERVAL = 5;
 
     Player player;
     PackedScene platformScene;
+    PackedScene tunnelRingScene;
+
+    Vector3 lastRingPoint = Vector3.Zero;
 
 
     public override void _Ready()
     {
         player = GetNode<Player>("Player");
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
+        tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
         GD.Randomize();
 
@@ -39,12 +44,15 @@ public class World : Spatial
         float distance = GetPlatformDistance(deltaH, speed, currentPlatformIsAccelerator);
         Vector3 fallDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ);
         Vector3 axis = currentPlatformTranslation - fallDirection*JUMP_HEIGHT;
+        axis = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
         
         Platform platform = platformScene.Instance<Platform>();
         platform.IsAccelerator = GD.Randi() % 2 == 0;
 
+        AddTunnelRings(axis);
+
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
-        platform.Translation = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
+        platform.Translation = axis;
 
         Vector3 rotationDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ - theta);
         platform.Translation -= rotationDirection*(deltaH - JUMP_HEIGHT);
@@ -67,5 +75,18 @@ public class World : Spatial
         float c = -deltaH*60; // times delta???
         // quadratic formula:
         return (-20 - Mathf.Sqrt(b*b - 4*a*c)) / (2*a) / 60;
+    }
+
+    private void AddTunnelRings(Vector3 newPoint)
+    {
+        float iterations = lastRingPoint.DistanceTo(newPoint);
+        for (int i = 0; i < iterations; i += RING_INTERVAL)
+        {
+            MeshInstance tunnelRing = tunnelRingScene.Instance<MeshInstance>();
+            tunnelRing.Translation = lastRingPoint.MoveToward(newPoint, i);
+            AddChild(tunnelRing);
+        }
+
+        lastRingPoint = newPoint;
     }
 }
