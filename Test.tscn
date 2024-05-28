@@ -6,6 +6,6 @@
 albedo_color = Color( 0.0509804, 0.733333, 1, 1 )
 
 [node name="Test" type="MeshInstance"]
-transform = Transform( 0.0550624, 0, 0, 0, 0.0550624, 0, 0, 0, 0.0550624, 0, 0, 0 )
+transform = Transform( 0.724486, 0, 0, 0, 0.724486, 0, 0, 0, 289.623, 0, 0, 286.287 )
 mesh = SubResource( 1 )
 material/0 = SubResource( 2 )

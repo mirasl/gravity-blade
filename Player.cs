@@ -3,8 +3,8 @@ using System;
 
 public class Player : KinematicBody
 {
-    const float GRAVITY_MAGNITUDE = 0.4f;
-    const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
+    public const float GRAVITY_MAGNITUDE = 0.4f;
+    public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 15;
     const float FORWARD_SPEED = 100;
@@ -17,7 +17,7 @@ public class Player : KinematicBody
     const float MIN_FORWARD_SPEED = 100;
 
     public Vector3 Velocity = Vector3.Zero;
-    private Vector3 fallDirection = Vector3.Down;
+    public Vector3 FallDirection = Vector3.Down;
     private Vector2 lookDirection = Vector2.Zero;
 
     bool jumpButtonPressed = false;
@@ -60,8 +60,19 @@ public class Player : KinematicBody
         UpdateFallDirection();
         HandleButtonRelease();
 
-        // onInlinePlatform = floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
-        //         ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(4);
+        onInlinePlatform = floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
+                ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(4);
+
+        if (onInlinePlatform)
+        {
+            snapped = true;
+            StaticBody inlinePlatform = (StaticBody)floorCast.GetCollider();
+            float startZ = inlinePlatform.GlobalTranslation.z;
+            float endZ = startZ - 140;
+
+            Rotation = new Vector3(Rotation.x, Rotation.y, -(Translation.z - startZ)/140 * Mathf.Pi);
+            UpdateFallDirection();
+        }
 
         // if (IsOnFloor() && (!snapped || onInlinePlatform))
         if (IsOnFloor() && !snapped)
@@ -91,7 +102,7 @@ public class Player : KinematicBody
 
         float strafeAxis = (Input.GetActionStrength("left") - Input.GetActionStrength("right")) * 
                 STRAFE_SPEED;
-        Vector3 strafeDirection = fallDirection.Rotated(Vector3.Forward, Mathf.Pi*0.5f).Normalized();
+        Vector3 strafeDirection = FallDirection.Rotated(Vector3.Forward, Mathf.Pi*0.5f).Normalized();
         Vector3 inputVelocity = new Vector3(strafeDirection.x*strafeAxis, 
                 strafeDirection.y*strafeAxis, 0);
 
@@ -117,7 +128,7 @@ public class Player : KinematicBody
 
         if (!shifting)
         {
-            Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
+            Velocity += new Vector3(FallDirection.x * GRAVITY_MAGNITUDE, FallDirection.y *
                     GRAVITY_MAGNITUDE, 0);
         }
         if (Mathf.Abs(Velocity.z) < MIN_FORWARD_SPEED)
@@ -129,11 +140,11 @@ public class Player : KinematicBody
         {
             Velocity.z += Velocity.y*0.3f;
 
-            Velocity = MoveAndSlideWithSnap(Velocity, fallDirection.Normalized()*2, -fallDirection);
+            Velocity = MoveAndSlideWithSnap(Velocity, FallDirection.Normalized()*2, -FallDirection);
         }
         else
         {
-            Velocity = MoveAndSlide(Velocity, -fallDirection);
+            Velocity = MoveAndSlide(Velocity, -FallDirection);
         }
         Velocity -= inputVelocity;
     }
@@ -147,7 +158,7 @@ public class Player : KinematicBody
     {
         snapped = false;
         
-        Velocity = new Vector3(-fallDirection.x * JUMPFORCE, -fallDirection.y * JUMPFORCE,
+        Velocity = new Vector3(-FallDirection.x * JUMPFORCE, -FallDirection.y * JUMPFORCE,
                 Velocity.z);
         jumpButtonPressed = true;
     }
@@ -185,7 +196,7 @@ public class Player : KinematicBody
                 spinButtonPressed = false;
                 // float oldXYSpeed = Mathf.Sqrt(Velocity.x*Velocity.x + Velocity.y*Velocity.y);
                 // UpdateFallDirection();
-                // Velocity += new Vector3(fallDirection.x * oldXYSpeed, fallDirection.y *
+                // Velocity += new Vector3(FallDirection.x * oldXYSpeed, FallDirection.y *
                 //         oldXYSpeed, 0);
             }
         }
@@ -193,7 +204,7 @@ public class Player : KinematicBody
 
     private void UpdateFallDirection()
     {
-        fallDirection = Vector3.Down.Rotated(Vector3.Back, Rotation.z);
+        FallDirection = Vector3.Down.Rotated(Vector3.Back, Rotation.z);
     }
 
     private float GetMouseAngle()
@@ -389,5 +400,28 @@ public class Player : KinematicBody
                 ((Godot.Node)result["collider"]).QueueFree();
             }
         }
+    }
+
+    private void GenerateRandomPlatform(Vector3 currentPlatformTranslation, float speed)
+    {
+        float theta = (int)(GD.Randf()*8)*Mathf.Pi/4;
+        float deltaH = -GD.Randf()*30;
+        float distance = GetPlatformDistance(deltaH, speed);
+        Vector3 axis = currentPlatformTranslation - FallDirection*8.33f;
+
+    }
+
+    private float GetPlatformDistance(float deltaH, float speed)
+    {
+        return speed*GetJumpTime(deltaH);
+    }
+
+    private float GetJumpTime(float deltaH)
+    {
+        float a = -GRAVITY_MAGNITUDE*0.5f;
+        float b = JUMPFORCE;
+        float c = -deltaH; // times delta???
+        // quadratic formula:
+        return (-20 - Mathf.Sqrt(b*b - 4*a*c)) / (2*a);
     }
 }
