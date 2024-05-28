@@ -17,7 +17,6 @@ extents = Vector3( 87.4066, 0.35369, 2.78988 )
 [sub_resource type="Environment" id=5]
 background_mode = 1
 background_sky = SubResource( 4 )
-background_color = Color( 0.0313726, 0.172549, 0.0666667, 1 )
 ambient_light_color = Color( 0.996078, 0.996078, 0.996078, 1 )
 
 [sub_resource type="BoxShape" id=6]

@@ -1,22 +1,38 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://RESOURCES/betterTorus.tres" type="ArrayMesh" id=1]
+[ext_resource path="res://TunnelRing.cs" type="Script" id=2]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;
 render_mode unshaded;
 
+uniform float lineLength = 0.0;
+uniform vec3 lineColor = vec3(0, 0, 0);
 
 void fragment()
 {
-	float grayscale = UV.x + sin(TIME);
-	ALBEDO = vec3(grayscale);
+	float grayscale = UV.x;
+	ALBEDO = vec3(0);
+//	ALPHA = 0.0;
+	
+	float lineStart = 0.0;
+	if (UV.x > lineStart && UV.x - lineStart < lineLength)
+	{
+		ALPHA = 1.0;
+		ALBEDO = lineColor;
+	}
+	
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
 shader = SubResource( 1 )
+shader_param/lineLength = 0.0
+shader_param/lineColor = Vector3( 0, 0, 0 )
 
 [node name="TunnelRing" type="MeshInstance"]
-transform = Transform( 37.8089, 0, 0, 0, -1.7664e-05, -37.8089, 0, 404.105, -1.65268e-06, 0, 0, 0 )
+transform = Transform( 45.1815, 0, 0, 0, -2.11084e-05, -45.1815, 0, 46.6838, -1.90924e-07, 0, 0, 0 )
 mesh = ExtResource( 1 )
 material/0 = SubResource( 2 )
+script = ExtResource( 2 )

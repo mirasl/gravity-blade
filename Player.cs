@@ -141,7 +141,7 @@ public class Player : KinematicBody
         {
             Velocity.z = -MIN_FORWARD_SPEED;
         }
-        GD.Print(Velocity.z);
+        // GD.Print(Velocity.z);
         Velocity += inputVelocity;
         if (snapped)
         {
