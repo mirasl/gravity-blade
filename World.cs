@@ -3,7 +3,8 @@ using System;
 
 public class World : Spatial
 {
-    const float BASE_JUMP_DISTANCE = 140;
+    const float BASE_PLATFORM_DISTANCE = 140;
+    const float BASE_ACCELERATOR_DISTANCE = 140;
     const float JUMP_HEIGHT = 8.33f;
 
     Player player;
@@ -17,25 +18,30 @@ public class World : Spatial
 
         GD.Randomize();
 
-        Spatial platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, 100);
+        Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, 100, false);
         for (int i = 0; i < 10; i++)
         {
             // GD.Print(platform.Translation);
-            platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 100);
+            platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 100, 
+                    platform.IsAccelerator);
         }
     }
 
     // returns newly generated platform
-    private Spatial GenerateRandomPlatform(Vector3 currentPlatformTranslation, float 
-            currentPlatformRotationZ, float speed)
+    private Platform GenerateRandomPlatform(Vector3 currentPlatformTranslation, float 
+            currentPlatformRotationZ, float speed, bool currentPlatformIsAccelerator)
     {
+        // Random values:
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
         float deltaH = -GD.Randf()*30;
-        float distance = GetPlatformDistance(deltaH, speed);
+
+        // Other values:
+        float distance = GetPlatformDistance(deltaH, speed, currentPlatformIsAccelerator);
         Vector3 fallDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ);
         Vector3 axis = currentPlatformTranslation - fallDirection*JUMP_HEIGHT;
         
-        Spatial platform = platformScene.Instance<Spatial>();
+        Platform platform = platformScene.Instance<Platform>();
+        platform.IsAccelerator = GD.Randi() % 2 == 0;
 
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
@@ -48,9 +54,10 @@ public class World : Spatial
         return platform;
     }
 
-    private float GetPlatformDistance(float deltaH, float speed)
+    private float GetPlatformDistance(float deltaH, float speed, bool wasAccelerator)
     {
-        return speed*GetJumpTime(deltaH) + BASE_JUMP_DISTANCE;
+        float addend = wasAccelerator ? BASE_ACCELERATOR_DISTANCE : BASE_PLATFORM_DISTANCE;
+        return speed*GetJumpTime(deltaH) + addend;
     }
 
     private float GetJumpTime(float deltaH)

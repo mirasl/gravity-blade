@@ -91,8 +91,8 @@ public class Player : KinematicBody
             Velocity.z += AIR_RESISTANCE*delta;
         }
 
-        if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
-                ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(0))
+        if (floorCast.IsColliding() && floorCast.GetCollider() is Platform && 
+                ((Platform)floorCast.GetCollider()).IsAccelerator)
         {
             Velocity.z -= BOOST_SPEED*delta;
         }
