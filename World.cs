@@ -32,19 +32,13 @@ public class World : Spatial
         Vector3 axis = currentPlatformTranslation - fallDirection*8.33f;
         
         Spatial platform = platformScene.Instance<Spatial>();
-        MeshInstance test = testScene.Instance<MeshInstance>();
 
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
 
         Vector3 rotationDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ - theta);
         platform.Translation -= rotationDirection*(deltaH - 8.33f);
-        GD.Print(theta * 180 / Mathf.Pi);
-        // platform.Rotate(Vector3.Forward, currentPlatformRotationZ + theta);
-        // GD.Print(platform.Translation);
-        // platform.Translation = platform.Translation.MoveToward(), deltaH);
-        // GD.Print(platform.Translation);
-        // GD.Print();
+
         AddChild(platform);
 
         return platform;
