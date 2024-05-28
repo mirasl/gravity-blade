@@ -4,9 +4,9 @@ using System;
 public class Player : KinematicBody
 {
     const float GRAVITY_MAGNITUDE = 0.4f;
-    const float JUMPFORCE = 20f;
+    const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
-    const float STRAFE_SPEED = 10;
+    const float STRAFE_SPEED = 15;
     const float FORWARD_SPEED = 100;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_SPEED = 100;
@@ -14,6 +14,7 @@ public class Player : KinematicBody
             //squared to account for spread out points on the line
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
+    const float MIN_FORWARD_SPEED = 100;
 
     public Vector3 Velocity = Vector3.Zero;
     private Vector3 fallDirection = Vector3.Down;
@@ -23,6 +24,7 @@ public class Player : KinematicBody
     bool spinButtonPressed = false;
     bool shifting = false;
     bool snapped = false;
+    bool onInlinePlatform = false;
 
     protected GravityWheel gravityWheel;
     protected Tween tween;
@@ -58,8 +60,13 @@ public class Player : KinematicBody
         UpdateFallDirection();
         HandleButtonRelease();
 
+        // onInlinePlatform = floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
+        //         ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(4);
+
+        // if (IsOnFloor() && (!snapped || onInlinePlatform))
         if (IsOnFloor() && !snapped)
         {
+            // GD.Print("hi");
             SnapToPlatform();
         }
         else if (snapped && !IsOnFloor())
@@ -67,9 +74,9 @@ public class Player : KinematicBody
             snapped = false;
         }
 
-        if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(2))
+        if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
+                ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(2))
         {
-            GD.Print(((StaticBody)floorCast.GetCollider()).CollisionLayer);
             Velocity.z -= BOOST_SPEED*delta;
         }
 
@@ -113,11 +120,14 @@ public class Player : KinematicBody
             Velocity += new Vector3(fallDirection.x * GRAVITY_MAGNITUDE, fallDirection.y *
                     GRAVITY_MAGNITUDE, 0);
         }
+        if (Mathf.Abs(Velocity.z) < MIN_FORWARD_SPEED)
+        {
+            Velocity.z = -MIN_FORWARD_SPEED;
+        }
         Velocity += inputVelocity;
         if (snapped)
         {
             Velocity.z += Velocity.y*0.3f;
-            GD.Print(Velocity.z);
 
             Velocity = MoveAndSlideWithSnap(Velocity, fallDirection.Normalized()*2, -fallDirection);
         }
@@ -195,6 +205,11 @@ public class Player : KinematicBody
 
     private void SnapToPlatform()
     {
+        if (GetSlideCount() == 0)
+        {
+            return;
+        }
+
         snapped = true;
 
         Velocity.x = 0;
