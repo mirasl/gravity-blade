@@ -4,7 +4,7 @@ using System;
 public class World : Spatial
 {
     const float BASE_PLATFORM_DISTANCE = 140;
-    const float BASE_ACCELERATOR_DISTANCE = 140;
+    const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
     const int RING_INTERVAL = 3;
 
@@ -82,8 +82,9 @@ public class World : Spatial
         float iterations = lastRingPoint.DistanceTo(newPoint);
         for (int i = 0; i < iterations; i += RING_INTERVAL)
         {
-            MeshInstance tunnelRing = tunnelRingScene.Instance<MeshInstance>();
+            TunnelRing tunnelRing = tunnelRingScene.Instance<TunnelRing>();
             tunnelRing.Translation = lastRingPoint.MoveToward(newPoint, i);
+            tunnelRing.player = player;
             AddChild(tunnelRing);
         }
 

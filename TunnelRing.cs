@@ -4,6 +4,7 @@ using System;
 public class TunnelRing : MeshInstance
 {
     float rotationSpeed;
+    public Player player;
 
 
     public override void _Ready()
@@ -32,7 +33,7 @@ public class TunnelRing : MeshInstance
             color = new Vector3(1, 0.3f, 1);
         }
 
-        length = GD.Randf();
+        length = GD.Randf() * 0.6f + 0.2f;
         startingRotation = GD.Randf();
         rotationSpeed = GD.Randf() - 0.5f;
 
@@ -45,5 +46,12 @@ public class TunnelRing : MeshInstance
     public override void _PhysicsProcess(float delta)
     {
         Rotation = new Vector3(Rotation.x + rotationSpeed * delta, Mathf.Pi/2, Mathf.Pi/2);
+        if (player != null)
+        {
+            float diff = player.Translation.z - Translation.z;
+            // Visible = diff < 500;
+            float coefficient = (1000-diff)/1000;
+            Scale = new Vector3(6.687f*coefficient, 3.429f, 6.687f*coefficient);
+        }
     }
 }
