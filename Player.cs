@@ -9,7 +9,8 @@ public class Player : KinematicBody
     const float STRAFE_SPEED = 15;
     const float FORWARD_SPEED = 100;
     const float MOUSE_SENSITIVITY = 1.1f;
-    const float BOOST_SPEED = 100;
+    const float BOOST_SPEED = 200; // m/s^2
+    const float AIR_RESISTANCE = 40; // m/s^2
     const float BRUSH_RADIUS_SQUARED = 400; // should be a bit larger than actual brush radius 
             //squared to account for spread out points on the line
     const float BRUSH_WIDTH = 20;
@@ -85,8 +86,13 @@ public class Player : KinematicBody
             snapped = false;
         }
 
+        if (!IsOnFloor())
+        {
+            Velocity.z += AIR_RESISTANCE*delta;
+        }
+
         if (floorCast.IsColliding() && floorCast.GetCollider() is StaticBody && 
-                ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(2))
+                ((StaticBody)floorCast.GetCollider()).GetCollisionLayerBit(0))
         {
             Velocity.z -= BOOST_SPEED*delta;
         }
@@ -135,6 +141,7 @@ public class Player : KinematicBody
         {
             Velocity.z = -MIN_FORWARD_SPEED;
         }
+        GD.Print(Velocity.z);
         Velocity += inputVelocity;
         if (snapped)
         {
@@ -297,7 +304,6 @@ public class Player : KinematicBody
 
     private void SliceCollisionViaQuadrangulation(Vector2[] points, float angle)
     {
-        GD.Print(angle);
         // Rotates entire points array by 90 degrees if the line of best fit is more upright:
         float stepifiedAngle = Mathf.Stepify(angle, Mathf.Pi/2);
         Vector2[] newPoints = points;
@@ -384,7 +390,6 @@ public class Player : KinematicBody
         {
             Vector2 translatedPoint = point + new Vector2(1920/2, 1080/2);
             Vector3 from = camera.ProjectRayOrigin(translatedPoint);
-            GD.Print(from);
             Vector3 to = from + camera.ProjectRayNormal(translatedPoint) * 200;
 
             MeshInstance testInstance = test.Instance<MeshInstance>();
