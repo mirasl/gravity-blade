@@ -11,7 +11,6 @@ public class World : Spatial
     public float ModulationAngle = 0; // from 0 to 1
 
     Vector3 lastAxisPoint = Vector3.Zero;
-    int dotsSpawned = 0;
 
     Player player;
     WorldEnvironment worldEnvironment;
@@ -39,31 +38,10 @@ public class World : Spatial
             platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 100, 
                     platform.IsAccelerator);
         }
-
-        // for (int i = 0; i < 1000; i++)
-        // {
-        //     dotsSpawner.SpawnRandomDot(-i);
-        //     dotsSpawned++;
-        // }
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        // // Spawn new dots if player is further ahead:
-        // while (dotsSpawned < -player.Translation.z + 1000)
-        // {
-        //     dotsSpawner.SpawnRandomDot(-dotsSpawned);
-        //     dotsSpawned++;
-        // }
-        // GD.Print(ModulationAngle);
-        
-        // // Color primaryColor = (new Color(0.93f, 0.73f, 0.89f)).LinearInterpolate(
-        // Color primaryColor = (new Color(1, 0.66f, 0.93f)).LinearInterpolate(
-        //         new Color(0.15f, 0.08f, 0.27f), ModulationCoefficient);
-
-        // Color secondaryColor = (new Color(1, 1, 1)).LinearInterpolate(
-        //         new Color(0.21f, 0.16f, 0.57f), ModulationCoefficient);
-
         worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
         worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
     }
