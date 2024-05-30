@@ -47,7 +47,8 @@ public class World : Spatial
         axis = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
         
         Platform platform = platformScene.Instance<Platform>();
-        platform.IsAccelerator = GD.Randi() % 2 == 0;
+        // platform.IsAccelerator = GD.Randi() % 2 == 0;
+        platform.IsAccelerator = true;
 
         AddTunnelRings(axis);
 

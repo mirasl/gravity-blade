@@ -5,10 +5,14 @@ public class TunnelRing : MeshInstance
 {
     float rotationSpeed;
     public Player player;
+    
+    Material surfaceMaterial;
 
 
     public override void _Ready()
     {
+        surfaceMaterial = GetSurfaceMaterial(0);
+
         float rand = GD.Randf();
 
         if (rand > 0.3f)
@@ -38,7 +42,6 @@ public class TunnelRing : MeshInstance
         rotationSpeed = GD.Randf() - 0.5f;
 
         Rotation = new Vector3(startingRotation * Mathf.Pi*2, Mathf.Pi/2, Mathf.Pi/2);
-        Material surfaceMaterial = GetSurfaceMaterial(0);
         surfaceMaterial.Set("shader_param/lineLength", length);
         surfaceMaterial.Set("shader_param/lineColor", color);
     }
@@ -49,9 +52,17 @@ public class TunnelRing : MeshInstance
         if (player != null)
         {
             float diff = player.Translation.z - Translation.z;
-            // Visible = diff < 500;
-            float coefficient = (1000-diff)/1000;
+
+            // Less trippy perspective:
+            Visible = diff < 700;
+            float coefficient = (1000 - diff)/1000;
+
+            // Trippy constancy:
+            // Visible = diff < 316;
+            // float coefficient = 100/(diff-400) + 1.2f; //585
+
             Scale = new Vector3(6.687f*coefficient, 3.429f, 6.687f*coefficient);
+            surfaceMaterial.Set("shader_param/alpha", coefficient*coefficient);
         }
     }
 }

@@ -9,6 +9,7 @@ render_mode unshaded;
 
 uniform float lineLength = 0.0;
 uniform vec3 lineColor = vec3(0, 0, 0);
+uniform float alpha = 1.0;
 
 void fragment()
 {
@@ -19,7 +20,7 @@ void fragment()
 	float lineStart = 0.0;
 	if (UV.x > lineStart && UV.x - lineStart < lineLength)
 	{
-		ALPHA = 1.0;
+		ALPHA = alpha;
 		ALBEDO = lineColor;
 	}
 	
@@ -30,6 +31,7 @@ resource_local_to_scene = true
 shader = SubResource( 9 )
 shader_param/lineLength = 0.0
 shader_param/lineColor = Vector3( 0, 0, 0 )
+shader_param/alpha = 1.0
 
 [node name="TunnelRing" type="MeshInstance"]
 transform = Transform( 6.68661, 0, 0, 0, -2.92281e-07, -6.68661, 0, 3.42862, -1.4987e-07, 0, 0, 0 )
