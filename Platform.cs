@@ -10,8 +10,8 @@ public class Platform : StaticBody
     {
         if (IsAccelerator)
         {
-            GetNode<MeshInstance>("TopMesh").GetSurfaceMaterial(0).Set("albedo_color", 
-                    Colors.Yellow);
+            // GetNode<MeshInstance>("TopMesh").GetSurfaceMaterial(0).Set("albedo_color", 
+            //         Colors.Yellow);
         }
     }
 }

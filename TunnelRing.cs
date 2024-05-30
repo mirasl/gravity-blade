@@ -27,11 +27,11 @@ public class TunnelRing : MeshInstance
         float length;
         float startingRotation;
 
-        if (rand < 0.1f)
+        if (rand < 0.05f)
         {
             colorType = "bg1";
         }
-        else if (rand < 0.2f)
+        else if (rand < 0.1f)
         {
             colorType = "bg2";
         }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Platform.cs" type="Script" id=1]
 
@@ -7,14 +7,17 @@ extents = Vector3( 3.77929, 0.35369, 65.3701 )
 
 [sub_resource type="CubeMesh" id=2]
 
-[sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 1, 0, 0, 1 )
-
 [sub_resource type="SpatialMaterial" id=4]
 resource_local_to_scene = true
 render_priority = 1
 flags_transparent = true
-albedo_color = Color( 0.313726, 1, 0, 1 )
+flags_unshaded = true
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+
+[sub_resource type="SphereMesh" id=6]
+material = SubResource( 5 )
 
 [node name="Platform" type="StaticBody"]
 script = ExtResource( 1 )
@@ -22,12 +25,20 @@ script = ExtResource( 1 )
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 3.7308, 0, -2.94009e-08, 0, 0.222349, 0, -7.49713e-05, 0, 65.3075, 0.0171468, 0, -3.95348e-08 )
-mesh = SubResource( 2 )
-material/0 = SubResource( 3 )
-
 [node name="TopMesh" type="MeshInstance" parent="."]
 transform = Transform( 3.7308, 0, -2.94009e-08, 0, 0.222349, 0, -7.49713e-05, 0, 65.3075, 0.0171468, 0.136941, -3.95348e-08 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 4 )
+
+[node name="CPUParticles" type="CPUParticles" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -65.0149 )
+visible = false
+amount = 120
+lifetime = 1.34
+mesh = SubResource( 6 )
+emission_shape = 2
+emission_box_extents = Vector3( 4, 0, 0 )
+direction = Vector3( 0, 0, 1 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0

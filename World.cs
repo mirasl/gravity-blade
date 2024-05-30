@@ -10,13 +10,14 @@ public class World : Spatial
 
     public float ModulationAngle = 0; // from 0 to 1
 
+    Vector3 lastRingPoint = Vector3.Zero;
+
     Player player;
     WorldEnvironment worldEnvironment;
     GlobalColors globalColors;
     PackedScene platformScene;
     PackedScene tunnelRingScene;
 
-    Vector3 lastRingPoint = Vector3.Zero;
 
 
     public override void _Ready()
