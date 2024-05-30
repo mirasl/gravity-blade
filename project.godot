@@ -14,6 +14,10 @@ config/name="Press-start"
 run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+GlobalColors="*res://GlobalColors.tscn"
+
 [display]
 
 window/size/width=1920

@@ -8,7 +8,10 @@ public class World : Spatial
     const float JUMP_HEIGHT = 8.33f;
     const int RING_INTERVAL = 3;
 
+    public float ModulationAngle = 0; // from 0 to 1
+
     Player player;
+    WorldEnvironment worldEnvironment;
     PackedScene platformScene;
     PackedScene tunnelRingScene;
 
@@ -18,6 +21,7 @@ public class World : Spatial
     public override void _Ready()
     {
         player = GetNode<Player>("Player");
+        worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -30,6 +34,23 @@ public class World : Spatial
             platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 100, 
                     platform.IsAccelerator);
         }
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        ModulationAngle = Mathf.Atan2(player.FallDirection.y, player.FallDirection.x);
+        GetNode<GlobalColors>("/root/GlobalColors").ShiftPalette();
+        // GD.Print(ModulationAngle);
+        
+        // // Color primaryColor = (new Color(0.93f, 0.73f, 0.89f)).LinearInterpolate(
+        // Color primaryColor = (new Color(1, 0.66f, 0.93f)).LinearInterpolate(
+        //         new Color(0.15f, 0.08f, 0.27f), ModulationCoefficient);
+
+        // Color secondaryColor = (new Color(1, 1, 1)).LinearInterpolate(
+        //         new Color(0.21f, 0.16f, 0.57f), ModulationCoefficient);
+
+        // worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", primaryColor);
+        // worldEnvironment.Environment.BackgroundSky.Set("sun_color", secondaryColor);
     }
 
     // returns newly generated platform
