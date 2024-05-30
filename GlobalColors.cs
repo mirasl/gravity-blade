@@ -57,7 +57,7 @@ public class GlobalColors : Node
 
     public override void _PhysicsProcess(float delta)
     {
-        GD.Print(bg1);
+        // GD.Print(bg1);
     }
 
     public void ShiftPalette()

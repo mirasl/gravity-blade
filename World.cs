@@ -12,6 +12,7 @@ public class World : Spatial
 
     Player player;
     WorldEnvironment worldEnvironment;
+    GlobalColors globalColors;
     PackedScene platformScene;
     PackedScene tunnelRingScene;
 
@@ -22,6 +23,7 @@ public class World : Spatial
     {
         player = GetNode<Player>("Player");
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -47,8 +49,8 @@ public class World : Spatial
         // Color secondaryColor = (new Color(1, 1, 1)).LinearInterpolate(
         //         new Color(0.21f, 0.16f, 0.57f), ModulationCoefficient);
 
-        // worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", primaryColor);
-        // worldEnvironment.Environment.BackgroundSky.Set("sun_color", secondaryColor);
+        worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
+        worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
     }
 
     // returns newly generated platform

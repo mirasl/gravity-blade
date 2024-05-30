@@ -31,6 +31,7 @@ public class Player : KinematicBody
     protected Tween tween;
     protected RayCast floorCast;
     protected Camera camera;
+    protected GlobalColors globalColors;
     protected PackedScene test;
     protected PackedScene enemyExplosionScene;
     // protected MouseLine mouseLine;
@@ -43,6 +44,7 @@ public class Player : KinematicBody
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
         test = GD.Load<PackedScene>("res://Test.tscn");
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         enemyExplosionScene = GD.Load<PackedScene>("res://EnemyExplosion.tscn");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
@@ -265,6 +267,11 @@ public class Player : KinematicBody
         Engine.TimeScale = 1f;
         // Input.MouseMode = Input.MouseModeEnum.Captured;
         gravityWheel.Lock();
+
+        if (Mathf.Abs(angle) > Mathf.Pi/6)
+        {
+            globalColors.ShiftPalette();
+        }
 
         tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
                 Rotation.y, Rotation.z - angle), 0.3f, Tween.TransitionType.Sine, 
