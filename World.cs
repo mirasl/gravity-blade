@@ -7,8 +7,9 @@ public class World : Spatial
     const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
     const int RING_INTERVAL = 3;
+    const float GENERATE_PLATFORM_DISTANCE = 1500; // distance from player to furthest platform at which we generate a new platform
 
-    public float ModulationAngle = 0; // from 0 to 1
+    Platform lastGeneratedPlatform;
 
     Vector3 lastAxisPoint = Vector3.Zero;
 
@@ -31,6 +32,7 @@ public class World : Spatial
 
         GD.Randomize();
 
+        // Start with ten platforms:
         Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, 100, false);
         for (int i = 0; i < 10; i++)
         {
@@ -44,6 +46,12 @@ public class World : Spatial
     {
         worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
         worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
+
+        if (player.Translation.z - lastGeneratedPlatform.Translation.z < GENERATE_PLATFORM_DISTANCE)
+        {
+            GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
+                    lastGeneratedPlatform.Rotation.z, 100, lastGeneratedPlatform.IsAccelerator);
+        }
     }
 
     // returns newly generated platform
@@ -76,6 +84,8 @@ public class World : Spatial
         platform.Translation -= rotationDirection*(deltaH - JUMP_HEIGHT);
 
         AddChild(platform);
+
+        lastGeneratedPlatform = platform;
 
         return platform;
     }

@@ -50,6 +50,11 @@ public class TunnelRing : MeshInstance
 
     public override void _PhysicsProcess(float delta)
     {
+        if (Translation.z > player.Translation.z)
+        {
+            QueueFree();
+        }
+
         Color color = globalColors.GetColorFromIndex(colorIndex);
         surfaceMaterial.Set("shader_param/lineColor", new Vector3(color.r, color.g, color.b));
 
