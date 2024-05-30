@@ -38,8 +38,6 @@ public class World : Spatial
 
     public override void _PhysicsProcess(float delta)
     {
-        ModulationAngle = Mathf.Atan2(player.FallDirection.y, player.FallDirection.x);
-        GetNode<GlobalColors>("/root/GlobalColors").ShiftPalette();
         // GD.Print(ModulationAngle);
         
         // // Color primaryColor = (new Color(0.93f, 0.73f, 0.89f)).LinearInterpolate(
