@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 public class DotsSpawner : Spatial
 {
+    const float MIN_RADIUS = 50;
+    const float MAX_RADIUS = 100;
+    const float MIN_SCALE = 0.5f;
+    const float MAX_SCALE = 2f;
+
     [Export] Mesh dotMesh;
     [Export] string playerPath;
 
@@ -41,12 +46,11 @@ public class DotsSpawner : Spatial
 		multimesh.TransformFormat = MultiMesh.TransformFormatEnum.Transform3d;
 		multimesh.ColorFormat = MultiMesh.ColorFormatEnum.Float;
 		multimesh.Mesh = (Mesh)dotMesh.Duplicate();
-
-        SpawnDot(new Vector3(0, 0, -100), 1, 2);
     }
 
     public override void _Process(float delta)
     {
+        // Destroy dots queued for destruction:
 		for (int i = 0; i < dotsQueuedForDestruction.Count; i++)
 		{
 			Dot dot = dotsQueuedForDestruction[i];
@@ -79,16 +83,34 @@ public class DotsSpawner : Spatial
 		}
     }
 
+    public void SpawnRandomDot(float z)
+    {
+        SpawnDot(
+            GD.Randf()*(MAX_RADIUS-MIN_RADIUS) + MIN_RADIUS,
+            GD.Randf()*Mathf.Pi*2,
+            z,
+            GD.Randf()*(MAX_SCALE-MIN_SCALE) + MIN_SCALE,
+            (int)(GD.Randf()*3)
+        );
+    }
+
     public void SpawnDot(
-			Vector3 translation, 
+			float r,
+            float theta,
+            float z,
 			float scale, 
 			int colorIndex)
 	{
 		Dot dot = new Dot();
-		dot.Translation = translation;
+		dot.Translation = PolarToRectangular(r, theta, z);
 		dot.Scale = scale;
 		dot.colorIndex = colorIndex;
 		
 		dots.Add(dot);
 	}
+
+    public Vector3 PolarToRectangular(float r, float theta, float z)
+    {
+        return new Vector3(r*Mathf.Cos(theta), r*Mathf.Sin(theta), z);
+    }
 }
