@@ -10,7 +10,7 @@ public class World : Spatial
 
     public float ModulationAngle = 0; // from 0 to 1
 
-    Vector3 lastRingPoint = Vector3.Zero;
+    Vector3 lastAxisPoint = Vector3.Zero;
     int dotsSpawned = 0;
 
     Player player;
@@ -40,21 +40,21 @@ public class World : Spatial
                     platform.IsAccelerator);
         }
 
-        for (int i = 0; i < 1000; i++)
-        {
-            dotsSpawner.SpawnRandomDot(-i);
-            dotsSpawned++;
-        }
+        // for (int i = 0; i < 1000; i++)
+        // {
+        //     dotsSpawner.SpawnRandomDot(-i);
+        //     dotsSpawned++;
+        // }
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        // Spawn new dots if player is further ahead:
-        while (dotsSpawned < -player.Translation.z + 1000)
-        {
-            dotsSpawner.SpawnRandomDot(-dotsSpawned);
-            dotsSpawned++;
-        }
+        // // Spawn new dots if player is further ahead:
+        // while (dotsSpawned < -player.Translation.z + 1000)
+        // {
+        //     dotsSpawner.SpawnRandomDot(-dotsSpawned);
+        //     dotsSpawned++;
+        // }
         // GD.Print(ModulationAngle);
         
         // // Color primaryColor = (new Color(0.93f, 0.73f, 0.89f)).LinearInterpolate(
@@ -87,6 +87,8 @@ public class World : Spatial
         platform.IsAccelerator = true;
 
         AddTunnelRings(axis);
+        AddDots(axis);
+        lastAxisPoint = axis;
 
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = axis;
@@ -117,15 +119,22 @@ public class World : Spatial
 
     private void AddTunnelRings(Vector3 newPoint)
     {
-        float iterations = lastRingPoint.DistanceTo(newPoint);
+        float iterations = lastAxisPoint.DistanceTo(newPoint);
         for (int i = 0; i < iterations; i += RING_INTERVAL)
         {
             TunnelRing tunnelRing = tunnelRingScene.Instance<TunnelRing>();
-            tunnelRing.Translation = lastRingPoint.MoveToward(newPoint, i);
+            tunnelRing.Translation = lastAxisPoint.MoveToward(newPoint, i);
             tunnelRing.player = player;
             AddChild(tunnelRing);
         }
+    }
 
-        lastRingPoint = newPoint;
+    private void AddDots(Vector3 newPoint)
+    {
+        float iterations = lastAxisPoint.DistanceTo(newPoint);
+        for (int i = 0; i < iterations; i++)
+        {
+            dotsSpawner.SpawnRandomDot(lastAxisPoint.MoveToward(newPoint, i));
+        }
     }
 }

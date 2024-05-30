@@ -6,7 +6,7 @@ public class DotsSpawner : Spatial
 {
     const float MIN_RADIUS = 50;
     const float MAX_RADIUS = 100;
-    const float MIN_SCALE = 0.5f;
+    const float MIN_SCALE = 0.25f;
     const float MAX_SCALE = 2f;
 
     [Export] Mesh dotMesh;
@@ -83,12 +83,12 @@ public class DotsSpawner : Spatial
 		}
     }
 
-    public void SpawnRandomDot(float z)
+    public void SpawnRandomDot(Vector3 origin)
     {
         SpawnDot(
             GD.Randf()*(MAX_RADIUS-MIN_RADIUS) + MIN_RADIUS,
             GD.Randf()*Mathf.Pi*2,
-            z,
+            origin,
             GD.Randf()*(MAX_SCALE-MIN_SCALE) + MIN_SCALE,
             (int)(GD.Randf()*3)
         );
@@ -97,20 +97,20 @@ public class DotsSpawner : Spatial
     public void SpawnDot(
 			float r,
             float theta,
-            float z,
+            Vector3 origin,
 			float scale, 
 			int colorIndex)
 	{
 		Dot dot = new Dot();
-		dot.Translation = PolarToRectangular(r, theta, z);
+		dot.Translation = PolarToRectangular(r, theta, origin);
 		dot.Scale = scale;
 		dot.colorIndex = colorIndex;
 		
 		dots.Add(dot);
 	}
 
-    public Vector3 PolarToRectangular(float r, float theta, float z)
+    public Vector3 PolarToRectangular(float r, float theta, Vector3 origin)
     {
-        return new Vector3(r*Mathf.Cos(theta), r*Mathf.Sin(theta), z);
+        return new Vector3(r*Mathf.Cos(theta) + origin.x, r*Mathf.Sin(theta) + origin.y, origin.z);
     }
 }
