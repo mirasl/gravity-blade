@@ -10,14 +10,16 @@ public class DotsSpawner : Spatial
     MultiMeshInstance dotsInstantiator;
 	List<Dot> dots = new List<Dot>();
 	List<Dot> dotsQueuedForDestruction = new List<Dot>();
+
     Player player;
+    GlobalColors globalColors;
 
 
 	public class Dot : Reference
 	{
 		public Vector3 Translation;
 		public float Scale;
-		public Color Albedo;
+		public int colorIndex;
 	}
 
 
@@ -29,6 +31,7 @@ public class DotsSpawner : Spatial
     public override void _Ready()
     {
         player = GetParent().GetNode<Player>(playerPath);
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
 
         dotsInstantiator = new MultiMeshInstance();
         AddChild(dotsInstantiator);
@@ -39,7 +42,7 @@ public class DotsSpawner : Spatial
 		multimesh.ColorFormat = MultiMesh.ColorFormatEnum.Float;
 		multimesh.Mesh = (Mesh)dotMesh.Duplicate();
 
-        SpawnDot(new Vector3(0, 0, -100), 1, Colors.Black);
+        SpawnDot(new Vector3(0, 0, -100), 1, 2);
     }
 
     public override void _Process(float delta)
@@ -71,19 +74,20 @@ public class DotsSpawner : Spatial
 
 			dotsInstantiator.Multimesh.SetInstanceTransform(i, dotTransform);
 
-			dotsInstantiator.Multimesh.SetInstanceColor(i, dot.Albedo);
+			dotsInstantiator.Multimesh.SetInstanceColor(i, globalColors.GetColorFromIndex(
+                    dot.colorIndex));
 		}
     }
 
     public void SpawnDot(
 			Vector3 translation, 
 			float scale, 
-			Color albedo)
+			int colorIndex)
 	{
 		Dot dot = new Dot();
 		dot.Translation = translation;
 		dot.Scale = scale;
-		dot.Albedo = albedo;
+		dot.colorIndex = colorIndex;
 		
 		dots.Add(dot);
 	}

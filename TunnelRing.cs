@@ -5,7 +5,7 @@ public class TunnelRing : MeshInstance
 {
     float rotationSpeed;
     public Player player;
-    string colorType;
+    int colorIndex;
     
     Material surfaceMaterial;
     GlobalColors globalColors;
@@ -29,15 +29,15 @@ public class TunnelRing : MeshInstance
 
         if (rand < 0.05f)
         {
-            colorType = "bg1";
+            colorIndex = 0;
         }
         else if (rand < 0.1f)
         {
-            colorType = "bg2";
+            colorIndex = 1;
         }
         else
         {
-            colorType = "fg";
+            colorIndex = 2;
         }
 
         length = GD.Randf() * 0.6f + 0.2f;
@@ -50,19 +50,7 @@ public class TunnelRing : MeshInstance
 
     public override void _PhysicsProcess(float delta)
     {
-        Color color = Colors.White;
-        switch (colorType)
-        {
-            case ("bg1"):
-                color = globalColors.bg1;
-                break;
-            case ("bg2"):
-                color = globalColors.bg2;
-                break;
-            case ("fg"):
-                color = globalColors.fg;
-                break;
-        }
+        Color color = globalColors.GetColorFromIndex(colorIndex);
         surfaceMaterial.Set("shader_param/lineColor", new Vector3(color.r, color.g, color.b));
 
         Rotation = new Vector3(Rotation.x + rotationSpeed * delta, Mathf.Pi/2, Mathf.Pi/2);

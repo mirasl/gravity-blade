@@ -60,6 +60,18 @@ public class GlobalColors : Node
         // GD.Print(bg1);
     }
 
+    public Color GetColorFromIndex(int i)
+    {
+        switch (i)
+        {
+            case (0): return bg1;
+            case (1): return bg2;
+            case (2): return fg;
+        }
+        GD.Print("ERROR! Invalid color index (GlobalColors.cs)");
+        return Colors.Black;
+    }
+
     public void ShiftPalette()
     {
         int newIndex = (int)(GD.Randf()*colorPalettes.Length);
