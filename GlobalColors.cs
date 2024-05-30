@@ -9,30 +9,30 @@ public class GlobalColors : Node
         // EVIL (dark blue, dark purple, bright red)
         new Dictionary<string, Color> 
         {
-            {"bg1", Colors.DarkBlue},
-            {"bg2", Colors.Purple},
-            {"fg", Colors.OrangeRed}
+            {"bg1", new Color("3b0fa5")},
+            {"bg2", new Color("0e1b49")},
+            {"fg", new Color("c91731")}
         },
         // TRANS (light blue, pink, white)
         new Dictionary<string, Color> 
         {
             {"bg1", Colors.White},
-            {"bg2", Colors.LightPink},
-            {"fg", Colors.LightSkyBlue}
+            {"bg2", new Color("e99fde")},
+            {"fg", new Color("39a8f0")}
         },
         // AURORA (light blue, light green, white)
         new Dictionary<string, Color> 
         {
-            {"bg1", Colors.LightBlue},
-            {"bg2", Colors.LightGreen},
-            {"fg", Colors.White}
+            {"bg1", new Color("045aae")}, // blue
+            {"bg2", new Color("4cde6f")}, // light green
+            {"fg", new Color("1a80a5")} // greener blue
         },
         // MUMBAI (yellow, turquoise, blue)
         new Dictionary<string, Color> 
         {
-            {"bg1", Colors.Yellow},
-            {"bg2", Colors.Turquoise},
-            {"fg", Colors.Blue}
+            {"bg1", new Color("52d998")},
+            {"bg2", new Color("fdff9a")},
+            {"fg", new Color("4082c0")}
         }
     };
 

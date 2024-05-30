@@ -6,6 +6,7 @@ public class Slice : Line2D
     [Signal] delegate void LineDrawn(bool gravity, float angle, float slope, Vector2[] points);
 
     [Export] bool Gravity = false;
+    [Export] Vector2 Offset = Vector2.Zero;
 
     const float MAX_POINTS = 45;
 
@@ -38,7 +39,7 @@ public class Slice : Line2D
         if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice)
         {
             slicing = true;
-            AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540));
+            AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540) + Offset);
         }
         else
         {

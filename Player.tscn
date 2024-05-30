@@ -33,6 +33,8 @@ collision_mask = 21
 [node name="SliceCanvas" type="CanvasLayer" parent="."]
 
 [node name="GravitySlice" parent="SliceCanvas" instance=ExtResource( 4 )]
+position = Vector2( 962, 542 )
+points = PoolVector2Array(  )
 width_curve = ExtResource( 5 )
 Gravity = true
 

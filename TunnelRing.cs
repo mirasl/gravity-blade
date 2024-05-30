@@ -37,7 +37,7 @@ public class TunnelRing : MeshInstance
         }
         else
         {
-            colorType = "bg3";
+            colorType = "fg";
         }
 
         length = GD.Randf() * 0.6f + 0.2f;
