@@ -17,7 +17,7 @@ public class GlobalColors : Node
         new Dictionary<string, Color> 
         {
             {"bg1", Colors.White},
-            {"bg2", new Color("e99fde")},
+            {"bg2", new Color("ed4cc5")}, // e99fde
             {"fg", new Color("39a8f0")}
         },
         // AURORA (light blue, light green, white)
