@@ -9,13 +9,14 @@ public class Player : KinematicBody
     const float STRAFE_SPEED = 15;
     const float FORWARD_SPEED = 100;
     const float MOUSE_SENSITIVITY = 1.1f;
-    const float BOOST_SPEED = 200; // m/s^2
+    const float BOOST_ACCELERATION = 200; // m/s^2
     const float AIR_RESISTANCE = 40; // m/s^2
     const float BRUSH_RADIUS_SQUARED = 400; // should be a bit larger than actual brush radius 
             //squared to account for spread out points on the line
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
     const float MIN_FORWARD_SPEED = 100;
+    const int MAX_SPEED_LINES_AMOUNT = 60;
 
     public Vector3 Velocity = Vector3.Zero;
     public Vector3 FallDirection = Vector3.Down;
@@ -27,25 +28,27 @@ public class Player : KinematicBody
     bool snapped = false;
     bool onInlinePlatform = false;
 
+    protected PackedScene test;
+    protected PackedScene enemyExplosionScene;
     protected GravityWheel gravityWheel;
     protected Tween tween;
     protected RayCast floorCast;
     protected Camera camera;
     protected GlobalColors globalColors;
-    protected PackedScene test;
-    protected PackedScene enemyExplosionScene;
+    protected Particles speedLines;
     // protected MouseLine mouseLine;
 
 
     public override void _Ready()
     {
+        test = GD.Load<PackedScene>("res://Test.tscn");
+        enemyExplosionScene = GD.Load<PackedScene>("res://EnemyExplosion.tscn");
         gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
-        test = GD.Load<PackedScene>("res://Test.tscn");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
-        enemyExplosionScene = GD.Load<PackedScene>("res://EnemyExplosion.tscn");
+        speedLines = GetNode<Particles>("Camera/SpeedLines");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
@@ -96,7 +99,7 @@ public class Player : KinematicBody
         if (floorCast.IsColliding() && floorCast.GetCollider() is Platform && 
                 ((Platform)floorCast.GetCollider()).IsAccelerator)
         {
-            Velocity.z -= BOOST_SPEED*delta;
+            Velocity.z -= BOOST_ACCELERATION*delta;
         }
 
         if (Input.IsActionJustPressed("jump") && OnFloor())
@@ -156,6 +159,8 @@ public class Player : KinematicBody
             Velocity = MoveAndSlide(Velocity, -FallDirection);
         }
         Velocity -= inputVelocity;
+
+        SetSpeedLinesAmount(-(int)Velocity.z - (int)MIN_FORWARD_SPEED);
     }
 
     private bool OnFloor()
@@ -435,5 +440,11 @@ public class Player : KinematicBody
         float c = -deltaH; // times delta???
         // quadratic formula:
         return (-20 - Mathf.Sqrt(b*b - 4*a*c)) / (2*a);
+    }
+
+    private void SetSpeedLinesAmount(int amount)
+    {
+        speedLines.Emitting = amount > 1;
+        speedLines.Amount = Mathf.Clamp(amount, 1, MAX_SPEED_LINES_AMOUNT);
     }
 }
