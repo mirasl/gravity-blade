@@ -7,7 +7,7 @@ public class World : Spatial
     const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
     const int RING_INTERVAL = 3;
-    const float GENERATE_PLATFORM_DISTANCE = 1500; // distance from player to furthest platform at which we generate a new platform
+    const float GENERATE_PLATFORM_DISTANCE = 1050; // distance from player to furthest platform at which we generate a new platform
 
     Platform lastGeneratedPlatform;
 
@@ -32,11 +32,10 @@ public class World : Spatial
 
         GD.Randomize();
 
-        // Start with ten platforms:
+        // Start with platforms:
         Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, 100, false);
-        for (int i = 0; i < 10; i++)
+        while (lastAxisPoint.z < -GENERATE_PLATFORM_DISTANCE)
         {
-            // GD.Print(platform.Translation);
             platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 100, 
                     platform.IsAccelerator);
         }
@@ -52,6 +51,7 @@ public class World : Spatial
             GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
                     lastGeneratedPlatform.Rotation.z, 100, lastGeneratedPlatform.IsAccelerator);
         }
+        GD.Print(player.Translation.z - lastGeneratedPlatform.Translation.z);
     }
 
     // returns newly generated platform
