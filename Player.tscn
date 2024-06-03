@@ -10,8 +10,8 @@ radius = 0.981067
 
 [sub_resource type="ParticlesMaterial" id=2]
 emission_shape = 5
-emission_ring_radius = 9.0
-emission_ring_inner_radius = 4.0
+emission_ring_radius = 4.0
+emission_ring_inner_radius = 9.0
 emission_ring_height = 1.0
 emission_ring_axis = Vector3( 0, 0, 1 )
 direction = Vector3( 0, 0, -1 )
@@ -51,7 +51,7 @@ void fragment() {
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
-//	ALPHA = UV.y*UV.y;
+	ALPHA = UV.y;
 }
 "
 
@@ -69,7 +69,7 @@ shader_param/uv2_offset = Vector3( 0, 0, 0 )
 
 [sub_resource type="CapsuleMesh" id=3]
 material = SubResource( 5 )
-radius = 0.08
+radius = 0.05
 mid_height = 9.197
 radial_segments = 4
 rings = 1
@@ -83,13 +83,38 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="Camera" type="Camera" parent="."]
+current = true
 far = 1000.0
 
-[node name="SpeedLines" type="Particles" parent="Camera"]
+[node name="SpeedLines60" type="Particles" parent="Camera"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -11.5295 )
-amount = 20
+emitting = false
+amount = 60
 lifetime = 0.28
-speed_scale = 0.5
+process_material = SubResource( 2 )
+draw_pass_1 = SubResource( 3 )
+
+[node name="SpeedLines30" type="Particles" parent="Camera"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -11.5295 )
+emitting = false
+amount = 30
+lifetime = 0.28
+process_material = SubResource( 2 )
+draw_pass_1 = SubResource( 3 )
+
+[node name="SpeedLines15" type="Particles" parent="Camera"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -11.5295 )
+emitting = false
+amount = 15
+lifetime = 0.28
+process_material = SubResource( 2 )
+draw_pass_1 = SubResource( 3 )
+
+[node name="SpeedLines5" type="Particles" parent="Camera"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -11.5295 )
+emitting = false
+amount = 5
+lifetime = 0.28
 process_material = SubResource( 2 )
 draw_pass_1 = SubResource( 3 )
 

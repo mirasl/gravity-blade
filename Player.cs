@@ -35,7 +35,10 @@ public class Player : KinematicBody
     protected RayCast floorCast;
     protected Camera camera;
     protected GlobalColors globalColors;
-    protected Particles speedLines;
+    protected Particles speedLines60;
+    protected Particles speedLines30;
+    protected Particles speedLines15;
+    protected Particles speedLines5;
     // protected MouseLine mouseLine;
 
 
@@ -48,7 +51,10 @@ public class Player : KinematicBody
         floorCast = GetNode<RayCast>("FloorCast");
         camera = GetNode<Camera>("Camera");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
-        speedLines = GetNode<Particles>("Camera/SpeedLines");
+        speedLines60 = GetNode<Particles>("Camera/SpeedLines60");
+        speedLines30 = GetNode<Particles>("Camera/SpeedLines30");
+        speedLines15 = GetNode<Particles>("Camera/SpeedLines15");
+        speedLines5 = GetNode<Particles>("Camera/SpeedLines5");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
@@ -83,7 +89,6 @@ public class Player : KinematicBody
         // if (IsOnFloor() && (!snapped || onInlinePlatform))
         if (IsOnFloor() && !snapped)
         {
-            // GD.Print("hi");
             SnapToPlatform();
         }
         else if (snapped && !IsOnFloor())
@@ -160,7 +165,8 @@ public class Player : KinematicBody
         }
         Velocity -= inputVelocity;
 
-        SetSpeedLinesAmount(-(int)Velocity.z - (int)MIN_FORWARD_SPEED);
+        SetSpeedLinesStrength((int)Mathf.Clamp((-Velocity.z - MIN_FORWARD_SPEED) / 30, 0, 4));
+        SetSpeedLinesColor();
     }
 
     private bool OnFloor()
@@ -442,9 +448,19 @@ public class Player : KinematicBody
         return (-20 - Mathf.Sqrt(b*b - 4*a*c)) / (2*a);
     }
 
-    private void SetSpeedLinesAmount(int amount)
+    private void SetSpeedLinesStrength(int strength)
     {
-        speedLines.Emitting = amount > 1;
-        speedLines.Amount = Mathf.Clamp(amount, 1, MAX_SPEED_LINES_AMOUNT);
+        speedLines60.Emitting = strength == 4;
+        speedLines30.Emitting = strength == 3;
+        speedLines15.Emitting = strength == 2;
+        speedLines5.Emitting = strength == 1;
+    }
+
+    private void SetSpeedLinesColor()
+    {
+        speedLines60.ProcessMaterial.Set("color", globalColors.bg1);
+        speedLines30.ProcessMaterial.Set("color", globalColors.bg1);
+        speedLines15.ProcessMaterial.Set("color", globalColors.bg1);
+        speedLines5.ProcessMaterial.Set("color", globalColors.bg1);
     }
 }

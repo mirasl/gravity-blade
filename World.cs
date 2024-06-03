@@ -51,7 +51,6 @@ public class World : Spatial
             GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
                     lastGeneratedPlatform.Rotation.z, 100, lastGeneratedPlatform.IsAccelerator);
         }
-        GD.Print(player.Translation.z - lastGeneratedPlatform.Translation.z);
     }
 
     // returns newly generated platform
