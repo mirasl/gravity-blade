@@ -128,7 +128,6 @@ public class World : Spatial
 
     public void sig_GameOver()
     {
-        GD.Print("GAME OVER");
         GetTree().Quit();
     }
 }
