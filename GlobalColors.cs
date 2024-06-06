@@ -23,8 +23,8 @@ public class GlobalColors : Node
         // AURORA (light blue, light green, white)
         new Dictionary<string, Color> 
         {
-            {"bg1", new Color("045aae")}, // blue
-            {"bg2", new Color("4cde6f")}, // light green
+            {"bg1", new Color("4cde6f")}, // light green
+            {"bg2", new Color("045aae")}, // blue
             {"fg", new Color("1a80a5")} // greener blue
         },
         // MUMBAI (yellow, turquoise, blue)

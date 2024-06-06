@@ -3,6 +3,11 @@ using System;
 
 public class TunnelRing : MeshInstance
 {
+    [Signal] delegate void GameOver();
+
+    const float SQUARED_OUT_OF_BOUNDS = 1800;
+    const float BOUND_CHECK_Z_DISTANCE = 1;
+
     float rotationSpeed;
     public Player player;
     int colorIndex;
@@ -61,6 +66,19 @@ public class TunnelRing : MeshInstance
         Rotation = new Vector3(Rotation.x + rotationSpeed * delta, Mathf.Pi/2, Mathf.Pi/2);
         if (player != null)
         {
+            // check if player is out of bounds:
+            if (Mathf.Abs(Translation.z - player.Translation.z) < BOUND_CHECK_Z_DISTANCE)
+            {
+                // GD.Print(Translation.z);
+                if (new Vector2(Translation.x, Translation.y).DistanceSquaredTo(new Vector2(
+                        player.Translation.x, player.Translation.y)) > SQUARED_OUT_OF_BOUNDS)
+                {
+                    GD.Print(new Vector2(Translation.x, Translation.y).DistanceSquaredTo(new Vector2(
+                        player.Translation.x, player.Translation.y)));
+                    EmitSignal("GameOver");
+                }
+            }
+
             float diff = player.Translation.z - Translation.z;
 
             // Less trippy perspective:

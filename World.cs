@@ -112,6 +112,7 @@ public class World : Spatial
             TunnelRing tunnelRing = tunnelRingScene.Instance<TunnelRing>();
             tunnelRing.Translation = lastAxisPoint.MoveToward(newPoint, i);
             tunnelRing.player = player;
+            tunnelRing.Connect("GameOver", this, "sig_GameOver");
             AddChild(tunnelRing);
         }
     }
@@ -123,5 +124,11 @@ public class World : Spatial
         {
             dotsSpawner.SpawnRandomDot(lastAxisPoint.MoveToward(newPoint, i));
         }
+    }
+
+    public void sig_GameOver()
+    {
+        GD.Print("GAME OVER");
+        GetTree().Quit();
     }
 }
