@@ -17,7 +17,10 @@ public class World : Spatial
     WorldEnvironment worldEnvironment;
     GlobalColors globalColors;
     DotsSpawner dotsSpawner;
+
     PackedScene platformScene;
+    PackedScene rampScene;
+    PackedScene bigRampScene;
     PackedScene tunnelRingScene;
 
 
@@ -27,7 +30,10 @@ public class World : Spatial
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         dotsSpawner = GetNode<DotsSpawner>("DotsSpawner");
+
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
+        rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
+        bigRampScene = GD.Load<PackedScene>("res://BigRamp.tscn");
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
         GD.Randomize();
@@ -60,6 +66,7 @@ public class World : Spatial
         // Random values:
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
         float deltaH = -GD.Randf()*30;
+        float rampSeed = GD.Randf();
 
         // Other values:
         float distance = GetPlatformDistance(deltaH, speed, currentPlatformIsAccelerator);
@@ -67,7 +74,20 @@ public class World : Spatial
         Vector3 axis = currentPlatformTranslation - fallDirection*JUMP_HEIGHT;
         axis = new Vector3(axis.x, axis.y, currentPlatformTranslation.z - distance);
         
-        Platform platform = platformScene.Instance<Platform>();
+        // Assign platform to platform, ramp, bigRamp (based on rampSeed):
+        Platform platform;
+        if (rampSeed < 0.6f)
+        {
+            platform = platformScene.Instance<Platform>();
+        }
+        else if (rampSeed < 0.85f)
+        {
+            platform = rampScene.Instance<Platform>();
+        }
+        else
+        {
+            platform = bigRampScene.Instance<Platform>();
+        }
         // platform.IsAccelerator = GD.Randi() % 2 == 0;
         platform.IsAccelerator = true;
 
@@ -128,6 +148,7 @@ public class World : Spatial
 
     public void sig_GameOver()
     {
-        GetTree().Quit();
+        /// !!! make an actual game over
+        GetTree().ReloadCurrentScene();
     }
 }
