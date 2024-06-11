@@ -69,6 +69,8 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
+        GD.Print(Translation.y);
+
         UpdateFallDirection();
         HandleButtonRelease();
 
