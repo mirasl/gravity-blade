@@ -7,13 +7,16 @@ public class World : Spatial
     const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
     const int RING_INTERVAL = 3;
+    const int DOT_INTERVAL = 2;
     const float GENERATE_PLATFORM_DISTANCE = 1050; // distance from player to furthest platform at which we generate a new platform
-    const float RAMP_SPEED = 250;
-    const float BIG_RAMP_SPEED = 460;
-    const float RAMP_AXIS_OFFSET = 1.5f; // distance from the top of the player's arc to the axis after leaving a ramp
-    const float BIG_RAMP_AXIS_OFFSET = 10f; // distance from the top of the player's arc to the axis after leaving a big ramp
+    const float RAMP_SPEED = 200;
+    const float BIG_RAMP_SPEED = 400;
+    const float RAMP_AXIS_OFFSET = 5f; // distance from the top of the player's arc to the axis after leaving a ramp
+    const float BIG_RAMP_AXIS_OFFSET = 15f; // distance from the top of the player's arc to the axis after leaving a big ramp
     const float RAMP_PROBABILITY = 0.25f;
     const float BIG_RAMP_PROBABILITY = 0.15f;
+    const float MIN_DELTA_H = 10;
+    const float MAX_DELTA_H = 30;
 
     float currentSpeed = 100;
 
@@ -73,7 +76,7 @@ public class World : Spatial
     {
         // Random values:
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
-        float deltaH = -GD.Randf()*30;
+        float deltaH = -GD.Randf()*(MAX_DELTA_H - MIN_DELTA_H) - MIN_DELTA_H;
         float rampSeed = GD.Randf();
 
         // Other values:
@@ -157,7 +160,7 @@ public class World : Spatial
     private void AddDots(Vector3 newPoint)
     {
         float iterations = lastAxisPoint.DistanceTo(newPoint);
-        for (int i = 0; i < iterations; i++)
+        for (int i = 0; i < iterations; i += DOT_INTERVAL)
         {
             dotsSpawner.SpawnRandomDot(lastAxisPoint.MoveToward(newPoint, i));
         }

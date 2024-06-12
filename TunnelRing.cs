@@ -5,7 +5,7 @@ public class TunnelRing : MeshInstance
 {
     [Signal] delegate void GameOver();
 
-    const float SQUARED_OUT_OF_BOUNDS = 5000;//1800;
+    const float SQUARED_OUT_OF_BOUNDS = 10000;//1800;
     const float BOUND_CHECK_Z_DISTANCE = 1;
 
     float rotationSpeed;
@@ -73,8 +73,8 @@ public class TunnelRing : MeshInstance
                 if (new Vector2(Translation.x, Translation.y).DistanceSquaredTo(new Vector2(
                         player.Translation.x, player.Translation.y)) > SQUARED_OUT_OF_BOUNDS)
                 {
-                    GD.Print(new Vector2(Translation.x, Translation.y).DistanceSquaredTo(new Vector2(
-                        player.Translation.x, player.Translation.y)));
+                    // GD.Print(new Vector2(Translation.x, Translation.y).DistanceSquaredTo(new Vector2(
+                    //     player.Translation.x, player.Translation.y)));
                     EmitSignal("GameOver");
                 }
             }

@@ -27,6 +27,7 @@ public class Player : KinematicBody
     bool shifting = false;
     bool snapped = false;
     bool onInlinePlatform = false;
+    bool rushingDown = false;
 
     protected PackedScene test;
     protected PackedScene enemyExplosionScene;
@@ -69,8 +70,6 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
-        GD.Print(Translation.y);
-
         UpdateFallDirection();
         HandleButtonRelease();
 
@@ -144,10 +143,13 @@ public class Player : KinematicBody
             gravityWheel.GravityAngle = GetMouseAngle() + Mathf.Pi;
         }
 
+        rushingDown = Input.IsActionPressed("down") && !IsOnFloor() && !snapped;
+
+        float gravityMagnitude = rushingDown ? 7*GRAVITY_MAGNITUDE : GRAVITY_MAGNITUDE;
         if (!shifting)
         {
-            Velocity += new Vector3(FallDirection.x * GRAVITY_MAGNITUDE, FallDirection.y *
-                    GRAVITY_MAGNITUDE, 0);
+            Velocity += new Vector3(FallDirection.x * gravityMagnitude, FallDirection.y *
+                    gravityMagnitude, 0);
         }
         if (Mathf.Abs(Velocity.z) < MIN_FORWARD_SPEED)
         {
