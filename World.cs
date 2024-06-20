@@ -6,17 +6,29 @@ public class World : Spatial
     const float BASE_PLATFORM_DISTANCE = 140;
     const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
+    const float GENERATE_PLATFORM_DISTANCE = 1050; // distance from player to furthest platform at which we generate a new platform
+    
     const int RING_INTERVAL = 3;
     const int DOT_INTERVAL = 2;
-    const float GENERATE_PLATFORM_DISTANCE = 1050; // distance from player to furthest platform at which we generate a new platform
-    const float RAMP_SPEED = 200;
-    const float BIG_RAMP_SPEED = 400;
-    const float RAMP_AXIS_OFFSET = 5f; // distance from the top of the player's arc to the axis after leaving a ramp
-    const float BIG_RAMP_AXIS_OFFSET = 15f; // distance from the top of the player's arc to the axis after leaving a big ramp
-    const float RAMP_PROBABILITY = 0.25f;
-    const float BIG_RAMP_PROBABILITY = 0.5f;
+    
     const float MIN_DELTA_H = 10;
     const float MAX_DELTA_H = 30;
+
+    const float RAMP_SPEED = 200;
+    const float BIG_RAMP_SPEED = 400;
+    
+    const float RAMP_AXIS_OFFSET = 5f; // distance from the top of the player's arc to the axis after leaving a ramp
+    const float BIG_RAMP_AXIS_OFFSET = 15f; // distance from the top of the player's arc to the axis after leaving a big ramp
+    
+    const float RAMP_DEPTH = 20; // distance the player slides down when they go on a ramp
+    const float BIG_RAMP_DEPTH = 60; // distance the player slides down when they go on a big ramp
+    
+    const float RAMP_LENGTH = 100;
+    const float BIG_RAMP_LENGTH = 208;
+    
+    const float RAMP_PROBABILITY = 0.25f;
+    const float BIG_RAMP_PROBABILITY = 0.5f;
+    
 
     float currentSpeed = 100;
 
@@ -113,20 +125,31 @@ public class World : Spatial
         AddTunnelRings(axis);
         AddDots(axis);
         lastAxisPoint = axis;
+        
+        Vector3 newFallDirection = Vector3.Down.Rotated(Vector3.Forward, 
+                -currentPlatformRotationZ - theta);
 
-        if (rampSeed < BIG_RAMP_PROBABILITY)
+        // RINGS FOLLOW RAMPS DOWNWARD:
+        if (rampSeed < BIG_RAMP_PROBABILITY) // BIG RAMP
         {
-            Vector3 newFallDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ - theta);
-            AddTunnelRings(axis + (new Vector3(60*newFallDirection.x, 60*newFallDirection.y, -208)));
-            lastAxisPoint = axis + (new Vector3(60*newFallDirection.x, 60*newFallDirection.y, -208));
+            Vector3 newAxis = axis + (new Vector3(BIG_RAMP_DEPTH*newFallDirection.x, 
+                    BIG_RAMP_DEPTH*newFallDirection.y, -BIG_RAMP_LENGTH));
+            AddTunnelRings(newAxis);
+            AddDots(newAxis);
+            lastAxisPoint = newAxis;
+        }
+        else if (rampSeed < RAMP_PROBABILITY) // RAMP
+        {
+            Vector3 newAxis = axis + (new Vector3(RAMP_DEPTH*newFallDirection.x, 
+                    RAMP_DEPTH*newFallDirection.y, -RAMP_LENGTH));
+            AddTunnelRings(newAxis);
+            AddDots(newAxis);
+            lastAxisPoint = newAxis;
         }
 
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = axis;
-
-        Vector3 rotationDirection = Vector3.Down.Rotated(Vector3.Forward, 
-                -currentPlatformRotationZ - theta);
-        platform.Translation -= rotationDirection*(deltaH - JUMP_HEIGHT);
+        platform.Translation -= newFallDirection*(deltaH - JUMP_HEIGHT);
 
         AddChild(platform);
 

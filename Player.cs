@@ -7,7 +7,6 @@ public class Player : KinematicBody
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
     const float STRAFE_SPEED = 15;
-    const float FORWARD_SPEED = 100;
     const float MOUSE_SENSITIVITY = 1.1f;
     const float BOOST_ACCELERATION = 200; // m/s^2
     const float AIR_RESISTANCE = 40; // m/s^2
@@ -16,6 +15,7 @@ public class Player : KinematicBody
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
     const float MIN_FORWARD_SPEED = 100;
+    const float MAX_FORWARD_SPEED = 500;
     const int MAX_SPEED_LINES_AMOUNT = 60;
 
     public Vector3 Velocity = Vector3.Zero;
@@ -65,7 +65,7 @@ public class Player : KinematicBody
         Rotation = Vector3.Zero;
         UpdateFallDirection();
 
-        Velocity.z = -FORWARD_SPEED;
+        Velocity.z = -MIN_FORWARD_SPEED;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -151,10 +151,10 @@ public class Player : KinematicBody
             Velocity += new Vector3(FallDirection.x * gravityMagnitude, FallDirection.y *
                     gravityMagnitude, 0);
         }
-        if (Mathf.Abs(Velocity.z) < MIN_FORWARD_SPEED)
-        {
-            Velocity.z = -MIN_FORWARD_SPEED;
-        }
+
+        // Check bounds of speed
+        Velocity.z = Mathf.Clamp(Velocity.z, -MAX_FORWARD_SPEED, -MIN_FORWARD_SPEED);
+
         // GD.Print(Velocity.z);
         Velocity += inputVelocity;
         if (snapped)

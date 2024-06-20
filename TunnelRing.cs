@@ -5,7 +5,7 @@ public class TunnelRing : MeshInstance
 {
     [Signal] delegate void GameOver();
 
-    const float SQUARED_OUT_OF_BOUNDS = 10000;//1800;
+    const float SQUARED_OUT_OF_BOUNDS = 1800;
     const float BOUND_CHECK_Z_DISTANCE = 1;
 
     float rotationSpeed;
