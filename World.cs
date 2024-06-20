@@ -14,7 +14,7 @@ public class World : Spatial
     const float RAMP_AXIS_OFFSET = 5f; // distance from the top of the player's arc to the axis after leaving a ramp
     const float BIG_RAMP_AXIS_OFFSET = 15f; // distance from the top of the player's arc to the axis after leaving a big ramp
     const float RAMP_PROBABILITY = 0.25f;
-    const float BIG_RAMP_PROBABILITY = 0.15f;
+    const float BIG_RAMP_PROBABILITY = 0.5f;
     const float MIN_DELTA_H = 10;
     const float MAX_DELTA_H = 30;
 
@@ -93,7 +93,6 @@ public class World : Spatial
             currentSpeed = BIG_RAMP_SPEED;
             // Subtract from axis in the fall direction (accounts for end ramp momentum):
             axis += fallDirection*BIG_RAMP_AXIS_OFFSET;
-
         }
         else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY) // RAMP
         {
@@ -114,6 +113,13 @@ public class World : Spatial
         AddTunnelRings(axis);
         AddDots(axis);
         lastAxisPoint = axis;
+
+        if (rampSeed < BIG_RAMP_PROBABILITY)
+        {
+            Vector3 newFallDirection = Vector3.Down.Rotated(Vector3.Forward, -currentPlatformRotationZ - theta);
+            AddTunnelRings(axis + (new Vector3(60*newFallDirection.x, 60*newFallDirection.y, -208)));
+            lastAxisPoint = axis + (new Vector3(60*newFallDirection.x, 60*newFallDirection.y, -208));
+        }
 
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = axis;

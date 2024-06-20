@@ -3,7 +3,7 @@ using System;
 
 public class Platform : StaticBody
 {
-    public bool IsAccelerator = false;
+    [Export] public bool IsAccelerator = false;
 
 
     public override void _Ready()
