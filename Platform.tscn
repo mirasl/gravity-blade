@@ -1,17 +1,12 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Platform.cs" type="Script" id=1]
+[ext_resource path="res://RESOURCES/PlatformMaterial.material" type="Material" id=2]
 
 [sub_resource type="BoxShape" id=7]
 extents = Vector3( 6.66897, 0.0386744, 65.0846 )
 
 [sub_resource type="CubeMesh" id=2]
-
-[sub_resource type="SpatialMaterial" id=4]
-resource_local_to_scene = true
-render_priority = 1
-flags_transparent = true
-flags_unshaded = true
 
 [sub_resource type="SpatialMaterial" id=5]
 flags_unshaded = true
@@ -29,7 +24,7 @@ shape = SubResource( 7 )
 [node name="TopMesh" type="MeshInstance" parent="."]
 transform = Transform( 6.65643, 0, -5.24566e-08, 0, 0.222349, 0, -7.49713e-05, 0, 65.3075, 0.0171468, 0.136941, -3.95348e-08 )
 mesh = SubResource( 2 )
-material/0 = SubResource( 4 )
+material/0 = ExtResource( 2 )
 
 [node name="CPUParticles" type="CPUParticles" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -65.0149 )

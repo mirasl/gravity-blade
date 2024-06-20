@@ -81,15 +81,24 @@ public class TunnelRing : MeshInstance
 
             float diff = player.Translation.z - Translation.z;
 
-            // Less trippy perspective:
+            // OPTION 1: Less trippy perspective:
             Visible = diff < 700;
             float coefficient = (1000 - diff)/1000;
 
-            // Trippy constancy:
+            // OPTION 2: Curved but not trippy:
+            // Visible = diff < 700;
+            // float coefficient = 70 / (diff - 800) + 1;
+            // if (coefficient < 0)
+            // {
+            //     coefficient = 0;
+            // }
+
+            // OPTION 3: Trippy constancy:
             // Visible = diff < 316;
             // float coefficient = 100/(diff-400) + 1.2f; //585
 
             Scale = new Vector3(6.687f*coefficient, 3.429f, 6.687f*coefficient);
+            // Scale = new Vector3(6.687f, 3.429f, 6.687f);
             surfaceMaterial.Set("shader_param/alpha", coefficient*coefficient);
         }
     }
