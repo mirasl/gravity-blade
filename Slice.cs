@@ -3,7 +3,7 @@ using System;
 
 public class Slice : Line2D
 {
-    [Signal] delegate void LineDrawn(bool gravity, float angle, float slope, Vector2[] points);
+    [Signal] delegate void LineDrawn(bool gravity, float angle, Vector2[] points);
 
     [Export] bool Gravity = false;
     [Export] Vector2 Offset = Vector2.Zero;
@@ -69,10 +69,8 @@ public class Slice : Line2D
             // arrowParticles.Show();
             arrow.Show();
             arrowAP.Play("point");
-            float[] regressionInfo = RegressedSlopeAngle(Points);
-            float angle = regressionInfo[0];
-            float slope = regressionInfo[1];
-            EmitSignal("LineDrawn", true, angle, slope, Points);
+            float angle = RegressedSlopeAngle(Points);
+            EmitSignal("LineDrawn", true, angle, Points);
 
             tween.InterpolateProperty(pivot, "rotation", angle, 0, 0.3f, Tween.TransitionType.Sine, 
                     Tween.EaseType.Out);
@@ -85,8 +83,7 @@ public class Slice : Line2D
         }
         else
         {
-            float[] regressionInfo = RegressedSlopeAngle(Points);
-            float angle = regressionInfo[0];
+            float angle = RegressedSlopeAngle(Points);
             EmitSignal("LineDrawn", false, angle, 0, Points);
         }
     }
@@ -97,7 +94,7 @@ public class Slice : Line2D
     }
 
     // Calculates slope of array of points with a linear regression:
-    public float[] RegressedSlopeAngle(Vector2[] points)
+    public float RegressedSlopeAngle(Vector2[] points)
     {
         // Calculate means:
         float xMean = 0;
@@ -118,7 +115,7 @@ public class Slice : Line2D
             sumXYDiff += (point.x - xMean) * (point.y - yMean);
             sumXDiffSquared += (point.x - xMean) * (point.x - xMean);
         }
-        float slope = sumXYDiff / sumXDiffSquared;
+        // float slope = sumXYDiff / sumXDiffSquared;
         float angle = Mathf.Atan2(sumXDiffSquared, -sumXYDiff);
 
         // Scale angle to range from 0 to 2pi:
@@ -132,7 +129,7 @@ public class Slice : Line2D
         // }
         // GD.Print(angle);
         // angle = Mathf.Stepify(angle, Mathf.Pi*0.25f);
-        return new float[]{angle, slope};
+        return angle;
     }
 
     public void sig_ArrowAPFinished(string animName)

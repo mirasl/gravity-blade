@@ -161,7 +161,7 @@ public class Player : KinematicBody
         {
             Velocity.z += Velocity.y*0.3f;
 
-            Velocity = MoveAndSlideWithSnap(Velocity, FallDirection.Normalized()*2, -FallDirection);
+            Velocity = MoveAndSlideWithSnap(Velocity, FallDirection.Normalized()*5, -FallDirection);
         }
         else
         {
@@ -169,7 +169,7 @@ public class Player : KinematicBody
         }
         Velocity -= inputVelocity;
 
-        SetSpeedLinesStrength((int)Mathf.Clamp((-Velocity.z - MIN_FORWARD_SPEED) / 30, 0, 4));
+        SetSpeedLinesStrength((int)Mathf.Clamp((-Velocity.z - MIN_FORWARD_SPEED) / 40, 0, 4));
         SetSpeedLinesColor();
     }
 
@@ -301,7 +301,7 @@ public class Player : KinematicBody
         shifting = false;
     }
 
-    public void sig_LineDrawn(bool gravity, float angle, float slope, Vector2[] points)
+    public void sig_LineDrawn(bool gravity, float angle, Vector2[] points)
     {
         if (gravity)
         {
