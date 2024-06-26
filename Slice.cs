@@ -93,7 +93,12 @@ public class Slice : Line2D
         return Points[Points.Length - 1].x > Points[0].x;
     }
 
-    // Calculates slope of array of points with a linear regression:
+    public bool IsDrawnToBottom(Vector2[] points)
+    {
+        return Points[Points.Length - 1].y > Points[0].y;
+    }
+
+    // Calculates angle of line of best fit of array of points with a linear regression:
     public float RegressedSlopeAngle(Vector2[] points)
     {
         // Calculate means:
@@ -122,6 +127,18 @@ public class Slice : Line2D
         if (IsDrawnToRight(points))
         {
             angle = (Mathf.Pi - angle)*-1;
+        }
+
+        if (Mathf.Abs(angle) < 0.1f || Mathf.Abs(Mathf.Pi - angle) < 0.1f)
+        {
+            if (IsDrawnToBottom(points))
+            {
+                angle = 0;
+            }
+            else
+            {
+                angle = Mathf.Pi;
+            }
         }
         // if (angle < 0)
         // {
