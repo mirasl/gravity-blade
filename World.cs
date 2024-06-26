@@ -23,7 +23,7 @@ public class World : Spatial
     const float RAMP_DEPTH = 20; // distance the player slides down when they go on a ramp
     const float BIG_RAMP_DEPTH = 60; // distance the player slides down when they go on a big ramp
     
-    const float RAMP_LENGTH = 100;
+    const float RAMP_LENGTH = 120;
     const float BIG_RAMP_LENGTH = 208;
     
     const float RAMP_PROBABILITY = 0.25f;
@@ -138,7 +138,7 @@ public class World : Spatial
             AddDots(newAxis);
             lastAxisPoint = newAxis;
         }
-        else if (rampSeed < RAMP_PROBABILITY) // RAMP
+        else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY) // RAMP
         {
             Vector3 newAxis = axis + (new Vector3(RAMP_DEPTH*newFallDirection.x, 
                     RAMP_DEPTH*newFallDirection.y, -RAMP_LENGTH));
