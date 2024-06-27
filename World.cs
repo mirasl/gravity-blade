@@ -70,6 +70,7 @@ public class World : Spatial
         GD.Randomize();
 
         // Start with platforms:
+        lastGeneratedPlatform = new Platform();
         Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, false);
         while (lastAxisPoint.z < -GENERATE_PLATFORM_DISTANCE)
         {
@@ -111,6 +112,7 @@ public class World : Spatial
         if (rampSeed < BIG_RAMP_PROBABILITY) // BIG RAMP
         {
             platform = bigRampScene.Instance<Platform>();
+            platform.CurrentType = Platform.Type.BigRamp;
             currentSpeed = BIG_RAMP_SPEED;
             // Subtract from axis in the fall direction (accounts for end ramp momentum):
             axis += fallDirection*BIG_RAMP_AXIS_OFFSET;
@@ -118,6 +120,7 @@ public class World : Spatial
         else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY) // RAMP
         {
             platform = rampScene.Instance<Platform>();
+            platform.CurrentType = Platform.Type.Ramp;
             currentSpeed = RAMP_SPEED;
             // Subtract from axis in the fall direction (accounts for end ramp momentum):
             axis += fallDirection*RAMP_AXIS_OFFSET;
@@ -125,6 +128,7 @@ public class World : Spatial
         else // PLATFORM
         {
             platform = platformScene.Instance<Platform>();
+            platform.CurrentType = Platform.Type.Flat;
             currentSpeed = 100;
         }
         // platform.IsAccelerator = GD.Randi() % 2 == 0;
@@ -171,7 +175,17 @@ public class World : Spatial
         }
         else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY)
         {
+            Enemy enemy = enemyScene.Instance<Enemy>();
+            enemy.CurrentType = Enemy.Type.Vertical;
+            enemies.AddChild(enemy);
+            enemy.Rotation = platform.Rotation;
 
+            float distanceBack = 150;
+            if (lastGeneratedPlatform.CurrentType == Platform.Type.BigRamp)
+            {
+                distanceBack = 350;
+            }
+            enemy.Translation = axis + Vector3.Back*distanceBack;
         }
         else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY + 
                 ENEMY_CIRCLE_PROBABILITY)
