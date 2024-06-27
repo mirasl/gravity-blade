@@ -344,12 +344,13 @@ public class Player : KinematicBody
 
         foreach (Enemy enemy in GetParent().GetNode<Spatial>("Enemies").GetChildren())
         {
-            if (Mathf.Abs(enemy.Translation.z - Translation.z) > ENEMY_RANGE)
+            KinematicBody enemyKB = enemy.GetNode<KinematicBody>("KinematicBody");
+            if (Mathf.Abs(enemyKB.GlobalTranslation.z - Translation.z) > ENEMY_RANGE)
             {
                 continue;
             }
             // Unproject enemy position and radius:
-            Vector2 enemyPosition = camera.UnprojectPosition(enemy.Translation);
+            Vector2 enemyPosition = camera.UnprojectPosition(enemyKB.GlobalTranslation);
             float enemyRadius = Mathf.Abs(enemyPosition.x - camera.UnprojectPosition(
                     enemy.Translation + new Vector3(enemy.Radius, 0, 0)).x);
             Vector2 unrotatedEnemyPosition = enemyPosition;
@@ -376,10 +377,10 @@ public class Player : KinematicBody
                     continue;
                 }
                 enemy.QueueFree();
-                EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
-                enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
-                enemyExplosion.Position = unrotatedEnemyPosition;
-                GetParent().AddChild(enemyExplosion);
+                // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
+                // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
+                // enemyExplosion.Position = unrotatedEnemyPosition;
+                // GetParent().AddChild(enemyExplosion);
                 break;
             }
         }

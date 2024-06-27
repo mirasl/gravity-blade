@@ -84,7 +84,7 @@ public class Slice : Line2D
         else
         {
             float angle = RegressedSlopeAngle(Points);
-            EmitSignal("LineDrawn", false, angle, 0, Points);
+            EmitSignal("LineDrawn", false, angle, Points);
         }
     }
 
