@@ -127,7 +127,7 @@ tracks/0/keys = {
 
 [node name="Enemy" type="Spatial"]
 script = ExtResource( 1 )
-Radius = 6.7
+Radius = 10.0
 
 [node name="KinematicBody" type="KinematicBody" parent="."]
 collision_layer = 8
@@ -137,7 +137,7 @@ collision_mask = 0
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="KinematicBody"]
-transform = Transform( 6.7055, 0, 0, 0, 6.7055, 0, 0, 0, 6.7055, 0, 0, 0 )
+transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0 )
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = SubResource( 3 )

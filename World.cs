@@ -28,6 +28,10 @@ public class World : Spatial
     
     const float RAMP_PROBABILITY = 0.25f;
     const float BIG_RAMP_PROBABILITY = 0.5f;
+
+    const float ENEMY_HORIZONTAL_PROBABILITY = 0.1f;
+    const float ENEMY_VERTICAL_PROBABILITY = 0.1f;
+    const float ENEMY_CIRCLE_PROBABILITY = 0.1f;
     
 
     float currentSpeed = 100;
@@ -40,11 +44,13 @@ public class World : Spatial
     WorldEnvironment worldEnvironment;
     GlobalColors globalColors;
     DotsSpawner dotsSpawner;
+    Spatial enemies;
 
     PackedScene platformScene;
     PackedScene rampScene;
     PackedScene bigRampScene;
     PackedScene tunnelRingScene;
+    PackedScene enemyScene;
 
 
     public override void _Ready()
@@ -53,11 +59,13 @@ public class World : Spatial
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         dotsSpawner = GetNode<DotsSpawner>("DotsSpawner");
+        enemies = GetNode<Spatial>("Enemies");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
         bigRampScene = GD.Load<PackedScene>("res://BigRamp.tscn");
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
+        enemyScene = GD.Load<PackedScene>("res://Enemy.tscn");
 
         GD.Randomize();
 
@@ -90,6 +98,7 @@ public class World : Spatial
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
         float deltaH = -GD.Randf()*(MAX_DELTA_H - MIN_DELTA_H) - MIN_DELTA_H;
         float rampSeed = GD.Randf();
+        float enemySeed = GD.Randf();
 
         // Other values:
         float distance = GetPlatformDistance(deltaH, currentSpeed, currentPlatformIsAccelerator);
@@ -150,6 +159,25 @@ public class World : Spatial
         platform.Rotation = new Vector3(0, 0, currentPlatformRotationZ + theta);
         platform.Translation = axis;
         platform.Translation -= newFallDirection*(deltaH - JUMP_HEIGHT);
+
+        // ENEMY:
+        if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY)
+        {
+            Enemy enemy = enemyScene.Instance<Enemy>();
+            enemy.CurrentType = Enemy.Type.Horizontal;
+            enemies.AddChild(enemy);
+            enemy.Rotation = platform.Rotation;
+            enemy.Translation = platform.Translation - newFallDirection*15;
+        }
+        else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY)
+        {
+
+        }
+        else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY + 
+                ENEMY_CIRCLE_PROBABILITY)
+        {
+
+        }
 
         AddChild(platform);
 
