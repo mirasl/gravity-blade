@@ -29,9 +29,9 @@ public class World : Spatial
     const float RAMP_PROBABILITY = 0.25f;
     const float BIG_RAMP_PROBABILITY = 0.5f;
 
-    const float ENEMY_HORIZONTAL_PROBABILITY = 0.1f;
-    const float ENEMY_VERTICAL_PROBABILITY = 0.1f;
-    const float ENEMY_CIRCLE_PROBABILITY = 0.1f;
+    const float ENEMY_HORIZONTAL_PROBABILITY = 0.2f;
+    const float ENEMY_VERTICAL_PROBABILITY = 0.2f;
+    const float ENEMY_CIRCLE_PROBABILITY = 0.2f;
     
 
     float currentSpeed = 100;
@@ -165,7 +165,7 @@ public class World : Spatial
         platform.Translation -= newFallDirection*(deltaH - JUMP_HEIGHT);
 
         // ENEMY:
-        if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY)
+        if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY) // HORIZONTAL
         {
             Enemy enemy = enemyScene.Instance<Enemy>();
             enemy.CurrentType = Enemy.Type.Horizontal;
@@ -173,7 +173,7 @@ public class World : Spatial
             enemy.Rotation = platform.Rotation;
             enemy.Translation = platform.Translation - newFallDirection*15;
         }
-        else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY)
+        else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY) // VERTICAL
         {
             Enemy enemy = enemyScene.Instance<Enemy>();
             enemy.CurrentType = Enemy.Type.Vertical;
@@ -188,8 +188,27 @@ public class World : Spatial
             enemy.Translation = axis + Vector3.Back*distanceBack;
         }
         else if (enemySeed < ENEMY_HORIZONTAL_PROBABILITY + ENEMY_VERTICAL_PROBABILITY + 
-                ENEMY_CIRCLE_PROBABILITY)
+                ENEMY_CIRCLE_PROBABILITY) // CIRCLE
         {
+            Enemy enemy = enemyScene.Instance<Enemy>();
+            enemy.CurrentType = Enemy.Type.Circle;
+            enemies.AddChild(enemy);
+            enemy.Rotation = platform.Rotation;
+
+            // 50% chance of spawning between platforms
+            if (GD.Randf() < 0.5f)
+            {
+                float distanceBack = 150;
+                if (lastGeneratedPlatform.CurrentType == Platform.Type.BigRamp)
+                {
+                    distanceBack = 350;
+                }
+                enemy.Translation = axis + Vector3.Back*distanceBack;
+            }
+            else
+            {
+                enemy.Translation = platform.Translation - newFallDirection*15;
+            }
 
         }
 
