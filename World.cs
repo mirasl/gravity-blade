@@ -71,11 +71,11 @@ public class World : Spatial
 
         // Start with platforms:
         lastGeneratedPlatform = new Platform();
-        Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, false);
-        while (lastAxisPoint.z < -GENERATE_PLATFORM_DISTANCE)
+        Platform platform = GenerateRandomPlatform(new Vector3(0, -8.895f, 0), 0, false, false);
+        while (lastAxisPoint.z > -GENERATE_PLATFORM_DISTANCE)
         {
-            platform = GenerateRandomPlatform(platform.Translation, platform.Rotation.z, 
-                    platform.IsAccelerator);
+            GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
+                    lastGeneratedPlatform.Rotation.z, lastGeneratedPlatform.IsAccelerator, false);
         }
     }
 
@@ -93,7 +93,7 @@ public class World : Spatial
 
     // returns newly generated platform
     private Platform GenerateRandomPlatform(Vector3 currentPlatformTranslation, float 
-            currentPlatformRotationZ, bool currentPlatformIsAccelerator)
+            currentPlatformRotationZ, bool currentPlatformIsAccelerator, bool rampsEnabled = true)
     {
         // Random values:
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
@@ -109,7 +109,7 @@ public class World : Spatial
         
         // Assign platform to platform, ramp, bigRamp (based on rampSeed):
         Platform platform;
-        if (rampSeed < BIG_RAMP_PROBABILITY) // BIG RAMP
+        if (rampSeed < BIG_RAMP_PROBABILITY && rampsEnabled) // BIG RAMP
         {
             platform = bigRampScene.Instance<Platform>();
             platform.CurrentType = Platform.Type.BigRamp;
@@ -117,7 +117,7 @@ public class World : Spatial
             // Subtract from axis in the fall direction (accounts for end ramp momentum):
             axis += fallDirection*BIG_RAMP_AXIS_OFFSET;
         }
-        else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY) // RAMP
+        else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY && rampsEnabled) // RAMP
         {
             platform = rampScene.Instance<Platform>();
             platform.CurrentType = Platform.Type.Ramp;
@@ -143,7 +143,7 @@ public class World : Spatial
                 -currentPlatformRotationZ - theta);
 
         // RINGS FOLLOW RAMPS DOWNWARD:
-        if (rampSeed < BIG_RAMP_PROBABILITY) // BIG RAMP
+        if (rampSeed < BIG_RAMP_PROBABILITY && rampsEnabled) // BIG RAMP
         {
             Vector3 newAxis = axis + (new Vector3(BIG_RAMP_DEPTH*newFallDirection.x, 
                     BIG_RAMP_DEPTH*newFallDirection.y, -BIG_RAMP_LENGTH));
@@ -151,7 +151,7 @@ public class World : Spatial
             AddDots(newAxis);
             lastAxisPoint = newAxis;
         }
-        else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY) // RAMP
+        else if (rampSeed < BIG_RAMP_PROBABILITY + RAMP_PROBABILITY && rampsEnabled) // RAMP
         {
             Vector3 newAxis = axis + (new Vector3(RAMP_DEPTH*newFallDirection.x, 
                     RAMP_DEPTH*newFallDirection.y, -RAMP_LENGTH));
