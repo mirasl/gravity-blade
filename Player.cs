@@ -17,6 +17,7 @@ public class Player : KinematicBody
     const float MIN_FORWARD_SPEED = 100;
     const float MAX_FORWARD_SPEED = 500;
     const int MAX_SPEED_LINES_AMOUNT = 60;
+    const float COYOTE_TIME = 0.2f;
 
     public Vector3 Velocity = Vector3.Zero;
     public Vector3 FallDirection = Vector3.Down;
@@ -28,6 +29,7 @@ public class Player : KinematicBody
     bool snapped = false;
     bool onInlinePlatform = false;
     bool rushingDown = false;
+    float currentCoyoteTime = 0;
 
     protected PackedScene test;
     protected PackedScene enemyExplosionScene;
@@ -108,7 +110,16 @@ public class Player : KinematicBody
             Velocity.z -= BOOST_ACCELERATION*delta;
         }
 
-        if (Input.IsActionJustPressed("jump") && OnFloor())
+        if (OnFloor())
+        {
+            currentCoyoteTime = 0;
+        }
+        else
+        {
+            currentCoyoteTime += delta;
+        }
+
+        if (Input.IsActionJustPressed("jump") && (OnFloor() || currentCoyoteTime < COYOTE_TIME))
         {
             Jump();
         }
