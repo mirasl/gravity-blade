@@ -47,11 +47,11 @@ public class UI : Control
         }
         // subScore.Modulate = fgColor;
 
-        if (Input.IsActionJustPressed("jump"))
-        {
-            AddScoreBonus(50, "+ slide ");
-        }
-        
+        // if (Input.IsActionJustPressed("jump"))
+        // {
+        //     AddScoreBonus(50, "+ slide ");
+        // }
+
         scoreNumber.Text = (DistanceScore + addedScore).ToString("000000");
     }
 

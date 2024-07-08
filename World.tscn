@@ -113,7 +113,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 1
+frame = 3
 playing = true
 centered = false
 
@@ -150,5 +150,6 @@ anims/pop = SubResource( 21 )
 [node name="SubScoreTimer" type="Timer" parent="UI"]
 one_shot = true
 
+[connection signal="EnemyKilled" from="Player" to="." method="sig_EnemyKilled"]
 [connection signal="animation_finished" from="UI/SubScores/AnimationPlayer" to="UI" method="sig_SubScoreAPAnimationFinished"]
 [connection signal="timeout" from="UI/SubScoreTimer" to="UI" method="sig_SubScoreTimerTimeout"]

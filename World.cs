@@ -32,6 +32,8 @@ public class World : Spatial
     const float ENEMY_HORIZONTAL_PROBABILITY = 0.2f;
     const float ENEMY_VERTICAL_PROBABILITY = 0.2f;
     const float ENEMY_CIRCLE_PROBABILITY = 0.2f;
+
+    const float ENEMY_POINTS = 50;
     
 
     float currentSpeed = 100;
@@ -262,6 +264,11 @@ public class World : Spatial
         {
             dotsSpawner.SpawnRandomDot(lastAxisPoint.MoveToward(newPoint, i));
         }
+    }
+
+    private void sig_EnemyKilled()
+    {
+        ui.AddScoreBonus(ENEMY_POINTS, "+ Enemy ");
     }
 
     public void sig_GameOver()

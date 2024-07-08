@@ -3,6 +3,8 @@ using System;
 
 public class Player : KinematicBody
 {
+    [Signal] delegate void EnemyKilled();
+
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
@@ -387,6 +389,7 @@ public class Player : KinematicBody
                     // GD.Print(enemyPosition.y - thisPoint.y);
                     continue;
                 }
+                EmitSignal("EnemyKilled");
                 enemy.QueueFree();
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
