@@ -3,7 +3,7 @@ using System;
 
 public class Player : KinematicBody
 {
-    [Signal] delegate void EnemyKilled();
+    [Signal] delegate void AddScoreBonus(float value, string text);
 
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
@@ -17,9 +17,16 @@ public class Player : KinematicBody
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
     const float MIN_FORWARD_SPEED = 100;
-    const float MAX_FORWARD_SPEED = 500;
+    // const float MAX_FORWARD_SPEED = 500;
+    const float MAX_FORWARD_SPEED = 99999999;
     const int MAX_SPEED_LINES_AMOUNT = 60;
     const float COYOTE_TIME = 0.2f;
+
+    const float ENEMY_POINTS = 50;
+    const float PERFECT_LANDING_POINTS = 100;
+    const float GREAT_LANDING_POINTS = 40;
+    const float GOOD_LANDING_POINTS = 20;
+
 
     public Vector3 Velocity = Vector3.Zero;
     public Vector3 FallDirection = Vector3.Down;
@@ -32,6 +39,7 @@ public class Player : KinematicBody
     bool onInlinePlatform = false;
     bool rushingDown = false;
     float currentCoyoteTime = 0;
+    bool eligibleForLandingBonus = false;
 
     protected PackedScene test;
     protected PackedScene enemyExplosionScene;
@@ -266,6 +274,13 @@ public class Player : KinematicBody
         Vector3 normal = GetSlideCollision(0).Normal;
         float angle = -Mathf.Atan2(normal.x, normal.y);
 
+        if (eligibleForLandingBonus)
+        {
+            ApplyLandingBonus(angle);
+            eligibleForLandingBonus = false;
+        }
+
+
         // Eliminates unwanted barrel roll animation when normal points straight down:
         if (angle > 3.14 && Rotation.z < 0)
         {
@@ -281,6 +296,30 @@ public class Player : KinematicBody
                 Tween.EaseType.Out);
         tween.Start();
         UpdateFallDirection();
+    }
+
+    private void ApplyLandingBonus(float angle)
+    {
+        float deltaTheta = Mathf.Abs(angle - Rotation.z); // introducing greek life to godot!
+        if (deltaTheta > Mathf.Pi*0.2f)
+        {
+            return;
+        }
+        else if (deltaTheta < 0.01f)
+        {
+            EmitSignal("AddScoreBonus", PERFECT_LANDING_POINTS, "+ perfect landing ");
+            return;
+        }
+        else if (deltaTheta < 0.05f)
+        {
+            EmitSignal("AddScoreBonus", GREAT_LANDING_POINTS, "+ great landing ");
+        }
+        else
+        {
+            EmitSignal("AddScoreBonus", GOOD_LANDING_POINTS, "+ good landing ");
+        }
+        // float landingBonus = (Mathf.Pi*0.05f - deltaTheta) / (Mathf.Pi * 0.05f) * MAX_IMPERFECT_LANDING_POINTS;
+        // EmitSignal("AddScoreBonus", (int)landingBonus, "+ landing ");
     }
 
     private void sig_GravityWheelTimeout()
@@ -299,6 +338,7 @@ public class Player : KinematicBody
         if (Mathf.Abs(angle) > Mathf.Pi/6)
         {
             globalColors.ShiftPalette();
+            eligibleForLandingBonus = true;
         }
 
         tween.InterpolateProperty(this, "rotation", Rotation, new Vector3(Rotation.x, 
@@ -389,7 +429,7 @@ public class Player : KinematicBody
                     // GD.Print(enemyPosition.y - thisPoint.y);
                     continue;
                 }
-                EmitSignal("EnemyKilled");
+                EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.QueueFree();
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;

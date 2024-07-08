@@ -32,9 +32,7 @@ public class World : Spatial
     const float ENEMY_HORIZONTAL_PROBABILITY = 0.2f;
     const float ENEMY_VERTICAL_PROBABILITY = 0.2f;
     const float ENEMY_CIRCLE_PROBABILITY = 0.2f;
-
-    const float ENEMY_POINTS = 50;
-    
+        
 
     float currentSpeed = 100;
 
@@ -266,9 +264,9 @@ public class World : Spatial
         }
     }
 
-    private void sig_EnemyKilled()
+    private void sig_AddScoreBonus(float value, string text)
     {
-        ui.AddScoreBonus(ENEMY_POINTS, "+ Enemy ");
+        ui.AddScoreBonus(value, text);
     }
 
     public void sig_GameOver()
