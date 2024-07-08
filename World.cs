@@ -45,6 +45,7 @@ public class World : Spatial
     GlobalColors globalColors;
     DotsSpawner dotsSpawner;
     Spatial enemies;
+    UI ui;
 
     PackedScene platformScene;
     PackedScene rampScene;
@@ -60,6 +61,7 @@ public class World : Spatial
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         dotsSpawner = GetNode<DotsSpawner>("DotsSpawner");
         enemies = GetNode<Spatial>("Enemies");
+        ui = GetNode<UI>("UI");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -88,6 +90,12 @@ public class World : Spatial
         {
             GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
                     lastGeneratedPlatform.Rotation.z, lastGeneratedPlatform.IsAccelerator);
+        }
+
+        ui.DistanceScore = -player.Translation.z / 10;
+        if (ui.DistanceScore < 0)
+        {
+            ui.DistanceScore = 0;
         }
     }
 

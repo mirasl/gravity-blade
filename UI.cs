@@ -5,16 +5,16 @@ using System.Collections.Generic;
 public class UI : Control
 {
     const float SUB_SCORE_Y_INTERVAL = 84;
+    const float SUB_SCORE_WAIT_TIME = 0.4f;
 
     float displayScore = 0;
-    float playerDistance = 0;
+    public float DistanceScore = 0;
     float addedScore = 0;
-    List<Label> subScores = new List<Label>{};
+    List<SubScore> subScores = new List<SubScore>{};
 
     AnimatedSprite uiFrame;
     Label scoreText;
     Label scoreNumber;
-    // Label subScore;
     GlobalColors globalColors;
     Control subScoresControl;
     Timer subScoreTimer;
@@ -27,7 +27,6 @@ public class UI : Control
         uiFrame = GetNode<AnimatedSprite>("UIFrame");
         scoreText = GetNode<Label>("ScoreText");
         scoreNumber = GetNode<Label>("ScoreNumber");
-        // subScore = GetNode<Label>("SubScore");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         subScoresControl = GetNode<Control>("SubScores");
         subScoreTimer = GetNode<Timer>("SubScoreTimer");
@@ -42,7 +41,7 @@ public class UI : Control
         uiFrame.Modulate = globalColors.bg2;
         scoreText.Modulate = fgColor;
         scoreNumber.Modulate = fgColor;
-        foreach (Label subScore in subScores)
+        foreach (SubScore subScore in subScores)
         {
             subScore.Modulate = fgColor;
         }
@@ -52,15 +51,14 @@ public class UI : Control
         {
             AddScoreBonus(50, "+ slide ");
         }
-
-        displayScore = playerDistance + addedScore;
-
-        scoreNumber.Text = displayScore.ToString("000000");
+        
+        scoreNumber.Text = (DistanceScore + addedScore).ToString("000000");
     }
 
     public void AddScoreBonus(float bonus, string text)
     {
-        Label subScore = subScoreScene.Instance<Label>();
+        SubScore subScore = subScoreScene.Instance<SubScore>();
+        subScore.Value = bonus;
 
         subScoresControl.AddChild(subScore);
         subScore.RectPosition = Vector2.Down * subScores.Count * SUB_SCORE_Y_INTERVAL;
@@ -69,7 +67,8 @@ public class UI : Control
         
         subScore.Text = text + bonus;
 
-        SceneTreeTimer stt = GetTree().CreateTimer(1);
+        // ahh so professional, awaits are for losers :P
+        SceneTreeTimer stt = GetTree().CreateTimer(SUB_SCORE_WAIT_TIME);
         stt.Connect("timeout", this, "sig_SubScoreTimerTimeout");
 
         // await ToSignal(GetTree().CreateTimer(1), "timeout");
@@ -100,10 +99,11 @@ public class UI : Control
     {
         if (animName == "pop")
         {
+            addedScore += subScores[0].Value;
             subScores[0].QueueFree();
             subScores.RemoveAt(0);
             subScoreAP.Play("RESET");
-            foreach (Label subScore in subScores)
+            foreach (SubScore subScore in subScores)
             {
                 subScore.RectPosition += Vector2.Up * SUB_SCORE_Y_INTERVAL;
             }
