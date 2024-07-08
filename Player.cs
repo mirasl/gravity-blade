@@ -17,8 +17,8 @@ public class Player : KinematicBody
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
     const float MIN_FORWARD_SPEED = 100;
-    // const float MAX_FORWARD_SPEED = 500;
-    const float MAX_FORWARD_SPEED = 99999999;
+    // const float MAX_FORWARD_SPEED = 500; // reasonable limit :(
+    const float MAX_FORWARD_SPEED = 99999999; // no limit :)
     const int MAX_SPEED_LINES_AMOUNT = 60;
     const float COYOTE_TIME = 0.2f;
 
@@ -274,12 +274,13 @@ public class Player : KinematicBody
         Vector3 normal = GetSlideCollision(0).Normal;
         float angle = -Mathf.Atan2(normal.x, normal.y);
 
+        // ApplyLandingBonus(angle);
+
         if (eligibleForLandingBonus)
         {
             ApplyLandingBonus(angle);
             eligibleForLandingBonus = false;
         }
-
 
         // Eliminates unwanted barrel roll animation when normal points straight down:
         if (angle > 3.14 && Rotation.z < 0)
@@ -301,8 +302,15 @@ public class Player : KinematicBody
     private void ApplyLandingBonus(float angle)
     {
         float deltaTheta = Mathf.Abs(angle - Rotation.z); // introducing greek life to godot!
+        while (deltaTheta > Mathf.Pi*0.5f)
+        {
+            deltaTheta = Mathf.Abs(deltaTheta - Mathf.Pi);
+        }
         if (deltaTheta > Mathf.Pi*0.2f)
         {
+            GD.Print(angle);
+            GD.Print(Rotation.z);
+            GD.Print(deltaTheta);
             return;
         }
         else if (deltaTheta < 0.01f)

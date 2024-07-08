@@ -32,7 +32,7 @@ public class World : Spatial
     const float ENEMY_HORIZONTAL_PROBABILITY = 0.2f;
     const float ENEMY_VERTICAL_PROBABILITY = 0.2f;
     const float ENEMY_CIRCLE_PROBABILITY = 0.2f;
-        
+
 
     float currentSpeed = 100;
 
@@ -105,6 +105,10 @@ public class World : Spatial
     {
         // Random values:
         float theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
+        while (theta == 0)
+        {
+            theta = (int)(GD.Randf()*8)*Mathf.Pi/4 - Mathf.Pi;
+        }
         float deltaH = -GD.Randf()*(MAX_DELTA_H - MIN_DELTA_H) - MIN_DELTA_H;
         float rampSeed = GD.Randf();
         float enemySeed = GD.Randf();
