@@ -1,9 +1,15 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
+[ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://ASSETS/SPRITES/UI/uiFrame2.png" type="Texture" id=4]
 [ext_resource path="res://Platform.tscn" type="PackedScene" id=5]
 [ext_resource path="res://World.cs" type="Script" id=6]
+[ext_resource path="res://ASSETS/SPRITES/UI/uiFrame3.png" type="Texture" id=7]
+[ext_resource path="res://ASSETS/SPRITES/UI/uiFrame4.png" type="Texture" id=8]
+[ext_resource path="res://ASSETS/SPRITES/UI/uiFrame1.png" type="Texture" id=9]
+[ext_resource path="res://UI.cs" type="Script" id=10]
 
 [sub_resource type="ProceduralSky" id=11]
 sky_top_color = Color( 1, 0.847059, 0.968627, 1 )
@@ -22,6 +28,25 @@ vertex_color_use_as_albedo = true
 
 [sub_resource type="SphereMesh" id=15]
 material = SubResource( 16 )
+
+[sub_resource type="SpriteFrames" id=20]
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 4 ), ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[sub_resource type="DynamicFont" id=17]
+size = 150
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=18]
+default_font = SubResource( 17 )
+
+[sub_resource type="DynamicFont" id=19]
+size = 80
+font_data = ExtResource( 3 )
 
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
@@ -49,3 +74,43 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8.99141, 0 )
 collision_layer = 5
 collision_mask = 2
 IsAccelerator = true
+
+[node name="UI" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 10 )
+
+[node name="UIFrame" type="AnimatedSprite" parent="UI"]
+frames = SubResource( 20 )
+frame = 2
+playing = true
+centered = false
+
+[node name="ScoreText" type="Label" parent="UI"]
+margin_left = 1.0
+margin_top = 51.0
+margin_right = 846.0
+margin_bottom = 127.0
+rect_rotation = -15.088
+theme = SubResource( 18 )
+custom_fonts/font = SubResource( 19 )
+text = "score"
+
+[node name="Score" type="Label" parent="UI"]
+margin_left = 3.0
+margin_top = 166.0
+margin_right = 848.0
+margin_bottom = 354.0
+rect_rotation = -19.7144
+theme = SubResource( 18 )
+text = "480000"
+
+[node name="SubScore" type="Label" parent="UI"]
+margin_left = 24.0
+margin_top = 328.0
+margin_right = 869.0
+margin_bottom = 404.0
+rect_rotation = -17.1517
+theme = SubResource( 18 )
+custom_fonts/font = SubResource( 19 )
+text = "+ Slide Time 50"

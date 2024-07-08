@@ -79,6 +79,7 @@ script = ExtResource( 1 )
 position = Vector2( -0.000976562, -1293 )
 rotation = 3.14159
 scale = Vector2( 0.89761, 1.18064 )
+emitting = false
 amount = 20
 lifetime = 1.1
 speed_scale = 2.0
