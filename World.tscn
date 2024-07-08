@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
@@ -48,6 +48,37 @@ default_font = SubResource( 17 )
 size = 80
 font_data = ExtResource( 3 )
 
+[sub_resource type="Animation" id=22]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 8, 337 ) ]
+}
+
+[sub_resource type="Animation" id=21]
+resource_name = "pop"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 8, 337 ), Vector2( 8, 253 ) ]
+}
+
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
 
@@ -82,35 +113,42 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 2
+frame = 3
 playing = true
 centered = false
 
 [node name="ScoreText" type="Label" parent="UI"]
-margin_left = 1.0
-margin_top = 51.0
-margin_right = 846.0
-margin_bottom = 127.0
+margin_top = 50.0
+margin_right = 845.0
+margin_bottom = 126.0
 rect_rotation = -15.088
 theme = SubResource( 18 )
 custom_fonts/font = SubResource( 19 )
 text = "score"
 
-[node name="Score" type="Label" parent="UI"]
+[node name="ScoreNumber" type="Label" parent="UI"]
 margin_left = 3.0
 margin_top = 166.0
-margin_right = 848.0
+margin_right = 539.0
 margin_bottom = 354.0
 rect_rotation = -19.7144
 theme = SubResource( 18 )
-text = "480000"
+text = "000050"
 
-[node name="SubScore" type="Label" parent="UI"]
-margin_left = 24.0
-margin_top = 328.0
-margin_right = 869.0
-margin_bottom = 404.0
-rect_rotation = -17.1517
-theme = SubResource( 18 )
-custom_fonts/font = SubResource( 19 )
-text = "+ Slide Time 50"
+[node name="SubScores" type="Control" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 337.0
+margin_right = 8.0
+margin_bottom = 337.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/SubScores"]
+anims/RESET = SubResource( 22 )
+anims/pop = SubResource( 21 )
+
+[node name="SubScoreTimer" type="Timer" parent="UI"]
+one_shot = true
+
+[connection signal="animation_finished" from="UI/SubScores/AnimationPlayer" to="UI" method="sig_SubScoreAPAnimationFinished"]
+[connection signal="timeout" from="UI/SubScoreTimer" to="UI" method="sig_SubScoreTimerTimeout"]
