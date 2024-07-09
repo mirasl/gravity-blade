@@ -10,7 +10,7 @@ public class UI : Control
     float displayScore = 0;
     public float DistanceScore = 0;
     public int Combo {get; private set;} = 0;
-    public float Multiplier {get; private set;} = 0; // increases by harmonic series to limit the power of the combo
+    public float Multiplier {get; private set;} = 1; // increases by harmonic series to limit the power of the combo
     float addedScore = 0;
     List<SubScore> subScores = new List<SubScore>{};
 
@@ -84,15 +84,16 @@ public class UI : Control
 
     public void AddScoreBonus(float bonus, string text)
     {
+        int multipliedBonus = (int)(Multiplier * bonus);
         SubScore subScore = subScoreScene.Instance<SubScore>();
-        subScore.Value = bonus;
+        subScore.Value = multipliedBonus;
 
         subScoresControl.AddChild(subScore);
         subScore.RectPosition = Vector2.Down * subScores.Count * SUB_SCORE_Y_INTERVAL;
 
         subScores.Add(subScore);
         
-        subScore.Text = text + bonus;
+        subScore.Text = text + multipliedBonus;
 
         // ahh so professional, awaits are for losers :P
         SceneTreeTimer stt = GetTree().CreateTimer(SUB_SCORE_WAIT_TIME);
@@ -149,12 +150,16 @@ public class UI : Control
     public void AddCombo()
     {
         Combo++;
+        if (Combo < 1)
+        {
+            Combo = 1;
+        }
         Multiplier += 1f/(Mathf.Sqrt(Combo)*3) + 1; // formula for multiplier based on combo
     }
 
     public void EndCombo()
     {
         Combo = 0;
-        Multiplier = 0;
+        Multiplier = 1;
     }
 }

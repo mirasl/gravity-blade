@@ -216,7 +216,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 2
+frame = 3
 playing = true
 centered = false
 
