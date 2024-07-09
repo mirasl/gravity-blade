@@ -4,6 +4,7 @@ using System;
 public class Player : KinematicBody
 {
     [Signal] delegate void AddScoreBonus(float value, string text);
+    [Signal] delegate void AddCombo();
 
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
@@ -308,15 +309,12 @@ public class Player : KinematicBody
         }
         if (deltaTheta > Mathf.Pi*0.2f)
         {
-            GD.Print(angle);
-            GD.Print(Rotation.z);
-            GD.Print(deltaTheta);
             return;
         }
-        else if (deltaTheta < 0.01f)
+
+        if (deltaTheta < 0.01f)
         {
             EmitSignal("AddScoreBonus", PERFECT_LANDING_POINTS, "+ perfect landing ");
-            return;
         }
         else if (deltaTheta < 0.05f)
         {
@@ -326,6 +324,7 @@ public class Player : KinematicBody
         {
             EmitSignal("AddScoreBonus", GOOD_LANDING_POINTS, "+ good landing ");
         }
+        EmitSignal("AddCombo");
         // float landingBonus = (Mathf.Pi*0.05f - deltaTheta) / (Mathf.Pi * 0.05f) * MAX_IMPERFECT_LANDING_POINTS;
         // EmitSignal("AddScoreBonus", (int)landingBonus, "+ landing ");
     }

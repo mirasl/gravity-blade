@@ -22,6 +22,7 @@ surfaces/0 = {
 
 [node name="Ramp" type="StaticBody"]
 script = ExtResource( 1 )
+extents = 169
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.09095, -92.1396 )

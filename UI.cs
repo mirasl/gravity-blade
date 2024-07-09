@@ -9,6 +9,8 @@ public class UI : Control
 
     float displayScore = 0;
     public float DistanceScore = 0;
+    public int Combo {get; private set;} = 0;
+    public float Multiplier {get; private set;} = 0; // increases by harmonic series to limit the power of the combo
     float addedScore = 0;
     List<SubScore> subScores = new List<SubScore>{};
 
@@ -69,6 +71,7 @@ public class UI : Control
         // }
 
         scoreNumber.Text = (DistanceScore + addedScore).ToString("000000");
+        comboNumber.Text = "" + Combo;
     }
 
     private void sig_GoAnimationFinished(string animName)
@@ -123,6 +126,10 @@ public class UI : Control
     {
         if (animName == "pop")
         {
+            if (subScores.Count == 0)
+            {
+                return;
+            }
             addedScore += subScores[0].Value;
             subScores[0].QueueFree();
             subScores.RemoveAt(0);
@@ -133,8 +140,21 @@ public class UI : Control
             }
         }
     }
+
     private Color Brighten(Color color)
     {
         return color.LinearInterpolate(Colors.White, 0.4f);
+    }
+
+    public void AddCombo()
+    {
+        Combo++;
+        Multiplier += 1f/(Mathf.Sqrt(Combo)*3) + 1; // formula for multiplier based on combo
+    }
+
+    public void EndCombo()
+    {
+        Combo = 0;
+        Multiplier = 0;
     }
 }

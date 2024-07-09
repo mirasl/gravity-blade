@@ -46,6 +46,7 @@ public class World : Spatial
     DotsSpawner dotsSpawner;
     Spatial enemies;
     UI ui;
+    Spatial platforms;
 
     PackedScene platformScene;
     PackedScene rampScene;
@@ -62,6 +63,7 @@ public class World : Spatial
         dotsSpawner = GetNode<DotsSpawner>("DotsSpawner");
         enemies = GetNode<Spatial>("Enemies");
         ui = GetNode<UI>("UI");
+        platforms = GetNode<Spatial>("Platforms");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -143,6 +145,8 @@ public class World : Spatial
             platform.CurrentType = Platform.Type.Flat;
             currentSpeed = 100;
         }
+        platform.player = player;
+        platform.Connect("EndCombo", this, "sig_EndCombo");
         // platform.IsAccelerator = GD.Randi() % 2 == 0;
         platform.IsAccelerator = true;
 
@@ -224,7 +228,7 @@ public class World : Spatial
 
         }
 
-        AddChild(platform);
+        platforms.AddChild(platform);
 
         lastGeneratedPlatform = platform;
 
@@ -277,5 +281,31 @@ public class World : Spatial
     {
         /// !!! make an actual game over
         GetTree().ReloadCurrentScene();
+    }
+
+    private void sig_AddCombo()
+    {
+        ui.AddCombo();
+        
+        // hackily finds the platform that the player landed on to continue the combo:
+        float maxPlatformZ = float.MinValue;
+        Platform closestPlatform = null;
+        foreach (Node platform in platforms.GetChildren())
+        {
+            if (platform is Platform && ((Platform)platform).Translation.z > maxPlatformZ)
+            {
+                maxPlatformZ = ((Platform)platform).Translation.z;
+                closestPlatform = (Platform)platform;
+            }
+        }
+        if (closestPlatform != null)
+        {
+            closestPlatform.SuccessfullyLanded = true;
+        }
+    }
+
+    private void sig_EndCombo()
+    {
+        ui.EndCombo();
     }
 }

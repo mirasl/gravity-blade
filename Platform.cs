@@ -3,8 +3,14 @@ using System;
 
 public class Platform : StaticBody
 {
+    [Signal] delegate void EndCombo();
+
     [Export] public bool IsAccelerator = false;
     [Export] public Type CurrentType = Type.Flat;
+    [Export] private int extents = 65;
+
+    public bool SuccessfullyLanded = false;
+    public Player player;
 
     public enum Type
     {
@@ -14,12 +20,24 @@ public class Platform : StaticBody
     }
 
 
-    public override void _Ready()
+    // public override void _Ready()
+    // {
+    //     if (IsAccelerator)
+    //     {
+    //         // GetNode<MeshInstance>("TopMesh").GetSurfaceMaterial(0).Set("albedo_color", 
+    //         //         Colors.Yellow);
+    //     }
+    // }
+
+    public override void _Process(float delta)
     {
-        if (IsAccelerator)
+        if (player != null && player.GlobalTranslation.z < GlobalTranslation.z - extents)
         {
-            // GetNode<MeshInstance>("TopMesh").GetSurfaceMaterial(0).Set("albedo_color", 
-            //         Colors.Yellow);
+            if (!SuccessfullyLanded)
+            {
+                EmitSignal("EndCombo");
+            }
+            QueueFree();
         }
     }
 }
