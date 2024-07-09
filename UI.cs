@@ -19,6 +19,7 @@ public class UI : Control
     Control subScoresControl;
     Timer subScoreTimer;
     AnimationPlayer subScoreAP;
+    Control go;
 
     PackedScene subScoreScene;
 
@@ -31,8 +32,13 @@ public class UI : Control
         subScoresControl = GetNode<Control>("SubScores");
         subScoreTimer = GetNode<Timer>("SubScoreTimer");
         subScoreAP = GetNode<AnimationPlayer>("SubScores/AnimationPlayer");
+        go = GetNode<Control>("Go");
 
         subScoreScene = GD.Load<PackedScene>("res://SubScore.tscn");
+
+        AnimatedSprite goAS = GetNode<AnimatedSprite>("Go/AnimatedSprite");
+        goAS.Frame = 0;
+        goAS.Play("complete");
     }
 
     public override void _Process(float delta)
@@ -45,6 +51,10 @@ public class UI : Control
         {
             subScore.Modulate = fgColor;
         }
+        if (go.Visible)
+        {
+            go.Modulate = globalColors.fg;
+        }
         // subScore.Modulate = fgColor;
 
         // if (Input.IsActionJustPressed("jump"))
@@ -53,6 +63,14 @@ public class UI : Control
         // }
 
         scoreNumber.Text = (DistanceScore + addedScore).ToString("000000");
+    }
+
+    private void sig_GoAnimationFinished(string animName)
+    {
+        if (animName == "go")
+        {
+            go.Hide();
+        }
     }
 
     public void AddScoreBonus(float bonus, string text)

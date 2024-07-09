@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
@@ -10,6 +10,11 @@
 [ext_resource path="res://ASSETS/SPRITES/UI/uiFrame4.png" type="Texture" id=8]
 [ext_resource path="res://ASSETS/SPRITES/UI/uiFrame1.png" type="Texture" id=9]
 [ext_resource path="res://UI.cs" type="Script" id=10]
+[ext_resource path="res://ASSETS/SPRITES/Go/go1.png" type="Texture" id=11]
+[ext_resource path="res://ASSETS/SPRITES/Go/go2.png" type="Texture" id=12]
+[ext_resource path="res://ASSETS/SPRITES/Go/go5.png" type="Texture" id=13]
+[ext_resource path="res://ASSETS/SPRITES/Go/go3.png" type="Texture" id=14]
+[ext_resource path="res://ASSETS/SPRITES/Go/go4.png" type="Texture" id=15]
 
 [sub_resource type="ProceduralSky" id=11]
 sky_top_color = Color( 1, 0.847059, 0.968627, 1 )
@@ -79,6 +84,91 @@ tracks/0/keys = {
 "values": [ Vector2( 8, 337 ), Vector2( 8, 253 ) ]
 }
 
+[sub_resource type="SpriteFrames" id=23]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 13 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": false,
+"name": "complete",
+"speed": 15.0
+}, {
+"frames": [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 14 ), ExtResource( 15 ), ExtResource( 13 ) ],
+"loop": false,
+"name": "grow",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 13 ), ExtResource( 15 ), ExtResource( 14 ), ExtResource( 12 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "shrink",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 15 ), ExtResource( 13 ) ],
+"loop": true,
+"name": "stay",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=24]
+size = 500
+font_data = ExtResource( 3 )
+
+[sub_resource type="Theme" id=25]
+default_font = SubResource( 24 )
+
+[sub_resource type="Animation" id=27]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 960, 540 ) ]
+}
+
+[sub_resource type="Animation" id=26]
+resource_name = "go"
+step = 0.067
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.067, 0.134, 0.201, 0.268, 0.67, 0.737, 0.804, 0.871, 0.938 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1e-05, 1e-05 ), Vector2( 0.250008, 0.250008 ), Vector2( 0.500005, 0.500005 ), Vector2( 0.750003, 0.750003 ), Vector2( 1, 1 ), Vector2( 1, 1 ), Vector2( 0.750003, 0.750003 ), Vector2( 0.500005, 0.500005 ), Vector2( 0.250007, 0.250007 ), Vector2( 1e-05, 1e-05 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.268, 0.335, 0.402, 0.469, 0.536, 0.603, 0.67, 1.005 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 960, 540 ), Vector2( 960, 540 ), Vector2( 981, 523 ), Vector2( 956, 595 ), Vector2( 924, 563 ), Vector2( 943, 591 ), Vector2( 975, 551 ), Vector2( 960, 540 ), Vector2( 960, 540 ) ]
+}
+
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
 
@@ -113,7 +203,6 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 1
 playing = true
 centered = false
 
@@ -150,6 +239,41 @@ anims/pop = SubResource( 21 )
 [node name="SubScoreTimer" type="Timer" parent="UI"]
 one_shot = true
 
+[node name="Go" type="Control" parent="UI"]
+modulate = Color( 0.709804, 0.223529, 0.223529, 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="UI/Go"]
+frames = SubResource( 23 )
+animation = "complete"
+centered = false
+
+[node name="Node2D" type="Node2D" parent="UI/Go"]
+position = Vector2( 960, 540 )
+scale = Vector2( 1e-05, 1e-05 )
+
+[node name="Label" type="Label" parent="UI/Go/Node2D"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -396.0
+margin_top = -235.0
+margin_right = 401.0
+margin_bottom = 234.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource( 25 )
+text = "GO!!"
+align = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Go/Node2D"]
+autoplay = "go"
+anims/RESET = SubResource( 27 )
+anims/go = SubResource( 26 )
+
 [connection signal="AddScoreBonus" from="Player" to="." method="sig_AddScoreBonus"]
 [connection signal="animation_finished" from="UI/SubScores/AnimationPlayer" to="UI" method="sig_SubScoreAPAnimationFinished"]
 [connection signal="timeout" from="UI/SubScoreTimer" to="UI" method="sig_SubScoreTimerTimeout"]
+[connection signal="animation_finished" from="UI/Go/Node2D/AnimationPlayer" to="UI" method="sig_GoAnimationFinished"]
