@@ -17,8 +17,8 @@ public class Player : KinematicBody
     const float BRUSH_WIDTH = 20;
     const float ENEMY_RANGE = 1000;
     const float MIN_FORWARD_SPEED = 100;
-    // const float MAX_FORWARD_SPEED = 500; // reasonable limit :(
-    const float MAX_FORWARD_SPEED = 99999999; // no limit :)
+    const float MAX_FORWARD_SPEED = 1000; // reasonable limit :(
+    // const float MAX_FORWARD_SPEED = 99999999; // no limit :)
     const int MAX_SPEED_LINES_AMOUNT = 60;
     const float COYOTE_TIME = 0.2f;
 

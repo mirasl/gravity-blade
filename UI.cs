@@ -15,6 +15,8 @@ public class UI : Control
     AnimatedSprite uiFrame;
     Label scoreText;
     Label scoreNumber;
+    Label comboText;
+    Label comboNumber;
     GlobalColors globalColors;
     Control subScoresControl;
     Timer subScoreTimer;
@@ -28,6 +30,8 @@ public class UI : Control
         uiFrame = GetNode<AnimatedSprite>("UIFrame");
         scoreText = GetNode<Label>("ScoreText");
         scoreNumber = GetNode<Label>("ScoreNumber");
+        comboText = GetNode<Label>("ComboText");
+        comboNumber = GetNode<Label>("ComboNumber");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         subScoresControl = GetNode<Control>("SubScores");
         subScoreTimer = GetNode<Timer>("SubScoreTimer");
@@ -47,6 +51,8 @@ public class UI : Control
         uiFrame.Modulate = globalColors.bg2;
         scoreText.Modulate = fgColor;
         scoreNumber.Modulate = fgColor;
+        comboText.Modulate = fgColor;
+        comboNumber.Modulate = fgColor;
         foreach (SubScore subScore in subScores)
         {
             subScore.Modulate = fgColor;
