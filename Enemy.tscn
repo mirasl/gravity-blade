@@ -1,15 +1,16 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Enemy.cs" type="Script" id=1]
+[ext_resource path="res://RESOURCES/EnemyGrayscaleGradient.tres" type="Texture" id=2]
 
 [sub_resource type="SphereShape" id=1]
 radius = 1.39858
 
 [sub_resource type="SphereMesh" id=2]
+resource_local_to_scene = true
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=8]
 flags_unshaded = true
-albedo_color = Color( 0.623529, 0, 0, 1 )
 
 [sub_resource type="Animation" id=5]
 length = 0.001
@@ -125,6 +126,68 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 30, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, -30, 0 ) ]
 }
 
+[sub_resource type="Curve" id=15]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.552273 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=16]
+curve = SubResource( 15 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+emission_shape = 5
+emission_ring_radius = 10.0
+emission_ring_inner_radius = 10.0
+emission_ring_height = 1.0
+emission_ring_axis = Vector3( 0, 0, 1 )
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 4.0
+scale = 2.0
+scale_random = 1.0
+scale_curve = SubResource( 16 )
+
+[sub_resource type="SpatialMaterial" id=10]
+flags_unshaded = true
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id=11]
+material = SubResource( 10 )
+
+[sub_resource type="Curve" id=12]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.626866, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.722388, 0.622727 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.327273 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=13]
+curve = SubResource( 12 )
+
+[sub_resource type="ParticlesMaterial" id=14]
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+flatness = 1.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 20.0
+scale = 10.0
+scale_random = 0.5
+scale_curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=21]
+emission_shape = 5
+emission_ring_radius = 10.0
+emission_ring_inner_radius = 0.0
+emission_ring_height = 1.0
+emission_ring_axis = Vector3( 0, 1, 0 )
+direction = Vector3( 0, 1, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 1.0
+scale = 4.0
+scale_random = 1.0
+scale_curve = SubResource( 13 )
+color_initial_ramp = ExtResource( 2 )
+
+[sub_resource type="SphereMesh" id=22]
+material = SubResource( 10 )
+height = 0.1
+
 [node name="Enemy" type="Spatial"]
 script = ExtResource( 1 )
 Radius = 10.0
@@ -136,11 +199,11 @@ collision_mask = 0
 [node name="CollisionShape" type="CollisionShape" parent="KinematicBody"]
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="KinematicBody"]
-transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0 )
+[node name="Sphere" type="MeshInstance" parent="KinematicBody"]
+transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
-material/0 = SubResource( 3 )
+material/0 = SubResource( 8 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody"]
 autoplay = "vertical"
@@ -148,3 +211,26 @@ anims/RESET = SubResource( 5 )
 anims/circle = SubResource( 7 )
 anims/horizontal = SubResource( 6 )
 anims/vertical = SubResource( 4 )
+
+[node name="RingParticles" type="Particles" parent="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.04469 )
+amount = 60
+speed_scale = 3.0
+process_material = SubResource( 9 )
+draw_pass_1 = SubResource( 11 )
+
+[node name="Particles2" type="Particles" parent="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+visible = false
+amount = 60
+speed_scale = 3.0
+process_material = SubResource( 14 )
+draw_pass_1 = SubResource( 11 )
+
+[node name="CenterParticles" type="Particles" parent="KinematicBody"]
+transform = Transform( 1, 0, 0, 0, 5.96046e-08, 1, 0, -1, 5.96046e-08, 0.0872345, 0, 2.38086 )
+visible = false
+amount = 10
+speed_scale = 3.0
+process_material = SubResource( 21 )
+draw_pass_1 = SubResource( 22 )

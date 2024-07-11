@@ -154,7 +154,7 @@ public class UI : Control
         {
             Combo = 1;
         }
-        Multiplier += 1f/(Mathf.Sqrt(Combo)*3) + 1; // formula for multiplier based on combo
+        Multiplier += 1f/(Mathf.Sqrt(Combo)*3) + 1; // diverging series for multiplier based on combo
     }
 
     public void EndCombo()
