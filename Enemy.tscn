@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Enemy.cs" type="Script" id=1]
 [ext_resource path="res://RESOURCES/enemy.material" type="Material" id=2]
+[ext_resource path="res://ModelScenes/Wing.tscn" type="PackedScene" id=3]
 
 [sub_resource type="SphereShape" id=1]
 radius = 1.39858
@@ -146,6 +147,68 @@ scale_curve = SubResource( 16 )
 [sub_resource type="SphereMesh" id=11]
 material = ExtResource( 2 )
 
+[sub_resource type="Animation" id=17]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0.433446, -21.1096, -39.6131 ) ]
+}
+
+[sub_resource type="Animation" id=18]
+resource_name = "flap"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4, 0.7 ),
+"transitions": PoolRealArray( 2, 2, 0.5 ),
+"update": 0,
+"values": [ Vector3( 0.433446, -21.1096, -39.6131 ), Vector3( 13.2748, 41.5258, 31.9255 ), Vector3( 6.85412, 10.2081, -3.84381 ) ]
+}
+
+[sub_resource type="Animation" id=19]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( -0.433445, -158.89, 140.387 ) ]
+}
+
+[sub_resource type="Animation" id=20]
+resource_name = "flap"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.4, 0.7 ),
+"transitions": PoolRealArray( 2, 2, 0.5 ),
+"update": 0,
+"values": [ Vector3( -0.433445, -158.89, 140.387 ), Vector3( -13.275, -221.526, 211.926 ), Vector3( -6.85422, -190.208, 176.156 ) ]
+}
+
 [node name="Enemy" type="Spatial"]
 script = ExtResource( 1 )
 Radius = 10.0
@@ -176,3 +239,25 @@ amount = 60
 speed_scale = 3.0
 process_material = SubResource( 9 )
 draw_pass_1 = SubResource( 11 )
+
+[node name="WingPivot" type="Spatial" parent="KinematicBody"]
+transform = Transform( 0.720407, 0.592714, -0.360143, -0.637583, 0.770345, -0.00756498, 0.272951, 0.235071, 0.932866, -8.60538, 3.89907, -0.994376 )
+
+[node name="Wing" parent="KinematicBody/WingPivot" instance=ExtResource( 3 )]
+transform = Transform( -0.00712818, 0.630483, -1.60163, -0.788373, 1.42257, 0.563505, 1.53009, 0.735908, 0.282882, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody/WingPivot"]
+autoplay = "flap"
+anims/RESET = SubResource( 17 )
+anims/flap = SubResource( 18 )
+
+[node name="WingPivot2" type="Spatial" parent="KinematicBody"]
+transform = Transform( -0.720407, -0.592714, 0.360143, -0.637583, 0.770345, -0.00756497, 0.272951, 0.235071, 0.932866, 8.23639, 3.89907, -0.994376 )
+
+[node name="Wing" parent="KinematicBody/WingPivot2" instance=ExtResource( 3 )]
+transform = Transform( -0.00712829, 0.630483, -1.60163, -0.788373, 1.42257, 0.563505, 1.53009, 0.735908, 0.282882, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody/WingPivot2"]
+autoplay = "flap"
+anims/RESET = SubResource( 19 )
+anims/flap = SubResource( 20 )

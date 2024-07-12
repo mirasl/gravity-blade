@@ -99,6 +99,11 @@ public class World : Spatial
         {
             ui.DistanceScore = 0;
         }
+
+        foreach (Enemy enemy in enemies.GetChildren())
+        {
+            enemy.FallDirection = player.FallDirection;
+        }
     }
 
     // returns newly generated platform

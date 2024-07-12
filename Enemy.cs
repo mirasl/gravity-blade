@@ -6,6 +6,8 @@ public class Enemy : Spatial
     [Export] public float Radius = 1.866f;
     [Export] public Type CurrentType = Type.Horizontal;
 
+    public Vector3 FallDirection = Vector3.Down;
+
     public enum Type 
     {
         Horizontal,
@@ -51,9 +53,6 @@ public class Enemy : Spatial
     public override void _Process(float delta)
     {
         sphereMaterial.Set("albedo_color", globalColors.text);
-        // ringParticlesProcessMaterial.Set("color", globalColors.text);
-        // centerParticlesProcessMaterial.Set("color", globalColors.text);
-        // Color darkenedColor = globalColors.text;
-        // darkenedColor.v = 0.835f;
+        LookAt(Translation + Vector3.Back, -FallDirection);
     }
 }
