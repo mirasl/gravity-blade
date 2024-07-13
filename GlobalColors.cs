@@ -12,8 +12,9 @@ public class GlobalColors : Node
         {
             {"bg1", new Color("3b0fa5")},
             {"bg2", new Color("0e1b49")},
-            {"fg", new Color("c91731")},
-            {"text", new Color("ee5a6f")}
+            {"fg", new Color("c91731")}, // red
+            {"text", new Color("ee5a6f")}, // lighter red
+            {"enemy", new Color("ee5a6f")} // lighter red (same as text)
         },
         // TRANS (light blue, pink, white)
         new Dictionary<string, Color> 
@@ -21,23 +22,26 @@ public class GlobalColors : Node
             {"bg1", Colors.White},
             {"bg2", new Color("ed4cc5")}, // e99fde
             {"fg", new Color("39a8f0")},
-            {"text", Colors.White}
+            {"text", Colors.White}, 
+            {"enemy", new Color("8ccffa")} // lighter blue
         },
         // AURORA (light blue, light green, white)
         new Dictionary<string, Color> 
         {
             {"bg1", new Color("4cde6f")}, // light green
             {"bg2", new Color("045aae")}, // blue
-            {"fg", new Color("1a80a5")}, // greener blue
-            {"text", new Color("4cde6f")} // light green
+            {"fg", new Color("108f3e")}, // greener blue ; old 1a80a5  19b387
+            {"text", new Color("4cde6f")},
+            {"enemy", new Color("24b357")} // lighter blue ; old  43abd1  49e3b7
         },
         // MUMBAI (yellow, turquoise, blue)
         new Dictionary<string, Color> 
         {
             {"bg1", new Color("52d998")},
             {"bg2", new Color("fdff9a")},
-            {"fg", new Color("4082c0")},
-            {"text", new Color("5f8fbb")}
+            {"fg", new Color("4082c0")}, // blue
+            {"text", new Color("5f8fbb")},
+            {"enemy", new Color("76aadb")} // lighter blue
         }
     };
 
@@ -47,10 +51,16 @@ public class GlobalColors : Node
     public Color bg2 = Colors.Black;
     public Color fg = Colors.Black;
     public Color text = Colors.Black;
+    public Color enemy = Colors.Black;
 
     private static int CurrentIndex = -1; // To ensure that ShiftPalette leads to new color
 
     Tween tween;
+    Material bg1Material;
+    Material bg2Material;
+    Material fgMaterial;
+    Material textMaterial;
+    Material enemyMaterial;
 
 
     public override void _Ready()
@@ -59,10 +69,21 @@ public class GlobalColors : Node
         tween = GetNode<Tween>("Tween");
 
         ShiftPalette();
+
+        bg1Material = GD.Load<Material>("res://RESOURCES/ColorMaterials/bg1.material");
+        bg2Material = GD.Load<Material>("res://RESOURCES/ColorMaterials/bg2.material");
+        fgMaterial = GD.Load<Material>("res://RESOURCES/ColorMaterials/fg.material");
+        textMaterial = GD.Load<Material>("res://RESOURCES/ColorMaterials/text.material");
+        enemyMaterial = GD.Load<Material>("res://RESOURCES/ColorMaterials/enemy.material");
     }
 
     public override void _PhysicsProcess(float delta)
     {
+        bg1Material.Set("albedo_color", bg1);
+        bg2Material.Set("albedo_color", bg2);
+        fgMaterial.Set("albedo_color", fg);
+        textMaterial.Set("albedo_color", text);
+        enemyMaterial.Set("albedo_color", enemy);
         // GD.Print(bg1);
     }
 
@@ -89,14 +110,16 @@ public class GlobalColors : Node
         CurrentIndex = newIndex;
         Dictionary<string, Color> palette = colorPalettes[CurrentIndex];
 
-        tween.InterpolateProperty(this, "bg1", bg1, palette["bg1"], 0.3f, Tween.TransitionType.Sine, 
-                Tween.EaseType.Out);
-        tween.InterpolateProperty(this, "bg2", bg2, palette["bg2"], 0.3f, Tween.TransitionType.Sine, 
-                Tween.EaseType.Out);
-        tween.InterpolateProperty(this, "fg", fg, palette["fg"], 0.3f, Tween.TransitionType.Sine, 
-                Tween.EaseType.Out);
-        tween.InterpolateProperty(this, "text", text, palette["text"], 0.3f, Tween.TransitionType.Sine, 
-                Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "bg1", bg1, palette["bg1"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "bg2", bg2, palette["bg2"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "fg", fg, palette["fg"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "text", text, palette["text"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "enemy", text, palette["enemy"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
         tween.Start();
 
         // SceneTreeTween tween = GetTree().CreateTween();

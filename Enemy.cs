@@ -52,7 +52,7 @@ public class Enemy : Spatial
 
     public override void _Process(float delta)
     {
-        sphereMaterial.Set("albedo_color", globalColors.text);
+        // sphereMaterial.Set("albedo_color", globalColors.text);
         LookAt(Translation + Vector3.Back, -FallDirection);
     }
 }
