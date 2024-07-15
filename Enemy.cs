@@ -6,7 +6,11 @@ public class Enemy : Spatial
     [Export] public float Radius = 1.866f;
     [Export] public Type CurrentType = Type.Horizontal;
 
+    // const int FREEZE_FRAMES = 3;
+
     public Vector3 FallDirection = Vector3.Down;
+    // int currentFreezeFrames = 0;
+    public bool Dead = false;
 
     public enum Type 
     {
@@ -78,10 +82,21 @@ public class Enemy : Spatial
     {
         // sphereMaterial.Set("albedo_color", globalColors.text);
         LookAt(Translation + Vector3.Back, -FallDirection);
+        // if (currentFreezeFrames < FREEZE_FRAMES)
+        // {
+        //     GD.Print(currentFreezeFrames);
+        //     currentFreezeFrames++;
+        // }
+        // else
+        // {
+        //     Engine.TimeScale = 1; // worst practice lolololol
+        // }
     }
 
     public void Explode(float angle)
     {
+        Dead = true;
+        
         animationPlayer.Stop();
 
         // ringParticles.Hide();
@@ -100,6 +115,13 @@ public class Enemy : Spatial
             // ps.BaseHue = globalColors.enemy.h;
             AddChild(ps);
         }
+
+        // Engine.TimeScale = 0.1f;
+        // currentFreezeFrames = 0;
+
+        // await ToSignal(GetTree().CreateTimer(0.05f), "timeout");
+
+        // Engine.TimeScale = 1;
     }
 
     public void sig_ExplosionAnimationFinished(string animName)

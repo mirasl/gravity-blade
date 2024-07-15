@@ -404,6 +404,10 @@ public class Player : KinematicBody
 
         foreach (Enemy enemy in GetParent().GetNode<Spatial>("Enemies").GetChildren())
         {
+            if (enemy.Dead)
+            {
+                continue;
+            }
             KinematicBody enemyKB = enemy.GetNode<KinematicBody>("KinematicBody");
             if (Mathf.Abs(enemyKB.GlobalTranslation.z - Translation.z) > ENEMY_RANGE)
             {
