@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Player.cs" type="Script" id=1]
 [ext_resource path="res://GravityWheel.tscn" type="PackedScene" id=2]
@@ -75,6 +75,115 @@ mid_height = 9.197
 radial_segments = 4
 rings = 1
 
+[sub_resource type="Shader" id=6]
+code = "shader_type canvas_item;
+
+uniform float alpha = 1.0;
+
+void fragment()
+{
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	float grayscale = (color.r + color.g + color.b) * 0.3333;
+	COLOR = vec4(grayscale, 0.0, 0.0, 0.0);
+	COLOR.a = (UV.x - 0.45)*(UV.x - 0.45) + (UV.y - 0.5)*(UV.y - 0.5);
+	COLOR.a *= alpha;
+	
+//	COLOR.a *= 2.0;
+}
+
+//void fragment()
+//{
+//	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+//	float grayscale = (color.r + color.g + color.b) * 0.3333;
+//	COLOR = vec4(0.0, 0.0, grayscale, 0.0);
+//	COLOR.a = (UV.x - 0.55)*(UV.x - 0.55) + (UV.y - 0.5)*(UV.y - 0.5);
+//}"
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 6 )
+shader_param/alpha = 0.0
+
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform float alpha = 1.0;
+
+//void fragment()
+//{
+//	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+//	float grayscale = (color.r + color.g + color.b) * 0.3333;
+//	COLOR = vec4(grayscale, 0.0, 0.0, 0.0);
+//	COLOR.a = (UV.x - 0.45)*(UV.x - 0.45) + (UV.y - 0.5)*(UV.y - 0.5);
+////	COLOR.a *= 2.0;
+//}
+
+void fragment()
+{
+	vec4 color = texture(SCREEN_TEXTURE, SCREEN_UV);
+	float grayscale = (color.r + color.g + color.b) * 0.3333;
+	COLOR = vec4(0.0, 0.0, grayscale, 0.0);
+	COLOR.a = (UV.x - 0.55)*(UV.x - 0.55) + (UV.y - 0.5)*(UV.y - 0.5);
+	COLOR.a *= alpha;
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+shader_param/alpha = 0.0
+
+[sub_resource type="Animation" id=11]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Red:material:shader_param/alpha")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Blue:material:shader_param/alpha")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Red:material:shader_param/alpha")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Blue:material:shader_param/alpha")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1.0, 1.0 ]
+}
+
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
 collision_mask = 5
@@ -143,6 +252,24 @@ Gravity = true
 [node name="NormalSlice" parent="SliceCanvas" instance=ExtResource( 4 )]
 width_curve = ExtResource( 5 )
 default_color = Color( 1, 1, 1, 1 )
+
+[node name="Aberration" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Red" type="ColorRect" parent="Aberration"]
+material = SubResource( 7 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Blue" type="ColorRect" parent="Aberration"]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Aberration"]
+anims/RESET = SubResource( 11 )
+anims/fade = SubResource( 10 )
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
 [connection signal="LineDrawn" from="SliceCanvas/GravitySlice" to="." method="sig_LineDrawn"]
