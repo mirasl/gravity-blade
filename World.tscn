@@ -216,7 +216,6 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 1
 playing = true
 centered = false
 
@@ -243,8 +242,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 8.0
 margin_top = 337.0
-margin_right = 3848.0
-margin_bottom = 2497.0
+margin_right = 7688.0
+margin_bottom = 4657.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/SubScores"]
 anims/RESET = SubResource( 22 )

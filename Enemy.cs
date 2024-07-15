@@ -25,6 +25,10 @@ public class Enemy : Spatial
     Particles ringParticles;
     Spatial explosion;
     AnimationPlayer explosionAP;
+    Particles explosionParticles;
+    AnimationPlayer animationPlayer;
+
+    PackedScene paintShotScene;
 
 
     public override void _Ready()
@@ -41,8 +45,16 @@ public class Enemy : Spatial
         ringParticles = GetNode<Particles>("KinematicBody/RingParticles");
         explosion = GetNode<Spatial>("KinematicBody/Explosion");
         explosionAP = GetNode<AnimationPlayer>("KinematicBody/Explosion/AnimationPlayer");
+        explosionParticles = GetNode<Particles>("KinematicBody/Explosion/ExplosionParticles");
+        animationPlayer = GetNode<AnimationPlayer>("KinematicBody/AnimationPlayer");
 
+        paintShotScene = GD.Load<PackedScene>("res://PaintShot.tscn");
+
+        sphere.Show();
+        wings.Show();
+        ringParticles.Show();
         explosion.Hide();
+        explosionParticles.Emitting = false;
 
         AnimationPlayer ap = GetNode<AnimationPlayer>("KinematicBody/AnimationPlayer");
         switch (CurrentType)
@@ -70,12 +82,31 @@ public class Enemy : Spatial
 
     public void Explode(float angle)
     {
-        ringParticles.Hide();
+        animationPlayer.Stop();
+
+        // ringParticles.Hide();
         sphere.Hide();
         wings.Hide();
 
         explosion.Show();
         explosion.Rotation = Vector3.Back * angle;
         explosionAP.Play("split");
+        explosionParticles.Emitting = true;
+        
+        // float baseHue = GD.Randf()*0.8f + 0.1f;
+        for (int i = 0; i < 10; i++)
+        {
+            PaintShot ps = paintShotScene.Instance<PaintShot>();
+            // ps.BaseHue = globalColors.enemy.h;
+            AddChild(ps);
+        }
+    }
+
+    public void sig_ExplosionAnimationFinished(string animName)
+    {
+        if (animName == "split")
+        {
+            QueueFree();
+        }
     }
 }

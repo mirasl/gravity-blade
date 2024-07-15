@@ -35,7 +35,7 @@ public class Slice : Line2D
 
     public override void _Process(float delta)
     {
-        int mouseButton = Gravity ? 2 : 1;
+        int mouseButton = Gravity ? 1 : 2;
         if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice)
         {
             slicing = true;

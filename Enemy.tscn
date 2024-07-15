@@ -1,6 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Enemy.cs" type="Script" id=1]
+[ext_resource path="res://RESOURCES/ColorMaterials/fg.material" type="Material" id=2]
 [ext_resource path="res://ModelScenes/Wing.tscn" type="PackedScene" id=3]
 [ext_resource path="res://RESOURCES/ColorMaterials/enemy.material" type="Material" id=4]
 
@@ -124,11 +125,12 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 30, 0 ), Vector3( 0, 0, 0 ), Vector3( 0, -30, 0 ) ]
 }
 
-[sub_resource type="Curve" id=15]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.552273 ), 0.0, 0.0, 0, 0 ]
+[sub_resource type="Curve" id=26]
+resource_local_to_scene = true
+_data = [ Vector2( 0, 0.275 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=16]
-curve = SubResource( 15 )
+curve = SubResource( 26 )
 
 [sub_resource type="ParticlesMaterial" id=9]
 emission_shape = 5
@@ -240,10 +242,46 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ) ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("LeftHemisphere:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 10, 10, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("RightHemisphere:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 10, 10, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
 
 [sub_resource type="Animation" id=22]
 resource_name = "split"
-length = 0.2
+length = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath("LeftHemisphere:translation")
 tracks/0/interp = 1
@@ -268,6 +306,54 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( -16, 0, 0 ) ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("LeftHemisphere:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 10, 1 ),
+"update": 0,
+"values": [ Vector3( 10, 10, 1 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("RightHemisphere:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 10, 1 ),
+"update": 0,
+"values": [ Vector3( 10, 10, 1 ), Vector3( 0, 0, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="ParticlesMaterial" id=24]
+direction = Vector3( 0, 0, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 40.0
+scale = 2.0
+scale_random = 1.0
+scale_curve = SubResource( 16 )
+
+[sub_resource type="SphereMesh" id=25]
+material = ExtResource( 2 )
 
 [node name="Enemy" type="Spatial"]
 script = ExtResource( 1 )
@@ -282,6 +368,7 @@ shape = SubResource( 1 )
 
 [node name="Sphere" type="MeshInstance" parent="KinematicBody"]
 transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, 0 )
+visible = false
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = ExtResource( 4 )
@@ -302,6 +389,7 @@ draw_pass_1 = SubResource( 11 )
 
 [node name="Wings" type="Spatial" parent="KinematicBody"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+visible = false
 
 [node name="WingPivot" type="Spatial" parent="KinematicBody/Wings"]
 transform = Transform( 0.720408, 0.592714, -0.360143, -0.637582, 0.770345, -0.00756498, 0.272951, 0.23507, 0.932866, -8.60538, 3.89907, -0.994376 )
@@ -326,6 +414,7 @@ anims/RESET = SubResource( 19 )
 anims/flap = SubResource( 20 )
 
 [node name="Explosion" type="Spatial" parent="KinematicBody"]
+visible = false
 
 [node name="LeftHemisphere" type="MeshInstance" parent="KinematicBody/Explosion"]
 transform = Transform( -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0, 1, 0, 0, 0 )
@@ -342,3 +431,14 @@ material/0 = ExtResource( 4 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody/Explosion"]
 anims/RESET = SubResource( 23 )
 anims/split = SubResource( 22 )
+
+[node name="ExplosionParticles" type="Particles" parent="KinematicBody/Explosion"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.04469 )
+emitting = false
+amount = 60
+one_shot = true
+speed_scale = 3.0
+process_material = SubResource( 24 )
+draw_pass_1 = SubResource( 25 )
+
+[connection signal="animation_finished" from="KinematicBody/Explosion/AnimationPlayer" to="." method="sig_ExplosionAnimationFinished"]
