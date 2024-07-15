@@ -47,7 +47,7 @@ public class Player : KinematicBody
     protected GravityWheel gravityWheel;
     protected Tween tween;
     protected RayCast floorCast;
-    protected Camera camera;
+    protected PlayerCamera camera;
     protected GlobalColors globalColors;
     protected Particles speedLines60;
     protected Particles speedLines30;
@@ -63,7 +63,7 @@ public class Player : KinematicBody
         gravityWheel = GetNode<GravityWheel>("UI/GravityWheel");
         tween = GetNode<Tween>("Tween");
         floorCast = GetNode<RayCast>("FloorCast");
-        camera = GetNode<Camera>("Camera");
+        camera = GetNode<PlayerCamera>("Camera");
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         speedLines60 = GetNode<Particles>("Camera/SpeedLines60");
         speedLines30 = GetNode<Particles>("Camera/SpeedLines30");
@@ -442,6 +442,7 @@ public class Player : KinematicBody
                 }
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.Explode(angle);
+                camera.StartShake(0.5f, 0.3f);
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
                 // enemyExplosion.Position = unrotatedEnemyPosition;
