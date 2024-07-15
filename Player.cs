@@ -53,7 +53,7 @@ public class Player : KinematicBody
     protected Particles speedLines30;
     protected Particles speedLines15;
     protected Particles speedLines5;
-    protected AnimationPlayer aberrationAP;
+    // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
 
 
@@ -70,7 +70,7 @@ public class Player : KinematicBody
         speedLines30 = GetNode<Particles>("Camera/SpeedLines30");
         speedLines15 = GetNode<Particles>("Camera/SpeedLines15");
         speedLines5 = GetNode<Particles>("Camera/SpeedLines5");
-        aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
+        // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
@@ -444,8 +444,8 @@ public class Player : KinematicBody
                 }
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.Explode(angle);
-                camera.StartShake(0.5f, 0.3f);
-                aberrationAP.Play("fade");
+                camera.StartShake(0.3f, 0.3f);
+                // aberrationAP.Play("fade");
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
                 // enemyExplosion.Position = unrotatedEnemyPosition;
