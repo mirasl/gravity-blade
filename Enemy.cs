@@ -96,7 +96,7 @@ public class Enemy : Spatial
     public void Explode(float angle)
     {
         Dead = true;
-        
+
         animationPlayer.Stop();
 
         // ringParticles.Hide();
@@ -113,7 +113,7 @@ public class Enemy : Spatial
         {
             PaintShot ps = paintShotScene.Instance<PaintShot>();
             // ps.BaseHue = globalColors.enemy.h;
-            AddChild(ps);
+            explosion.AddChild(ps);
         }
 
         // Engine.TimeScale = 0.1f;

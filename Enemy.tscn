@@ -282,6 +282,7 @@ tracks/4/keys = {
 [sub_resource type="Animation" id=22]
 resource_name = "split"
 length = 0.5
+step = 0.01
 tracks/0/type = "value"
 tracks/0/path = NodePath("LeftHemisphere:translation")
 tracks/0/interp = 1
@@ -289,7 +290,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 2, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( 16, 0, 0 ) ]
@@ -301,7 +302,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 2, 1 ),
 "update": 0,
 "values": [ Vector3( 0, 0, 0 ), Vector3( -16, 0, 0 ) ]
@@ -313,7 +314,7 @@ tracks/2/loop_wrap = true
 tracks/2/imported = false
 tracks/2/enabled = true
 tracks/2/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 10, 1 ),
 "update": 0,
 "values": [ Vector3( 10, 10, 1 ), Vector3( 0, 0, 0 ) ]
@@ -325,7 +326,7 @@ tracks/3/loop_wrap = true
 tracks/3/imported = false
 tracks/3/enabled = true
 tracks/3/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 10, 1 ),
 "update": 0,
 "values": [ Vector3( 10, 10, 1 ), Vector3( 0, 0, 0 ) ]
@@ -337,7 +338,7 @@ tracks/4/loop_wrap = true
 tracks/4/imported = false
 tracks/4/enabled = true
 tracks/4/keys = {
-"times": PoolRealArray( 0, 0.2 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
@@ -417,7 +418,7 @@ anims/flap = SubResource( 20 )
 visible = false
 
 [node name="LeftHemisphere" type="MeshInstance" parent="KinematicBody/Explosion"]
-transform = Transform( -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0, 1, 0, 0, 0 )
+transform = Transform( 7.54979e-07, 10, 0, -10, 7.54979e-07, 0, 0, 0, 1, 0, 0, 0 )
 mesh = SubResource( 21 )
 skeleton = NodePath("../../..")
 material/0 = ExtResource( 4 )
