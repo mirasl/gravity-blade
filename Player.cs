@@ -437,7 +437,7 @@ public class Player : KinematicBody
                     continue;
                 }
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
-                enemy.QueueFree();
+                enemy.Explode(angle);
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
                 // enemyExplosion.Position = unrotatedEnemyPosition;

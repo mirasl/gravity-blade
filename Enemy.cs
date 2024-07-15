@@ -20,6 +20,11 @@ public class Enemy : Spatial
     // Material centerParticlesProcessMaterial;
     Material sphereMaterial;
     GlobalColors globalColors;
+    MeshInstance sphere;
+    Spatial wings;
+    Particles ringParticles;
+    Spatial explosion;
+    AnimationPlayer explosionAP;
 
 
     public override void _Ready()
@@ -31,6 +36,13 @@ public class Enemy : Spatial
         sphereMaterial = GetNode<MeshInstance>(
                 "KinematicBody/Sphere").GetSurfaceMaterial(0);
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
+        sphere = GetNode<MeshInstance>("KinematicBody/Sphere");
+        wings = GetNode<Spatial>("KinematicBody/Wings");
+        ringParticles = GetNode<Particles>("KinematicBody/RingParticles");
+        explosion = GetNode<Spatial>("KinematicBody/Explosion");
+        explosionAP = GetNode<AnimationPlayer>("KinematicBody/Explosion/AnimationPlayer");
+
+        explosion.Hide();
 
         AnimationPlayer ap = GetNode<AnimationPlayer>("KinematicBody/AnimationPlayer");
         switch (CurrentType)
@@ -54,5 +66,16 @@ public class Enemy : Spatial
     {
         // sphereMaterial.Set("albedo_color", globalColors.text);
         LookAt(Translation + Vector3.Back, -FallDirection);
+    }
+
+    public void Explode(float angle)
+    {
+        ringParticles.Hide();
+        sphere.Hide();
+        wings.Hide();
+
+        explosion.Show();
+        explosion.Rotation = Vector3.Back * angle;
+        explosionAP.Play("split");
     }
 }

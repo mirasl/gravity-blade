@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Enemy.cs" type="Script" id=1]
 [ext_resource path="res://ModelScenes/Wing.tscn" type="PackedScene" id=3]
@@ -209,6 +209,66 @@ tracks/0/keys = {
 "values": [ Vector3( -0.433445, -158.89, 140.387 ), Vector3( -13.275, -221.526, 211.926 ), Vector3( -6.85422, -190.208, 176.156 ) ]
 }
 
+[sub_resource type="SphereMesh" id=21]
+resource_local_to_scene = true
+height = 1.0
+is_hemisphere = true
+
+[sub_resource type="Animation" id=23]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("LeftHemisphere:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RightHemisphere:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=22]
+resource_name = "split"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("LeftHemisphere:translation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 2, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( 16, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RightHemisphere:translation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 2, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 0 ), Vector3( -16, 0, 0 ) ]
+}
+
 [node name="Enemy" type="Spatial"]
 script = ExtResource( 1 )
 Radius = 10.0
@@ -264,3 +324,21 @@ transform = Transform( -0.00712829, 0.630483, -1.60163, -0.788373, 1.42257, 0.56
 autoplay = "flap"
 anims/RESET = SubResource( 19 )
 anims/flap = SubResource( 20 )
+
+[node name="Explosion" type="Spatial" parent="KinematicBody"]
+
+[node name="LeftHemisphere" type="MeshInstance" parent="KinematicBody/Explosion"]
+transform = Transform( -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 21 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 4 )
+
+[node name="RightHemisphere" type="MeshInstance" parent="KinematicBody/Explosion"]
+transform = Transform( -4.37114e-07, -10, 0, 10, -4.37114e-07, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 21 )
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="KinematicBody/Explosion"]
+anims/RESET = SubResource( 23 )
+anims/split = SubResource( 22 )
