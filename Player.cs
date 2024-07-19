@@ -444,7 +444,7 @@ public class Player : KinematicBody
                 }
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.Explode(angle);
-                camera.StartShake(0.3f, 0.3f);
+                camera.StartShake(0.7f, 0.4f);
                 // aberrationAP.Play("fade");
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;
