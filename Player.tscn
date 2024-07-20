@@ -138,9 +138,12 @@ collision_mask = 21
 position = Vector2( 962, 542 )
 points = PoolVector2Array(  )
 width_curve = ExtResource( 5 )
+default_color = Color( 0, 0.882353, 1, 1 )
 Gravity = true
 
 [node name="NormalSlice" parent="SliceCanvas" instance=ExtResource( 4 )]
+position = Vector2( 962, 542 )
+points = PoolVector2Array(  )
 width_curve = ExtResource( 5 )
 default_color = Color( 1, 1, 1, 1 )
 

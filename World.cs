@@ -47,6 +47,7 @@ public class World : Spatial
     Spatial enemies;
     UI ui;
     Spatial platforms;
+    GravitySlashes gravitySlashes;
 
     PackedScene platformScene;
     PackedScene rampScene;
@@ -64,6 +65,7 @@ public class World : Spatial
         enemies = GetNode<Spatial>("Enemies");
         ui = GetNode<UI>("UI");
         platforms = GetNode<Spatial>("Platforms");
+        gravitySlashes = GetNode<GravitySlashes>("UI/GravitySlashes");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -312,5 +314,15 @@ public class World : Spatial
     private void sig_EndCombo()
     {
         ui.EndCombo();
+    }
+
+    public void sig_PlayerUsedGravitySlash()
+    {
+        gravitySlashes.RemoveSlash();
+    }
+
+    public void sig_PlayerRestoredGravitySlash()
+    {
+        gravitySlashes.AddSlash();
     }
 }

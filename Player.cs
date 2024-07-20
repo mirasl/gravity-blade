@@ -5,6 +5,8 @@ public class Player : KinematicBody
 {
     [Signal] delegate void AddScoreBonus(float value, string text);
     [Signal] delegate void AddCombo();
+    [Signal] delegate void UseGravitySlash();
+    [Signal] delegate void RestoreGravitySlash();
 
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
@@ -53,6 +55,8 @@ public class Player : KinematicBody
     protected Particles speedLines30;
     protected Particles speedLines15;
     protected Particles speedLines5;
+    protected Slice gravitySlice;
+    protected Slice normalSlice;
     // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
 
@@ -70,6 +74,8 @@ public class Player : KinematicBody
         speedLines30 = GetNode<Particles>("Camera/SpeedLines30");
         speedLines15 = GetNode<Particles>("Camera/SpeedLines15");
         speedLines5 = GetNode<Particles>("Camera/SpeedLines5");
+        gravitySlice = GetNode<Slice>("SliceCanvas/GravitySlice");
+        normalSlice = GetNode<Slice>("SliceCanvas/NormalSlice");
         // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
@@ -277,6 +283,11 @@ public class Player : KinematicBody
         Vector3 normal = GetSlideCollision(0).Normal;
         float angle = -Mathf.Atan2(normal.x, normal.y);
 
+        // restore gravity slash:
+        EmitSignal("RestoreGravitySlash");
+        gravitySlice.AddGravitySlash();
+        normalSlice.AddGravitySlash();
+
         // ApplyLandingBonus(angle);
 
         if (eligibleForLandingBonus)
@@ -368,6 +379,9 @@ public class Player : KinematicBody
         if (gravity)
         {
             RotateShift(angle);
+            EmitSignal("UseGravitySlash");
+            gravitySlice.RemoveGravitySlash();
+            normalSlice.RemoveGravitySlash();
         }
 
         SliceCollisionViaQuadrangulation(points, angle);
@@ -445,6 +459,12 @@ public class Player : KinematicBody
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.Explode(angle);
                 camera.StartShake(0.7f, 0.4f);
+
+                // restore gravity slash:
+                EmitSignal("RestoreGravitySlash");
+                gravitySlice.AddGravitySlash();
+                normalSlice.AddGravitySlash();
+                
                 // aberrationAP.Play("fade");
                 // EnemyExplosion enemyExplosion = enemyExplosionScene.Instance<EnemyExplosion>();
                 // enemyExplosion.Rotation = angle + Mathf.Pi*0.5f;

@@ -10,6 +10,7 @@ public class Slice : Line2D
 
     const float MAX_POINTS = 45;
 
+    private float gravitySlashes = 4;
     bool slicing = false;
     bool canSlice = true;
 
@@ -35,8 +36,11 @@ public class Slice : Line2D
 
     public override void _Process(float delta)
     {
+        GD.Print(gravitySlashes);
         int mouseButton = Gravity ? 1 : 2;
-        if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice)
+
+        if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice && 
+                !(Gravity && gravitySlashes < 1))
         {
             slicing = true;
             AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540) + Offset);
@@ -71,6 +75,7 @@ public class Slice : Line2D
             arrowAP.Play("point");
             float angle = RegressedSlopeAngle(Points);
             EmitSignal("LineDrawn", true, angle, Points);
+            // RemoveGravitySlash();
 
             tween.InterpolateProperty(pivot, "rotation", angle, 0, 0.3f, Tween.TransitionType.Sine, 
                     Tween.EaseType.Out);
@@ -154,6 +159,23 @@ public class Slice : Line2D
         if (animName == "point")
         {
             arrow.Hide();
+        }
+    }
+
+    public void AddGravitySlash()
+    {
+        GD.Print("ADD");
+        if (gravitySlashes < 4)
+        {
+            gravitySlashes++;
+        }
+    }
+
+    public void RemoveGravitySlash()
+    {
+        if (gravitySlashes > 0)
+        {
+            gravitySlashes--;
         }
     }
 }

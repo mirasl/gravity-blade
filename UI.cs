@@ -24,6 +24,7 @@ public class UI : Control
     Timer subScoreTimer;
     AnimationPlayer subScoreAP;
     Control go;
+    GravitySlashes gravitySlashes;
 
     PackedScene subScoreScene;
 
@@ -39,6 +40,7 @@ public class UI : Control
         subScoreTimer = GetNode<Timer>("SubScoreTimer");
         subScoreAP = GetNode<AnimationPlayer>("SubScores/AnimationPlayer");
         go = GetNode<Control>("Go");
+        gravitySlashes = GetNode<GravitySlashes>("GravitySlashes");
 
         subScoreScene = GD.Load<PackedScene>("res://SubScore.tscn");
 
