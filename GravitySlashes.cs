@@ -9,6 +9,7 @@ public class GravitySlashes : Control
     AnimatedSprite slash2;
     AnimatedSprite slash3;
     AnimatedSprite slash4;
+    GlobalColors globalColors;
 
 
     public override void _Ready()
@@ -17,6 +18,12 @@ public class GravitySlashes : Control
         slash2 = GetNode<AnimatedSprite>("2");
         slash3 = GetNode<AnimatedSprite>("3");
         slash4 = GetNode<AnimatedSprite>("4");
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
+    }
+
+    public override void _Process(float delta)
+    {
+        Modulate = globalColors.text;
     }
 
     public void RemoveSlash()
