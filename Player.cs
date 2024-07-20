@@ -7,6 +7,7 @@ public class Player : KinematicBody
     [Signal] delegate void AddCombo();
     [Signal] delegate void UseGravitySlash();
     [Signal] delegate void RestoreGravitySlash();
+    [Signal] delegate void GameOver();
 
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
@@ -556,5 +557,14 @@ public class Player : KinematicBody
         speedLines30.ProcessMaterial.Set("color", globalColors.bg1);
         speedLines15.ProcessMaterial.Set("color", globalColors.bg1);
         speedLines5.ProcessMaterial.Set("color", globalColors.bg1);
+    }
+
+    private void sig_HurtboxBodyEntered(Node body)
+    {
+        Node maybeEnemy = body.GetParentOrNull<Node>();
+        if (maybeEnemy != null && maybeEnemy is Enemy)
+        {
+            EmitSignal("GameOver");
+        }
     }
 }

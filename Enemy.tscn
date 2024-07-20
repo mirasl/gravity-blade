@@ -6,7 +6,7 @@
 [ext_resource path="res://RESOURCES/ColorMaterials/enemy.material" type="Material" id=4]
 
 [sub_resource type="SphereShape" id=1]
-radius = 1.39858
+radius = 9.83034
 
 [sub_resource type="SphereMesh" id=2]
 resource_local_to_scene = true
@@ -369,7 +369,6 @@ shape = SubResource( 1 )
 
 [node name="Sphere" type="MeshInstance" parent="KinematicBody"]
 transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, 0 )
-visible = false
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = ExtResource( 4 )
@@ -390,7 +389,6 @@ draw_pass_1 = SubResource( 11 )
 
 [node name="Wings" type="Spatial" parent="KinematicBody"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
-visible = false
 
 [node name="WingPivot" type="Spatial" parent="KinematicBody/Wings"]
 transform = Transform( 0.720408, 0.592714, -0.360143, -0.637582, 0.770345, -0.00756498, 0.272951, 0.23507, 0.932866, -8.60538, 3.89907, -0.994376 )

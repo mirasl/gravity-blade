@@ -36,7 +36,7 @@ public class Slice : Line2D
 
     public override void _Process(float delta)
     {
-        GD.Print(gravitySlashes);
+        // GD.Print(gravitySlashes);
         int mouseButton = Gravity ? 1 : 2;
 
         if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice && 
@@ -164,7 +164,6 @@ public class Slice : Line2D
 
     public void AddGravitySlash()
     {
-        GD.Print("ADD");
         if (gravitySlashes < 4)
         {
             gravitySlashes++;

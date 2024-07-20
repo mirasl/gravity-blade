@@ -229,7 +229,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 2
+frame = 3
 playing = true
 centered = false
 
@@ -329,31 +329,33 @@ script = ExtResource( 20 )
 position = Vector2( 1377, 1014 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
+frame = 3
 playing = true
 
 [node name="2" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1500, 933 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="3" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1640, 859 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="4" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1799, 800 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
+frame = 1
 playing = true
 
 [connection signal="AddCombo" from="Player" to="." method="sig_AddCombo"]
 [connection signal="AddScoreBonus" from="Player" to="." method="sig_AddScoreBonus"]
+[connection signal="GameOver" from="Player" to="." method="sig_GameOver"]
 [connection signal="RestoreGravitySlash" from="Player" to="." method="sig_PlayerRestoredGravitySlash"]
 [connection signal="UseGravitySlash" from="Player" to="." method="sig_PlayerUsedGravitySlash"]
 [connection signal="animation_finished" from="UI/SubScores/AnimationPlayer" to="UI" method="sig_SubScoreAPAnimationFinished"]
