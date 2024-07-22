@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
@@ -20,6 +20,12 @@
 [ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/2.png" type="Texture" id=18]
 [ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/1.png" type="Texture" id=19]
 [ext_resource path="res://GravitySlashes.cs" type="Script" id=20]
+[ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/dissolve2.png" type="Texture" id=21]
+[ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/dissolve3.png" type="Texture" id=22]
+[ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/dissolve1.png" type="Texture" id=23]
+[ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/dissolve4.png" type="Texture" id=24]
+[ext_resource path="res://ASSETS/SPRITES/UI/GravitySlashes/hidden.png" type="Texture" id=25]
+[ext_resource path="res://UIGravitySlash.cs" type="Script" id=26]
 
 [sub_resource type="ProceduralSky" id=11]
 sky_top_color = Color( 1, 0.847059, 0.968627, 1 )
@@ -191,6 +197,16 @@ animations = [ {
 "loop": true,
 "name": "default",
 "speed": 10.0
+}, {
+"frames": [ ExtResource( 24 ), ExtResource( 22 ), ExtResource( 21 ), ExtResource( 23 ) ],
+"loop": false,
+"name": "enter",
+"speed": 30.0
+}, {
+"frames": [ ExtResource( 23 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 24 ), ExtResource( 25 ) ],
+"loop": false,
+"name": "exit",
+"speed": 10.0
 } ]
 
 [node name="World" type="Spatial"]
@@ -229,7 +245,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 3
+frame = 2
 playing = true
 centered = false
 
@@ -329,29 +345,32 @@ script = ExtResource( 20 )
 position = Vector2( 1377, 1014 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 3
+frame = 2
 playing = true
+script = ExtResource( 26 )
 
 [node name="2" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1500, 933 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
+frame = 1
 playing = true
+script = ExtResource( 26 )
 
 [node name="3" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1640, 859 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
+frame = 1
 playing = true
+script = ExtResource( 26 )
 
 [node name="4" type="AnimatedSprite" parent="UI/GravitySlashes"]
 position = Vector2( 1799, 800 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 1
 playing = true
+script = ExtResource( 26 )
 
 [connection signal="AddCombo" from="Player" to="." method="sig_AddCombo"]
 [connection signal="AddScoreBonus" from="Player" to="." method="sig_AddScoreBonus"]
@@ -361,3 +380,7 @@ playing = true
 [connection signal="animation_finished" from="UI/SubScores/AnimationPlayer" to="UI" method="sig_SubScoreAPAnimationFinished"]
 [connection signal="timeout" from="UI/SubScoreTimer" to="UI" method="sig_SubScoreTimerTimeout"]
 [connection signal="animation_finished" from="UI/Go/Node2D/AnimationPlayer" to="UI" method="sig_GoAnimationFinished"]
+[connection signal="animation_finished" from="UI/GravitySlashes/1" to="UI/GravitySlashes/1" method="sig_AnimationFinished"]
+[connection signal="animation_finished" from="UI/GravitySlashes/2" to="UI/GravitySlashes/2" method="sig_AnimationFinished"]
+[connection signal="animation_finished" from="UI/GravitySlashes/3" to="UI/GravitySlashes/3" method="sig_AnimationFinished"]
+[connection signal="animation_finished" from="UI/GravitySlashes/4" to="UI/GravitySlashes/4" method="sig_AnimationFinished"]

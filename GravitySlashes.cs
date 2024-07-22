@@ -32,8 +32,8 @@ public class GravitySlashes : Control
         {
             return;
         }
+        GetLastSlash().Play("exit");
         slashes--;
-        UpdateSlashes();
     }
 
     public void AddSlash()
@@ -43,14 +43,27 @@ public class GravitySlashes : Control
             return;
         }
         slashes++;
-        UpdateSlashes();
+        GetLastSlash().Play("enter");
+        // UpdateSlashes();
     }
 
-    private void UpdateSlashes()
+    // private void UpdateSlashes()
+    // {
+    //     slash1.Visible = slashes >= 1;
+    //     slash2.Visible = slashes >= 2;
+    //     slash3.Visible = slashes >= 3;
+    //     slash4.Visible = slashes >= 4;
+    // }
+
+    private AnimatedSprite GetLastSlash()
     {
-        slash1.Visible = slashes >= 1;
-        slash2.Visible = slashes >= 2;
-        slash3.Visible = slashes >= 3;
-        slash4.Visible = slashes >= 4;
+        switch (slashes)
+        {
+            case (1): return slash1;
+            case (2): return slash2;
+            case (3): return slash3;
+            case (4): return slash4;
+        }
+        return null;
     }
 }
