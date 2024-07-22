@@ -10,6 +10,7 @@ public class Player : KinematicBody
     [Signal] delegate void GameOver();
 
     [Export] bool ScreenspaceOutlineEnabled = false;
+    [Export] bool NormalOutlineEnabled = false;
 
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
@@ -61,6 +62,7 @@ public class Player : KinematicBody
     protected Slice gravitySlice;
     protected Slice normalSlice;
     protected ColorRect screenspaceOutline;
+    protected MeshInstance normalOutline;
     protected Material normalOutlineMaterial;
     // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
@@ -82,12 +84,17 @@ public class Player : KinematicBody
         gravitySlice = GetNode<Slice>("SliceCanvas/GravitySlice");
         normalSlice = GetNode<Slice>("SliceCanvas/NormalSlice");
         screenspaceOutline = GetNode<ColorRect>("ScreenspaceOutline");
-        normalOutlineMaterial = GetNode<MeshInstance>("DepthOverlay/NormalOutline").Mesh.SurfaceGetMaterial(0);
+        normalOutline = GetNode<MeshInstance>("DepthOverlay/NormalOutline");
+        normalOutlineMaterial = normalOutline.Mesh.SurfaceGetMaterial(0);
         // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
         screenspaceOutline.Hide();
+        if (NormalOutlineEnabled)
+        {
+            normalOutline.Hide();
+        }
 
         // Input.MouseMode = Input.MouseModeEnum.Captured;
         Input.MouseMode = Input.MouseModeEnum.Confined;
@@ -95,13 +102,14 @@ public class Player : KinematicBody
         UpdateFallDirection();
 
         Velocity.z = -MIN_FORWARD_SPEED;
+
     }
 
     public override void _PhysicsProcess(float delta)
     {
-        Color outlineColor = globalColors.enemy;
-        // outlineColor.v *= 1.5f;
-        normalOutlineMaterial.Set("shader_param/customColor", ColorToVector3(outlineColor));
+        // Color outlineColor = globalColors.enemy;
+        // // outlineColor.v *= 1.5f;
+        // normalOutlineMaterial.Set("shader_param/customColor", ColorToVector3(outlineColor));
 
         UpdateFallDirection();
         HandleButtonRelease();
@@ -480,6 +488,10 @@ public class Player : KinematicBody
                 {
                     ShowScreenspaceOutline(0.4f);
                 }
+                if (NormalOutlineEnabled)
+                {
+                    ShowNormalOutline(0.4f);
+                }
 
                 // restore gravity slash:
                 EmitSignal("RestoreGravitySlash");
@@ -501,6 +513,13 @@ public class Player : KinematicBody
         screenspaceOutline.Show();
         await ToSignal(GetTree().CreateTimer(time), "timeout");
         screenspaceOutline.Hide();
+    }
+
+    private async void ShowNormalOutline(float time)
+    {
+        normalOutline.Show();
+        await ToSignal(GetTree().CreateTimer(time), "timeout");
+        normalOutline.Hide();
     }
 
     private void SliceCollisionViaCircles(Vector2[] points)

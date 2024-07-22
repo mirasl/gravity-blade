@@ -3,3 +3,4 @@
 [resource]
 flags_unshaded = true
 albedo_color = Color( 0.854902, 0.854902, 0.854902, 1 )
+uv1_scale = Vector3( 15, 1, 1 )
