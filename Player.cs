@@ -61,6 +61,7 @@ public class Player : KinematicBody
     protected Slice gravitySlice;
     protected Slice normalSlice;
     protected ColorRect screenspaceOutline;
+    protected Material normalOutlineMaterial;
     // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
 
@@ -81,6 +82,7 @@ public class Player : KinematicBody
         gravitySlice = GetNode<Slice>("SliceCanvas/GravitySlice");
         normalSlice = GetNode<Slice>("SliceCanvas/NormalSlice");
         screenspaceOutline = GetNode<ColorRect>("ScreenspaceOutline");
+        normalOutlineMaterial = GetNode<MeshInstance>("DepthOverlay/NormalOutline").Mesh.SurfaceGetMaterial(0);
         // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
@@ -97,6 +99,10 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
+        Color outlineColor = globalColors.fg;
+        outlineColor.v *= 1.5f;
+        normalOutlineMaterial.Set("shader_param/customColor", ColorToVector3(outlineColor));
+
         UpdateFallDirection();
         HandleButtonRelease();
 
@@ -227,6 +233,11 @@ public class Player : KinematicBody
     {
         spinButtonPressed = true;
         Transform = Transform.Rotated(Vector3.Forward, ROTATION_SPEED * delta);
+    }
+
+    private Vector3 ColorToVector3(Color color)
+    {
+        return new Vector3(color.r, color.g, color.b);
     }
 
     public override void _UnhandledInput(InputEvent @event)

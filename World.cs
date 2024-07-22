@@ -88,7 +88,8 @@ public class World : Spatial
 
         if (HackerMode)
         {
-            player.GetNode<MeshInstance>("DepthOverlay/DepthOutline").Show();
+            player.GetNode<MeshInstance>("DepthOverlay/HackerOutline").Show();
+            // player.GetNode<MeshInstance>("DepthOverlay/HackerOutline").Hide();
             dotsSpawner.dotMesh.SurfaceGetMaterial(0).Set("flags_transparent", false);
             GD.Load<Resource>("res://RESOURCES/PlatformMaterial.material").Set("shader", 
                     GD.Load<Resource>("res://RESOURCES/hackerModeShader.gdshader"));

@@ -21,6 +21,8 @@ public class Platform : StaticBody
 
     protected MeshInstance hackerMesh;
     protected MeshInstance normalMesh;
+    protected Material normalMaterial;
+    protected Material secondaryMaterial;
     protected GlobalColors globalColors;
 
 
@@ -37,6 +39,8 @@ public class Platform : StaticBody
     {
         hackerMesh = GetNode<MeshInstance>("HackerMesh");
         normalMesh = GetNode<MeshInstance>("NormalMesh");
+        normalMaterial = normalMesh.GetSurfaceMaterial(0);
+        secondaryMaterial = GetNode<MeshInstance>("NormalMesh/SecondaryMesh").GetSurfaceMaterial(0);
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
 
         // delays following code to ensure that globalColors' hackerMode has been properly set:
@@ -48,6 +52,9 @@ public class Platform : StaticBody
 
     public override void _Process(float delta)
     {
+        normalMaterial.Set("albedo", globalColors.fg);
+        secondaryMaterial.Set("albedo", globalColors.bg1);
+
         if (player != null && player.GlobalTranslation.z < GlobalTranslation.z - extents)
         {
             if (!SuccessfullyLanded)

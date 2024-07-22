@@ -27,6 +27,10 @@ mouse_cursor/custom_image="res://ASSETS/SPRITES/Crosshair.png"
 window/stretch/mode="viewport"
 window/stretch/aspect="keep"
 
+[global]
+
+msaa=false
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
