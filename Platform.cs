@@ -52,8 +52,8 @@ public class Platform : StaticBody
 
     public override void _Process(float delta)
     {
-        normalMaterial.Set("albedo", globalColors.fg);
-        secondaryMaterial.Set("albedo", globalColors.bg1);
+        normalMaterial.Set("albedo_color", Brighten(globalColors.fg, 0.2f));
+        secondaryMaterial.Set("albedo_color", Brighten(globalColors.fg, 0.6f));
 
         if (player != null && player.GlobalTranslation.z < GlobalTranslation.z - extents)
         {
@@ -63,5 +63,14 @@ public class Platform : StaticBody
             }
             QueueFree();
         }
+    }
+
+    private Color Brighten(Color color, float amount)
+    {
+        Color newColor = color;
+        newColor.r += (1 - newColor.r) * amount;
+        newColor.g += (1 - newColor.g) * amount;
+        newColor.b += (1 - newColor.b) * amount;
+        return newColor;
     }
 }

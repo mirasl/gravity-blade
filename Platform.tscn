@@ -38,7 +38,7 @@ mesh = SubResource( 8 )
 material/0 = ExtResource( 4 )
 
 [node name="SecondaryMesh" type="MeshInstance" parent="NormalMesh"]
-transform = Transform( 1, 0, 0, 0, 2.74989, 0, 0, 0, 1, -0.00270886, -4.67891, -3.10982e-09 )
+transform = Transform( 1.04569, 0, -2.16033e-10, 0, 2.74989, 0, 3.14701e-08, 0, 1.01827, -2.32831e-10, -2.8335, -0.0178808 )
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = ExtResource( 2 )

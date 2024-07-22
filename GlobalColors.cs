@@ -87,11 +87,9 @@ public class GlobalColors : Node
         enemyMaterial.Set("albedo_color", enemy);
         if (!HackerMode)
         {
-            enemyMaterial.Set("flags_transparent", true);
-            fgMaterial.Set("flags_transparent", true);
-            // GD.Print(enemyMaterial.Get("transparent"));
+            // enemyMaterial.Set("flags_transparent", true);
+            // fgMaterial.Set("flags_transparent", true);
         }
-        // GD.Print(bg1);
     }
 
     public Color GetColorFromIndex(int i)

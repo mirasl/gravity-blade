@@ -693,6 +693,7 @@ visible = false
 mesh = SubResource( 36 )
 
 [node name="NormalOutline" type="MeshInstance" parent="DepthOverlay"]
+visible = false
 mesh = SubResource( 38 )
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]

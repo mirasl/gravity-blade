@@ -99,8 +99,8 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
-        Color outlineColor = globalColors.fg;
-        outlineColor.v *= 1.5f;
+        Color outlineColor = globalColors.enemy;
+        // outlineColor.v *= 1.5f;
         normalOutlineMaterial.Set("shader_param/customColor", ColorToVector3(outlineColor));
 
         UpdateFallDirection();

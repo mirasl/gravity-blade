@@ -35,7 +35,7 @@ public class Enemy : Spatial
     PackedScene paintShotScene;
 
 
-    public override async void _Ready()
+    public override void _Ready()
     {
         // ringParticlesProcessMaterial = GetNode<Particles>(
         //         "KinematicBody/RingParticles").ProcessMaterial;

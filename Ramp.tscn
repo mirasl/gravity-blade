@@ -44,15 +44,21 @@ skeleton = NodePath("../..")
 material/0 = ExtResource( 2 )
 
 [node name="SecondaryMesh" type="MeshInstance" parent="NormalMesh"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.26901, 0 )
+transform = Transform( 1.03402, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.26901, 0 )
 mesh = SubResource( 1 )
 skeleton = NodePath("../../..")
 material/0 = ExtResource( 4 )
 
-[node name="SecondaryMesh2" type="MeshInstance" parent="NormalMesh/SecondaryMesh"]
-transform = Transform( 7.02757, 0, 0, 0, 1, 0, 0, 0, 35.38, 0, 8.65478, 92.444 )
+[node name="SecondaryMesh2" type="MeshInstance" parent="NormalMesh"]
+transform = Transform( 7.2055, 0, 0, 0, 1, 0, 0, 0, 35.38, 0, 8.00667, 92.444 )
 mesh = SubResource( 4 )
-skeleton = NodePath("../../../..")
+skeleton = NodePath("../../..")
+material/0 = ExtResource( 4 )
+
+[node name="SecondaryMesh3" type="MeshInstance" parent="NormalMesh"]
+transform = Transform( 7.205, 0, 0, 0, 0.990117, -1.2622, 0, 0.140245, 8.91105, 0, -2.91816, -69.3082 )
+mesh = SubResource( 4 )
+skeleton = NodePath("../../..")
 material/0 = ExtResource( 4 )
 
 [node name="NormalMesh2" type="MeshInstance" parent="NormalMesh"]
