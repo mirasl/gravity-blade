@@ -35,7 +35,7 @@ public class Enemy : Spatial
     PackedScene paintShotScene;
 
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         // ringParticlesProcessMaterial = GetNode<Particles>(
         //         "KinematicBody/RingParticles").ProcessMaterial;
@@ -76,6 +76,16 @@ public class Enemy : Spatial
                 ap.Stop();
                 break;
         }
+
+        // // run following code after other scripts:
+        // await ToSignal(GetTree().CreateTimer(0), "timeout"); 
+
+        // if (!globalColors.HackerMode)
+        // {
+        //     GetNode<MeshInstance>("KinematicBody/Wings/WingPivot/Wing/Grid").GetSurfaceMaterial(0).MakeUni
+        //     GetNode<MeshInstance>("KinematicBody/Wings/WingPivot2/Wing/Grid");
+            
+        // }
     }
 
     public override void _Process(float delta)
