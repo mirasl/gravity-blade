@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Player.cs" type="Script" id=1]
 [ext_resource path="res://GravityWheel.tscn" type="PackedScene" id=2]
@@ -78,6 +78,360 @@ rings = 1
 [sub_resource type="SphereShape" id=6]
 radius = 0.63349
 
+[sub_resource type="Shader" id=32]
+code = "shader_type canvas_item;
+
+uniform bool useOutline = false;
+uniform bool useGrayscale = false;
+uniform bool usePixelation = false;
+uniform bool useCelShade = true;
+uniform bool useFloorCelShade = false;
+
+uniform int floorValues = 10;
+
+uniform int pixelSize = 3;
+
+uniform vec3 grayscaleMultiplier = vec3(1, 1, 1);
+
+uniform vec2 offset = vec2(0,0);
+
+// Apollo palette:
+uniform vec3 color1 = vec3(0.09019607843137255, 0.12549019607843137, 0.2196078431372549);
+uniform vec3 color2 = vec3(0.1450980392156863, 0.22745098039215686, 0.3686274509803922);
+uniform vec3 color3 = vec3(0.23529411764705882, 0.3686274509803922, 0.5450980392156862);
+uniform vec3 color4 = vec3(0.30980392156862746, 0.5607843137254902, 0.7294117647058823);
+uniform vec3 color5 = vec3(0.45098039215686275, 0.7450980392156863, 0.8274509803921568);
+uniform vec3 color6 = vec3(0.0, 0.0, 0.0);
+uniform vec3 color7 = vec3(0.09803921568627451, 0.2, 0.17647058823529413);
+uniform vec3 color8 = vec3(0.1450980392156863, 0.33725490196078434, 0.1803921568627451);
+uniform vec3 color9 = vec3(0.27450980392156865, 0.5098039215686274, 0.19607843137254902);
+uniform vec3 color10 = vec3(0.4588235294117647, 0.6549019607843137, 0.2627450980392157);
+uniform vec3 color11 = vec3(0.6588235294117647, 0.792156862745098, 0.34509803921568627);
+uniform vec3 color12 = vec3(0.8156862745098039, 0.8549019607843137, 0.5686274509803921);
+uniform vec3 color13 = vec3(0.30196078431372547, 0.16862745098039217, 0.19607843137254902);
+uniform vec3 color14 = vec3(0.47843137254901963, 0.2823529411764706, 0.2549019607843137);
+uniform vec3 color15 = vec3(0.6784313725490196, 0.4666666666666667, 0.3411764705882353);
+uniform vec3 color16 = vec3(0.7529411764705882, 0.5803921568627451, 0.45098039215686275);
+uniform vec3 color17 = vec3(0.8431372549019608, 0.7098039215686275, 0.5803921568627451);
+uniform vec3 color18 = vec3(0.9058823529411765, 0.8352941176470589, 0.7019607843137254);
+uniform vec3 color19 = vec3(0.20392156862745098, 0.10980392156862745, 0.15294117647058825);
+uniform vec3 color20 = vec3(0.3764705882352941, 0.17254901960784313, 0.17254901960784313);
+uniform vec3 color21 = vec3(0.5333333333333333, 0.29411764705882354, 0.16862745098039217);
+uniform vec3 color22 = vec3(0.7450980392156863, 0.4666666666666667, 0.16862745098039217);
+uniform vec3 color23 = vec3(0.8705882352941177, 0.6196078431372549, 0.2549019607843137);
+uniform vec3 color24 = vec3(0.9098039215686274, 0.7568627450980392, 0.4392156862745098);
+uniform vec3 color25 = vec3(0.1411764705882353, 0.08235294117647059, 0.15294117647058825);
+uniform vec3 color26 = vec3(0.2549019607843137, 0.11372549019607843, 0.19215686274509805);
+uniform vec3 color27 = vec3(0.4588235294117647, 0.1411764705882353, 0.2196078431372549);
+uniform vec3 color28 = vec3(0.6470588235294118, 0.18823529411764706, 0.18823529411764706);
+uniform vec3 color29 = vec3(0.8117647058823529, 0.3411764705882353, 0.23529411764705882);
+uniform vec3 color30 = vec3(0.8549019607843137, 0.5254901960784314, 0.24313725490196078);
+uniform vec3 color31 = vec3(0.11764705882352941, 0.11372549019607843, 0.2235294117647059);
+uniform vec3 color32 = vec3(0.25098039215686274, 0.15294117647058825, 0.3176470588235294);
+uniform vec3 color33 = vec3(0.47843137254901963, 0.21176470588235294, 0.4823529411764706);
+uniform vec3 color34 = vec3(0.6352941176470588, 0.24313725490196078, 0.5490196078431373);
+uniform vec3 color35 = vec3(0.7764705882352941, 0.3176470588235294, 0.592156862745098);
+uniform vec3 color36 = vec3(0.8745098039215686, 0.5176470588235295, 0.6470588235294118);
+uniform vec3 color37 = vec3(0.03529411764705882, 0.0392156862745098, 0.0784313725490196);
+uniform vec3 color38 = vec3(0.06274509803921569, 0.0784313725490196, 0.12156862745098039);
+uniform vec3 color39 = vec3(0.08235294117647059, 0.11372549019607843, 0.1568627450980392);
+uniform vec3 color40 = vec3(0.12549019607843137, 0.1803921568627451, 0.21568627450980393);
+uniform vec3 color41 = vec3(0.2235294117647059, 0.2901960784313726, 0.3137254901960784);
+uniform vec3 color42 = vec3(0.3411764705882353, 0.4470588235294118, 0.4666666666666667);
+uniform vec3 color43 = vec3(0.5058823529411764, 0.592156862745098, 0.5882352941176471);
+uniform vec3 color44 = vec3(0.6588235294117647, 0.7098039215686275, 0.6980392156862745);
+uniform vec3 color45 = vec3(0.7803921568627451, 0.8117647058823529, 0.8);
+uniform vec3 color46 = vec3(0.9215686274509803, 0.9294117647058824, 0.9137254901960784);
+
+uniform vec3 outlineColor = vec3(0.0, 0.0, 0.0);
+uniform float outlineDiff = 0.2; // VERY finicky magic number
+uniform int outlineThickness = 1;
+
+uniform float shadeAmount = 0.001;
+
+float distanceSquared(vec3 a, vec3 b) {
+	return pow(a.r - b.r, 2) + pow(a.g - b.g, 2) + pow(a.b - b.b, 2);
+}
+
+// Returns the pixel texture after applying cel shade:
+vec3 applyCelShade(vec3 thisPixel) {
+	int colorSize = 46;
+	vec3 colors[46];
+	colors[0] = color1;
+	colors[1] = color2;
+	colors[2] = color3;
+	colors[3] = color4;
+	colors[4] = color5;
+	colors[5] = color6;
+	colors[6] = color7;
+	colors[7] = color8;
+	colors[8] = color9;
+	colors[9] = color10;
+	colors[10] = color11;
+	colors[11] = color12;
+	colors[12] = color13;
+	colors[13] = color14;
+	colors[14] = color15;
+	colors[15] = color16;
+	colors[16] = color17;
+	colors[17] = color18;
+	colors[18] = color19;
+	colors[19] = color20;
+	colors[20] = color21;
+	colors[21] = color22;
+	colors[22] = color23;
+	colors[23] = color24;
+	colors[24] = color25;
+	colors[25] = color26;
+	colors[26] = color27;
+	colors[27] = color28;
+	colors[28] = color29;
+	colors[29] = color30;
+	colors[30] = color31;
+	colors[31] = color32;
+	colors[32] = color33;
+	colors[33] = color34;
+	colors[34] = color35;
+	colors[35] = color36;
+	colors[36] = color37;
+	colors[37] = color38;
+	colors[38] = color39;
+	colors[39] = color40;
+	colors[40] = color41;
+	colors[41] = color42;
+	colors[42] = color43;
+	colors[43] = color44;
+	colors[44] = color45;
+	colors[45] = color46;
+	
+	float minDiff = 1000.0;
+	vec3 shadedColor = vec3(0.0, 0.0, 0.0);
+		
+	for (int i = 0; i < colorSize/8; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = colorSize/8; i < colorSize/4; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = colorSize/4; i < 3*colorSize/8; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = 3*colorSize/8; i < colorSize/2; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = colorSize/2; i < 5*colorSize/8; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = 5*colorSize/8; i < 3*colorSize/4; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = 3*colorSize/4; i < 7*colorSize/8; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	for (int i = 7*colorSize/8; i < colorSize; i++) {
+		float currentDistance =
+				(colors[i].r - thisPixel.r)*(colors[i].r - thisPixel.r) +
+				(colors[i].g - thisPixel.g)*(colors[i].g - thisPixel.g) +
+				(colors[i].b - thisPixel.b)*(colors[i].b - thisPixel.b);
+		if (currentDistance < minDiff) {
+			minDiff = currentDistance;
+			shadedColor = colors[i];
+		}
+	}
+	
+	return shadedColor;
+}
+
+// Returns specified outline color if thisPixel is adjacent to a pixel of a 
+// different color, otherwise returns the same pixel.
+// This is pretty bad because it makes EVERYTHING outlined - better to use a
+// spatial shader on a per-object basis. Also, doesn't really work with pixels.
+vec3 applyOutline(vec3 thisPixel, sampler2D screen_texture, vec2 uv, vec3 color) {
+	vec2 size = 1.0 / vec2(ivec2(1920, 1080));
+	
+	for(int y = -outlineThickness; y <= outlineThickness; y++)
+	for(int x = -outlineThickness; x <= outlineThickness; x++)
+	{
+	    vec2 pixel_off = vec2(float(x), float(y));
+	    vec3 tex = texture(screen_texture, uv + pixel_off * size).rgb;
+		float dist = distanceSquared(tex, thisPixel);
+		if (dist > outlineDiff*outlineDiff) {
+			return color;
+		}
+	}
+	return thisPixel;
+}
+
+// Returns the current pixel texture after having applied the pixelization 
+// effect (basically the texture() function but after pixelizing):
+vec4 pixelizedTexture(sampler2D screen_texture, vec2 uv, int ps) {
+	ivec2 size = ivec2(1920, 1080);//textureSize(screen_texture, 0);
+
+	float xFactor = float(size.x) / float(ps);
+	float yFactor = float(size.y) / float(ps);
+
+	float grid_uv_x = floor(uv.x * xFactor) / xFactor;
+	float grid_uv_y = floor(uv.y * yFactor) / yFactor;
+
+	return texture(screen_texture, vec2(grid_uv_x, grid_uv_y));
+}
+
+// Main screenspace process:
+void fragment() {
+	// UV vertically flipped:
+	vec2 uvFlipped = vec2(UV.x - offset.x, 1.0 - UV.y + offset.y);
+	
+	// Pixelation:
+	vec4 tp;
+	if (usePixelation) {
+		tp = pixelizedTexture(SCREEN_TEXTURE, uvFlipped, pixelSize);
+	} else {
+		tp = texture(SCREEN_TEXTURE, uvFlipped);
+	}
+	vec3 thisPixel = tp.rgb;
+	
+	// Outline:
+	if (useOutline) {
+		thisPixel = applyOutline(thisPixel, SCREEN_TEXTURE, uvFlipped, color6);
+	}
+	
+	// Cel Shade:
+	if (useCelShade) {
+		thisPixel = applyCelShade(thisPixel);
+	}
+	
+	// Grayscale:
+	if (useGrayscale) {
+		float grayscale = (thisPixel.r + thisPixel.g + thisPixel.b) / 3.0;
+		grayscale = floor(grayscale * 15.0) / 15.0;
+		
+		//vec3 grayscaleMap[15];
+		//grayscaleMap[0] = vec3()
+		
+		thisPixel = vec3(grayscale*grayscaleMultiplier.r, 
+				grayscale*grayscaleMultiplier.g, 
+				grayscale*grayscaleMultiplier.b);
+	}
+	
+	if (useFloorCelShade) {
+		thisPixel = floor(thisPixel * float(floorValues)) / float(floorValues);
+	}
+	
+	COLOR = vec4(thisPixel.r, thisPixel.g, thisPixel.b, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=33]
+shader = SubResource( 32 )
+shader_param/useOutline = true
+shader_param/useGrayscale = false
+shader_param/usePixelation = false
+shader_param/useCelShade = false
+shader_param/useFloorCelShade = false
+shader_param/floorValues = 10
+shader_param/pixelSize = 3
+shader_param/grayscaleMultiplier = Vector3( 1, 1, 1 )
+shader_param/offset = Vector2( 0, 0 )
+shader_param/color1 = Vector3( 0.0901961, 0.12549, 0.219608 )
+shader_param/color2 = Vector3( 0.145098, 0.227451, 0.368627 )
+shader_param/color3 = Vector3( 0.235294, 0.368627, 0.545098 )
+shader_param/color4 = Vector3( 0.309804, 0.560784, 0.729412 )
+shader_param/color5 = Vector3( 0.45098, 0.745098, 0.827451 )
+shader_param/color6 = Vector3( 0, 0, 0 )
+shader_param/color7 = Vector3( 0.0980392, 0.2, 0.176471 )
+shader_param/color8 = Vector3( 0.145098, 0.337255, 0.180392 )
+shader_param/color9 = Vector3( 0.27451, 0.509804, 0.196078 )
+shader_param/color10 = Vector3( 0.458824, 0.654902, 0.262745 )
+shader_param/color11 = Vector3( 0.658824, 0.792157, 0.345098 )
+shader_param/color12 = Vector3( 0.815686, 0.854902, 0.568627 )
+shader_param/color13 = Vector3( 0.301961, 0.168627, 0.196078 )
+shader_param/color14 = Vector3( 0.478431, 0.282353, 0.254902 )
+shader_param/color15 = Vector3( 0.678431, 0.466667, 0.341176 )
+shader_param/color16 = Vector3( 0.752941, 0.580392, 0.45098 )
+shader_param/color17 = Vector3( 0.843137, 0.709804, 0.580392 )
+shader_param/color18 = Vector3( 0.905882, 0.835294, 0.701961 )
+shader_param/color19 = Vector3( 0.203922, 0.109804, 0.152941 )
+shader_param/color20 = Vector3( 0.376471, 0.172549, 0.172549 )
+shader_param/color21 = Vector3( 0.533333, 0.294118, 0.168627 )
+shader_param/color22 = Vector3( 0.745098, 0.466667, 0.168627 )
+shader_param/color23 = Vector3( 0.870588, 0.619608, 0.254902 )
+shader_param/color24 = Vector3( 0.909804, 0.756863, 0.439216 )
+shader_param/color25 = Vector3( 0.141176, 0.0823529, 0.152941 )
+shader_param/color26 = Vector3( 0.254902, 0.113725, 0.192157 )
+shader_param/color27 = Vector3( 0.458824, 0.141176, 0.219608 )
+shader_param/color28 = Vector3( 0.647059, 0.188235, 0.188235 )
+shader_param/color29 = Vector3( 0.811765, 0.341176, 0.235294 )
+shader_param/color30 = Vector3( 0.854902, 0.52549, 0.243137 )
+shader_param/color31 = Vector3( 0.117647, 0.113725, 0.223529 )
+shader_param/color32 = Vector3( 0.25098, 0.152941, 0.317647 )
+shader_param/color33 = Vector3( 0.478431, 0.211765, 0.482353 )
+shader_param/color34 = Vector3( 0.635294, 0.243137, 0.54902 )
+shader_param/color35 = Vector3( 0.776471, 0.317647, 0.592157 )
+shader_param/color36 = Vector3( 0.87451, 0.517647, 0.647059 )
+shader_param/color37 = Vector3( 0.0352941, 0.0392157, 0.0784314 )
+shader_param/color38 = Vector3( 0.0627451, 0.0784314, 0.121569 )
+shader_param/color39 = Vector3( 0.0823529, 0.113725, 0.156863 )
+shader_param/color40 = Vector3( 0.12549, 0.180392, 0.215686 )
+shader_param/color41 = Vector3( 0.223529, 0.290196, 0.313726 )
+shader_param/color42 = Vector3( 0.341176, 0.447059, 0.466667 )
+shader_param/color43 = Vector3( 0.505882, 0.592157, 0.588235 )
+shader_param/color44 = Vector3( 0.658824, 0.709804, 0.698039 )
+shader_param/color45 = Vector3( 0.780392, 0.811765, 0.8 )
+shader_param/color46 = Vector3( 0.921569, 0.929412, 0.913725 )
+shader_param/outlineColor = Vector3( 0, 0, 0 )
+shader_param/outlineDiff = 0.2
+shader_param/outlineThickness = 1
+shader_param/shadeAmount = 0.001
+
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
 collision_mask = 5
@@ -141,7 +495,6 @@ collision_mask = 21
 position = Vector2( 962, 542 )
 points = PoolVector2Array(  )
 width_curve = ExtResource( 5 )
-default_color = Color( 0, 0.882353, 1, 1 )
 Gravity = true
 
 [node name="NormalSlice" parent="SliceCanvas" instance=ExtResource( 4 )]
@@ -156,6 +509,12 @@ collision_mask = 8
 
 [node name="CollisionShape" type="CollisionShape" parent="Hurtbox"]
 shape = SubResource( 6 )
+
+[node name="ScreenspaceOutline" type="ColorRect" parent="."]
+visible = false
+material = SubResource( 33 )
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
 [connection signal="LineDrawn" from="SliceCanvas/GravitySlice" to="." method="sig_LineDrawn"]

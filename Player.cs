@@ -9,6 +9,8 @@ public class Player : KinematicBody
     [Signal] delegate void RestoreGravitySlash();
     [Signal] delegate void GameOver();
 
+    [Export] bool ScreenspaceOutlineEnabled = false;
+
     public const float GRAVITY_MAGNITUDE = 0.4f;
     public const float JUMPFORCE = 20f; // with gravity of 0.4, jump height is 8.33333
     const float ROTATION_SPEED = 0;//Mathf.Pi; // rad/s
@@ -58,6 +60,7 @@ public class Player : KinematicBody
     protected Particles speedLines5;
     protected Slice gravitySlice;
     protected Slice normalSlice;
+    protected ColorRect screenspaceOutline;
     // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
 
@@ -77,10 +80,12 @@ public class Player : KinematicBody
         speedLines5 = GetNode<Particles>("Camera/SpeedLines5");
         gravitySlice = GetNode<Slice>("SliceCanvas/GravitySlice");
         normalSlice = GetNode<Slice>("SliceCanvas/NormalSlice");
+        screenspaceOutline = GetNode<ColorRect>("ScreenspaceOutline");
         // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
         gravityWheel.SetWheelVisibility(false);
+        screenspaceOutline.Hide();
 
         // Input.MouseMode = Input.MouseModeEnum.Captured;
         Input.MouseMode = Input.MouseModeEnum.Confined;
@@ -460,6 +465,10 @@ public class Player : KinematicBody
                 EmitSignal("AddScoreBonus", ENEMY_POINTS, "+ Enemy ");
                 enemy.Explode(angle);
                 camera.StartShake(0.7f, 0.4f);
+                if (ScreenspaceOutlineEnabled)
+                {
+                    ShowScreenspaceOutline(0.4f);
+                }
 
                 // restore gravity slash:
                 EmitSignal("RestoreGravitySlash");
@@ -474,6 +483,13 @@ public class Player : KinematicBody
                 break;
             }
         }
+    }
+
+    private async void ShowScreenspaceOutline(float time)
+    {
+        screenspaceOutline.Show();
+        await ToSignal(GetTree().CreateTimer(time), "timeout");
+        screenspaceOutline.Hide();
     }
 
     private void SliceCollisionViaCircles(Vector2[] points)
