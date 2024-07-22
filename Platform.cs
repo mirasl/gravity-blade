@@ -19,6 +19,10 @@ public class Platform : StaticBody
         BigRamp
     }
 
+    protected MeshInstance hackerMesh;
+    protected MeshInstance normalMesh;
+    protected GlobalColors globalColors;
+
 
     // public override void _Ready()
     // {
@@ -28,6 +32,19 @@ public class Platform : StaticBody
     //         //         Colors.Yellow);
     //     }
     // }
+
+    public override async void _Ready()
+    {
+        hackerMesh = GetNode<MeshInstance>("HackerMesh");
+        normalMesh = GetNode<MeshInstance>("NormalMesh");
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
+
+        // delays following code to ensure that globalColors' hackerMode has been properly set:
+        await ToSignal(GetTree().CreateTimer(0), "timeout");
+
+        hackerMesh.Visible = globalColors.HackerMode;
+        normalMesh.Visible = !globalColors.HackerMode;
+    }
 
     public override void _Process(float delta)
     {

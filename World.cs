@@ -90,6 +90,9 @@ public class World : Spatial
         {
             player.GetNode<MeshInstance>("DepthOverlay/DepthOutline").Show();
             dotsSpawner.dotMesh.SurfaceGetMaterial(0).Set("flags_transparent", false);
+            GD.Load<Resource>("res://RESOURCES/PlatformMaterial.material").Set("shader", 
+                    GD.Load<Resource>("res://RESOURCES/hackerModeShader.gdshader"));
+            globalColors.HackerMode = true;
         }
     }
 

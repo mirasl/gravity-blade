@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GlobalColors : Node
 {
+    public bool HackerMode = false;
     // bg2 is in the main background of the scene
     private static Dictionary<string, Color>[] colorPalettes = new Dictionary<string, Color>[]
     {
