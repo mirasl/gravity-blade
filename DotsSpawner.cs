@@ -9,7 +9,7 @@ public class DotsSpawner : Spatial
     const float MIN_SCALE = 0.25f;
     const float MAX_SCALE = 2f;
 
-    [Export] Mesh dotMesh;
+    [Export] public Mesh dotMesh;
     [Export] string playerPath;
 
     MultiMeshInstance dotsInstantiator;

@@ -3,6 +3,8 @@ using System;
 
 public class World : Spatial
 {
+    [Export] bool HackerMode = false;
+
     const float BASE_PLATFORM_DISTANCE = 140;
     const float BASE_ACCELERATOR_DISTANCE = 180;
     const float JUMP_HEIGHT = 8.33f;
@@ -82,6 +84,12 @@ public class World : Spatial
         {
             GenerateRandomPlatform(lastGeneratedPlatform.Translation, 
                     lastGeneratedPlatform.Rotation.z, lastGeneratedPlatform.IsAccelerator, false);
+        }
+
+        if (HackerMode)
+        {
+            player.GetNode<MeshInstance>("DepthOverlay/DepthOutline").Show();
+            dotsSpawner.dotMesh.SurfaceGetMaterial(0).Set("flags_transparent", false);
         }
     }
 

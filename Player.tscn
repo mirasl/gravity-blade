@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Player.cs" type="Script" id=1]
 [ext_resource path="res://GravityWheel.tscn" type="PackedScene" id=2]
@@ -432,6 +432,91 @@ shader_param/outlineDiff = 0.2
 shader_param/outlineThickness = 1
 shader_param/shadeAmount = 0.001
 
+[sub_resource type="Shader" id=34]
+code = "// Outline based on differences in the depth buffer
+shader_type spatial;
+render_mode unshaded;
+
+uniform vec2 offset = vec2(0,0);
+uniform bool useCustomColor = true;
+uniform vec3 customColor = vec3(0.2,0.2,0.2);
+uniform bool autoModulateDarker = false;
+uniform bool outlineOnly = false;
+uniform vec3 outlineOnlyColor = vec3(0.2,0.2,0.2);
+
+void vertex() {
+	POSITION = vec4(VERTEX - vec3(0.0,0.0,1.0), 1.0);
+}
+
+float linearDepthTexture(sampler2D sampler, vec2 coords, mat4 ipm) {
+	float depth = texture(sampler, coords).r;
+	vec3 ndc = vec3(coords, depth) * 2.0 - 1.0;
+	vec4 view = ipm * vec4(ndc, 1.0);
+	view.xyz /= view.w;
+	float linear_depth = -view.z;
+	return linear_depth;
+}
+
+// Main screenspace process:
+void fragment() {
+	ALPHA = 0.0;
+	
+	vec2 delta = vec2(0.0, 1.0);
+	
+	vec2 uv = SCREEN_UV + offset;
+	
+	float c = linearDepthTexture(DEPTH_TEXTURE, uv, INV_PROJECTION_MATRIX);
+	float c1y = linearDepthTexture(DEPTH_TEXTURE, uv.xy-delta/360.0, INV_PROJECTION_MATRIX);
+	float c2y = linearDepthTexture(DEPTH_TEXTURE, uv.xy+delta/360.0, INV_PROJECTION_MATRIX);
+	float c1x = linearDepthTexture(DEPTH_TEXTURE, uv.xy-delta.yx/680.0, INV_PROJECTION_MATRIX);
+	float c2x = linearDepthTexture(DEPTH_TEXTURE, uv.xy+delta.yx/680.0, INV_PROJECTION_MATRIX);
+
+	float convexThreshold = 0.5;
+	float concaveThreshold = 1.0;
+	
+	float averageX = abs(c1x + c2x) / 2.0;
+	float averageY = abs(c1y + c2y) / 2.0;
+	
+	if (outlineOnly) {
+		ALPHA = 1.0;
+		ALBEDO = outlineOnlyColor;
+	}
+	
+//	// Concave: /\\
+//	if ((c < averageX - concaveThreshold) || (c < averageY - concaveThreshold)) {
+//		//ALPHA = 1.0;
+//		//ALBEDO = vec3(0,0,0);
+//	}
+	
+	// Convex: \\/
+	if ((c > averageX + convexThreshold) || (c > averageY + convexThreshold)) {
+		ALPHA = 1.0;
+		if (useCustomColor) {
+			ALBEDO = customColor;
+		} else if (autoModulateDarker) {
+			ALBEDO = texture(SCREEN_TEXTURE, SCREEN_UV).rgb/1.5;
+		} else {
+			ALBEDO = texture(SCREEN_TEXTURE, SCREEN_UV).rgb + (1.0 - 
+					texture(SCREEN_TEXTURE, SCREEN_UV).rgb)/2.0;
+		}
+	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id=35]
+render_priority = 2
+shader = SubResource( 34 )
+shader_param/offset = Vector2( 0, 0 )
+shader_param/useCustomColor = true
+shader_param/customColor = Vector3( 0.2, 0.6, 0.2 )
+shader_param/autoModulateDarker = false
+shader_param/outlineOnly = true
+shader_param/outlineOnlyColor = Vector3( 0, 0, 0 )
+
+[sub_resource type="QuadMesh" id=36]
+material = SubResource( 35 )
+size = Vector2( 2, 2 )
+
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
 collision_mask = 5
@@ -515,6 +600,12 @@ visible = false
 material = SubResource( 33 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="DepthOverlay" type="Spatial" parent="."]
+
+[node name="DepthOutline" type="MeshInstance" parent="DepthOverlay"]
+visible = false
+mesh = SubResource( 36 )
 
 [connection signal="Timeout" from="UI/GravityWheel" to="." method="sig_GravityWheelTimeout"]
 [connection signal="LineDrawn" from="SliceCanvas/GravitySlice" to="." method="sig_LineDrawn"]

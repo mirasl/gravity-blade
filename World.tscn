@@ -39,6 +39,7 @@ ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.0
 
 [sub_resource type="SpatialMaterial" id=16]
+flags_transparent = true
 flags_unshaded = true
 vertex_color_use_as_albedo = true
 
@@ -245,7 +246,6 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 1
 playing = true
 centered = false
 
@@ -345,7 +345,7 @@ script = ExtResource( 20 )
 position = Vector2( 1377, 1014 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
+frame = 1
 playing = true
 script = ExtResource( 26 )
 
@@ -353,6 +353,7 @@ script = ExtResource( 26 )
 position = Vector2( 1500, 933 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
+frame = 3
 playing = true
 script = ExtResource( 26 )
 
@@ -360,6 +361,7 @@ script = ExtResource( 26 )
 position = Vector2( 1640, 859 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
+frame = 3
 playing = true
 script = ExtResource( 26 )
 
@@ -367,7 +369,7 @@ script = ExtResource( 26 )
 position = Vector2( 1799, 800 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 3
+frame = 2
 playing = true
 script = ExtResource( 26 )
 
