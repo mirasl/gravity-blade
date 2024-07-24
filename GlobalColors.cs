@@ -26,7 +26,7 @@ public class GlobalColors : Node
             {"fg", new Color("39a8f0")},
             {"text", Colors.White}, 
             {"enemy", new Color("8ccffa")}, // lighter blue
-            {"platform", Colors.White},
+            {"platform", new Color("2f6cb3")}, // darker blue
         },
         // AURORA (light blue, light green, white)
         new Dictionary<string, Color> 
