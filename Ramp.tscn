@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Platform.cs" type="Script" id=1]
-[ext_resource path="res://RESOURCES/NonHackerPlatform.material" type="Material" id=2]
+[ext_resource path="res://RESOURCES/NonHackerPlatformWithDots.tres" type="Material" id=2]
 [ext_resource path="res://RESOURCES/HackerPlatform.material" type="Material" id=3]
 [ext_resource path="res://RESOURCES/SecondaryPlatformMesh.tres" type="Material" id=4]
 

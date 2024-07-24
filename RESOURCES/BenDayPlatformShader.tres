@@ -1,10 +1,10 @@
 [gd_resource type="Shader" format=2]
 
 [resource]
-code = "// NOTE: Shader automatically converted from Godot Engine 3.5.3.stable.mono's SpatialMaterial.
+code = "shader_type spatial;
 
-shader_type spatial;
 render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+
 uniform vec4 albedo : hint_color;
 uniform sampler2D texture_albedo : hint_albedo;
 uniform float specular;
@@ -16,7 +16,7 @@ uniform vec3 uv1_offset;
 uniform vec3 uv2_scale;
 uniform vec3 uv2_offset;
 uniform float animationSpeed = 5.0;
-uniform float animationOffset = 0.015;
+uniform float animationOffset = 0.005;
 
 
 void vertex() {
@@ -25,9 +25,11 @@ void vertex() {
 
 
 
-float distanceSquared(vec2 a, vec2 b)
+float distanceSquared16by9(vec2 a, vec2 b)
 {
-	return (a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y);
+	// 0.31640625 = (9 / 16)^2
+	return (a.y - b.y)*(a.y - b.y)*0.31640625 + 
+			(a.x - b.x)*(a.x - b.x);
 }
 
 void fragment() {
@@ -38,33 +40,43 @@ void fragment() {
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
 	ALPHA = albedo.a * albedo_tex.a;
-	
-	float offset = 0.05;
+
+	float offset = 0.025;
 	if (int(TIME*animationSpeed) % 2 == 0)
 	{
-		offset = 0.05 + animationOffset;
+		offset = 0.025 + animationOffset;
 	}
-	// Draw dots:
-	for (float x = offset; x < 1.0; x += 0.2)
+	
+	// Draw dots every other pixel:
+	int x = int(SCREEN_UV.x * 640.0);
+	int y = int(SCREEN_UV.y * 360.0);
+	
+	if (x % 2 == 0 && y % 2 == 0)
 	{
-		for (float y = 0.05; y < 10.0; y += 0.1)
-		{
-			if (distanceSquared(UV, vec2(x,y)) < 0.0005)
-			{
-				ALBEDO = vec3(1.0);
-			}
-		}
+		ALBEDO *= 1.8;
 	}
-	for (float x = 0.1 + offset; x < 1.0; x += 0.2)
-	{
-		for (float y = 0.1; y < 10.0; y += 0.1)
-		{
-			if (distanceSquared(UV, vec2(x,y)) < 0.0005)
-			{
-				ALBEDO = vec3(1.0);
-			}
-		}
-	}
+
+//	// Draw dots:
+//	for (float x = offset; x < 1.0; x += 0.01)
+//	{
+//		for (float y = 0.05; y < 1.0; y += 0.01)
+//		{
+//			if (distanceSquared16by9(SCREEN_UV, vec2(x,y)) < 0.000002)
+//			{
+//				ALBEDO = vec3(1.0);
+//			}
+//		}
+//	}
+//	for (float x = 0.005 + offset; x < 1.0; x += 0.01)
+//	{
+//		for (float y = 0.005; y < 1.0; y += 0.01)
+//		{
+//			if (distanceSquared16by9(SCREEN_UV, vec2(x,y)) < 0.000002)
+//			{
+//				ALBEDO = vec3(1.0);
+//			}
+//		}
+//	}
 }
 
 "
