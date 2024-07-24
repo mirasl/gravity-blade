@@ -51,11 +51,11 @@ void fragment() {
 	int x = int(SCREEN_UV.x * 640.0);
 	int y = int(SCREEN_UV.y * 360.0);
 	
-	if (x % 2 == 0 && y % 2 == 0)
+	if ((x % 4 == 0 && y % 2 == 0) || (x % 4 == 2 && y % 2 == 1))
 	{
-		if (UV.x < 0.2 || UV.y < 0.05)
+		if (UV.x + UV.y*10.0 < 5.0 && UV.x + UV.y*5.0 > 2.0 || true)
 		{
-			ALBEDO *= 1.5;
+			ALBEDO *= 1.2;
 		}
 	}
 
