@@ -53,7 +53,10 @@ void fragment() {
 	
 	if (x % 2 == 0 && y % 2 == 0)
 	{
-		ALBEDO *= 1.8;
+		if (UV.x < 0.2 || UV.y < 0.05)
+		{
+			ALBEDO *= 1.5;
+		}
 	}
 
 //	// Draw dots:
