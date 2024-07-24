@@ -52,8 +52,8 @@ public class Platform : StaticBody
 
     public override void _Process(float delta)
     {
-        normalMaterial.Set("albedo_color", Brighten(globalColors.fg, 0.2f));
-        secondaryMaterial.Set("albedo_color", Brighten(globalColors.fg, 0.6f));
+        normalMaterial.Set("albedo_color", Brighten(globalColors.platform, 0.2f));
+        secondaryMaterial.Set("albedo_color", Brighten(globalColors.platform, 0.4f));
 
         if (player != null && player.GlobalTranslation.z < GlobalTranslation.z - extents)
         {

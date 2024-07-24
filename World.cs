@@ -91,8 +91,8 @@ public class World : Spatial
             player.GetNode<MeshInstance>("DepthOverlay/HackerOutline").Show();
             player.GetNode<MeshInstance>("DepthOverlay/NormalOutline").Hide();
             dotsSpawner.dotMesh.SurfaceGetMaterial(0).Set("flags_transparent", false);
-            GD.Load<Resource>("res://RESOURCES/PlatformMaterial.material").Set("shader", 
-                    GD.Load<Resource>("res://RESOURCES/hackerModeShader.gdshader"));
+            // GD.Load<Resource>("res://RESOURCES/PlatformMaterial.material").Set("shader", 
+            //         GD.Load<Resource>("res://RESOURCES/hackerModeShader.gdshader"));
             globalColors.HackerMode = true;
         }
     }

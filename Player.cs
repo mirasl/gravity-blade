@@ -608,7 +608,7 @@ public class Player : KinematicBody
     private void sig_HurtboxBodyEntered(Node body)
     {
         Node maybeEnemy = body.GetParentOrNull<Node>();
-        if (maybeEnemy != null && maybeEnemy is Enemy)
+        if (maybeEnemy != null && maybeEnemy is Enemy && !((Enemy)maybeEnemy).Dead)
         {
             EmitSignal("GameOver");
         }

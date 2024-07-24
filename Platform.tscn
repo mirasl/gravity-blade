@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Platform.cs" type="Script" id=1]
 [ext_resource path="res://RESOURCES/SecondaryPlatformMesh.tres" type="Material" id=2]
 [ext_resource path="res://RESOURCES/HackerPlatform.material" type="Material" id=3]
 [ext_resource path="res://RESOURCES/NonHackerPlatform.material" type="Material" id=4]
-[ext_resource path="res://ASSETS/SPRITES/benDayTexture.png" type="Texture" id=5]
 
 [sub_resource type="BoxShape" id=7]
 extents = Vector3( 6.66897, 0.0386744, 65.0846 )
@@ -12,15 +11,6 @@ extents = Vector3( 6.66897, 0.0386744, 65.0846 )
 [sub_resource type="PlaneMesh" id=8]
 
 [sub_resource type="CubeMesh" id=2]
-
-[sub_resource type="PlaneMesh" id=10]
-
-[sub_resource type="SpatialMaterial" id=11]
-render_priority = 2
-flags_transparent = true
-flags_unshaded = true
-albedo_texture = ExtResource( 5 )
-uv1_scale = Vector3( 1, 10, 1 )
 
 [node name="Platform" type="StaticBody"]
 script = ExtResource( 1 )
@@ -39,13 +29,6 @@ transform = Transform( 1.04569, 0, -2.16033e-10, 0, 2.74989, 0, 3.14701e-08, 0, 
 mesh = SubResource( 2 )
 skeleton = NodePath("../..")
 material/0 = ExtResource( 2 )
-
-[node name="NormalMesh2" type="MeshInstance" parent="NormalMesh"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0423424, 1.96114, -4.86089e-08 )
-visible = false
-mesh = SubResource( 10 )
-skeleton = NodePath("../..")
-material/0 = SubResource( 11 )
 
 [node name="HackerMesh" type="MeshInstance" parent="."]
 transform = Transform( 6.65643, 0, -5.24566e-08, 0, 0.222349, 0, -7.49713e-05, 0, 65.3075, 0.0171468, 0.136941, -3.95348e-08 )

@@ -15,7 +15,8 @@ public class GlobalColors : Node
             {"bg2", new Color("0e1b49")},
             {"fg", new Color("c91731")}, // red
             {"text", new Color("ee5a6f")}, // lighter red
-            {"enemy", new Color("ee5a6f")} // lighter red (same as text)
+            {"enemy", new Color("ee5a6f")}, // lighter red (same as text)
+            {"platform", new Color("6640c2")}, // lighter purple
         },
         // TRANS (light blue, pink, white)
         new Dictionary<string, Color> 
@@ -24,7 +25,8 @@ public class GlobalColors : Node
             {"bg2", new Color("ed4cc5")}, // e99fde
             {"fg", new Color("39a8f0")},
             {"text", Colors.White}, 
-            {"enemy", new Color("8ccffa")} // lighter blue
+            {"enemy", new Color("8ccffa")}, // lighter blue
+            {"platform", Colors.White},
         },
         // AURORA (light blue, light green, white)
         new Dictionary<string, Color> 
@@ -33,7 +35,8 @@ public class GlobalColors : Node
             {"bg2", new Color("045aae")}, // blue
             {"fg", new Color("108f3e")}, // greener blue ; old 1a80a5   4cde6f
             {"text", new Color("4cde6f")},
-            {"enemy", new Color("24b357")} // lighter blue ; old  43abd1  49e3b7
+            {"enemy", new Color("24b357")}, // lighter blue ; old  43abd1  49e3b7
+            {"platform", new Color("1d42a1")},
         },
         // MUMBAI (yellow, turquoise, blue)
         new Dictionary<string, Color> 
@@ -42,7 +45,8 @@ public class GlobalColors : Node
             {"bg2", new Color("fdff9a")},
             {"fg", new Color("4082c0")}, // blue
             {"text", new Color("5f8fbb")},
-            {"enemy", new Color("76aadb")} // lighter blue
+            {"enemy", new Color("76aadb")}, // lighter blue
+            {"platform", new Color("39a371")}, // dark turquoise
         }
     };
 
@@ -53,6 +57,7 @@ public class GlobalColors : Node
     public Color fg = Colors.Black;
     public Color text = Colors.Black;
     public Color enemy = Colors.Black;
+    public Color platform = Colors.Black;
 
     private static int CurrentIndex = -1; // To ensure that ShiftPalette leads to new color
 
@@ -124,6 +129,8 @@ public class GlobalColors : Node
         tween.InterpolateProperty(this, "text", text, palette["text"], 0.3f, 
                 Tween.TransitionType.Sine, Tween.EaseType.Out);
         tween.InterpolateProperty(this, "enemy", text, palette["enemy"], 0.3f, 
+                Tween.TransitionType.Sine, Tween.EaseType.Out);
+        tween.InterpolateProperty(this, "platform", text, palette["platform"], 0.3f, 
                 Tween.TransitionType.Sine, Tween.EaseType.Out);
         tween.Start();
 
