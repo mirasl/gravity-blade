@@ -110,6 +110,8 @@ public class Player : KinematicBody
     {
         if (Frozen)
         {
+            gravitySlice.Disabled = true;
+            normalSlice.Disabled = true;
             return; // big yikes lol
         }
         // Color outlineColor = globalColors.enemy;

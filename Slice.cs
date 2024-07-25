@@ -13,6 +13,7 @@ public class Slice : Line2D
     private float gravitySlashes = 4;
     bool slicing = false;
     bool canSlice = true;
+    public bool Disabled = false;
 
     protected Sprite arrow;
     protected Tween tween;
@@ -40,7 +41,7 @@ public class Slice : Line2D
         int mouseButton = Gravity ? 1 : 2;
 
         if (Input.IsMouseButtonPressed(mouseButton) && Points.Length < 35 && canSlice && 
-                !(Gravity && gravitySlashes < 1))
+                !(Gravity && gravitySlashes < 1) && !Disabled)
         {
             slicing = true;
             AddPoint(GetViewport().GetMousePosition() - new Vector2(960, 540) + Offset);
