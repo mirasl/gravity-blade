@@ -101,6 +101,8 @@ public class World : Spatial
             //         GD.Load<Resource>("res://RESOURCES/hackerModeShader.gdshader"));
             globalColors.HackerMode = true;
         }
+
+        LoadHighScore();
     }
 
     public override void _PhysicsProcess(float delta)
@@ -297,18 +299,14 @@ public class World : Spatial
         }
     }
 
-    public void SaveHighScore()
+    public void SaveHighScore(float highScore)
     {
-        if (ui.DisplayScore > HighScore)
-        {
-            HighScore = ui.DisplayScore;
-        }
-        save.Call("save_game", HighScore);
+        save.Call("save_game", highScore);
     }
 
     public void LoadHighScore()
     {
-        save.Call("load_game"); // this method sets World.HighScore public variable
+        HighScore = (float)save.Call("load_game");
     }
 
     private void sig_AddScoreBonus(float value, string text)
@@ -323,7 +321,12 @@ public class World : Spatial
             return;
         }
         gameOverCalled = true;
-        recap.SetActive();
+        if (ui.DisplayScore > HighScore)
+        {
+            HighScore = ui.DisplayScore;
+            SaveHighScore(HighScore);
+        }
+        recap.SetActive(ui.DisplayScore, HighScore);
         player.Frozen = true;
         player.GetNode<PlayerCamera>("Camera").StartShake(1, 1);
         ui.Hide();

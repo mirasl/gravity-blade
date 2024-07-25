@@ -18,6 +18,8 @@ public class Recap : Control
     protected AnimatedSprite frame;
     protected ColorRect background;
     protected AnimationPlayer backgroundAP;
+    protected Label scoreNumber;
+    protected Label highScoreNumber;
 
 
     public override void _Ready()
@@ -28,6 +30,8 @@ public class Recap : Control
         frame = GetNode<AnimatedSprite>("Frame");
         background = GetNode<ColorRect>("Background");
         backgroundAP = GetNode<AnimationPlayer>("Background/AnimationPlayer");
+        scoreNumber = GetNode<Label>("Labels/ScoreNumber");
+        highScoreNumber = GetNode<Label>("Labels/HighScoreNumber");
     }
 
     public override void _Process(float delta)
@@ -60,8 +64,10 @@ public class Recap : Control
         }
     }
 
-    public void SetActive()
+    public void SetActive(float score, float highScore)
     {
+        scoreNumber.Text = score.ToString("000000");
+        highScoreNumber.Text = highScore.ToString("000000");
         active = true;
         backgroundAP.Play("slide");
     }

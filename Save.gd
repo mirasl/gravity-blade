@@ -28,9 +28,7 @@ func load_game():
 	# var input = save_game.get_as_text()
     var save_data = parse_json(save_game.get_line())
 
-    var world = get_node_or_null("/root/World")
-    if (world != null and world is World):
-        world.HighScore = save_data.high_score
+    return save_data.high_score
 	
 
 
