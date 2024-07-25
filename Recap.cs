@@ -48,6 +48,7 @@ public class Recap : Control
         labels.Modulate = globalColors.text;
         frame.Modulate = globalColors.bg2;
         background.Modulate = globalColors.bg2;
+        circleSelect.Modulate = globalColors.text;
 
         ProcessCircleSelectPosition();
 

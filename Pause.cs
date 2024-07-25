@@ -100,5 +100,6 @@ public class Pause : Control
 
         labels.Modulate = globalColors.text;
         background.Modulate = globalColors.bg2;
+        circleSelect.Modulate = globalColors.text;
     }
 }

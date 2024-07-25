@@ -85,16 +85,22 @@ public class GlobalColors : Node
 
     public override void _PhysicsProcess(float delta)
     {
+        if (HackerMode)
+        {
+            bg2 = Colors.Black;
+            text = new Color(0.2f, 0.6f, 0.2f);
+        }
+        // else
+        // {
+        //     // enemyMaterial.Set("flags_transparent", true);
+        //     // fgMaterial.Set("flags_transparent", true);
+        // }
+
         bg1Material.Set("albedo_color", bg1);
         bg2Material.Set("albedo_color", bg2);
         fgMaterial.Set("albedo_color", fg);
         textMaterial.Set("albedo_color", text);
         enemyMaterial.Set("albedo_color", enemy);
-        if (!HackerMode)
-        {
-            // enemyMaterial.Set("flags_transparent", true);
-            // fgMaterial.Set("flags_transparent", true);
-        }
     }
 
     public Color GetColorFromIndex(int i)
@@ -112,6 +118,10 @@ public class GlobalColors : Node
 
     public void ShiftPalette()
     {
+        if (HackerMode)
+        {
+            return;
+        }
         int newIndex = (int)(GD.Randf()*colorPalettes.Length);
         while (newIndex == CurrentIndex)
         {

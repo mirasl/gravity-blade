@@ -47,6 +47,8 @@ public class UI : Control
         AnimatedSprite goAS = GetNode<AnimatedSprite>("Go/AnimatedSprite");
         goAS.Frame = 0;
         goAS.Play("complete");
+
+        Show();
     }
 
     public override void _Process(float delta)
