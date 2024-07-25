@@ -8,6 +8,8 @@ public class Audio : Node
     AudioStreamPlayer[] slices = new AudioStreamPlayer[20];
 
     int index = 0;
+    bool queuedShift = false;
+    float previousPlaybackPosition = 0;
 
 
     public override void _Ready()
@@ -24,11 +26,33 @@ public class Audio : Node
     {
         if (Input.IsActionJustPressed("ui_accept"))
         {
-            NextChord();
+            QueueNextChord();
+        }
+
+        // Check if loop audio just finished a loop:
+        if (loops[index].Playing)
+        {
+            if (loops[index].GetPlaybackPosition() < previousPlaybackPosition)
+            {
+                sig_LoopFinished();
+            }
+            previousPlaybackPosition = loops[index].GetPlaybackPosition();
         }
     }
 
-    public void NextChord()
+    public void QueueNextChord()
+    {
+        if (!starts[index].Playing && !loops[index].Playing)
+        {
+            NextChord();
+        }
+        else
+        {
+            queuedShift = true;
+        }
+    }
+
+    private void NextChord()
     {
         starts[index].Stop();
         loops[index].Stop();
@@ -47,6 +71,24 @@ public class Audio : Node
 
     private void sig_StartFinished()
     {
-        loops[index].Play();
+        if (queuedShift)
+        {
+            queuedShift = false;
+            NextChord();
+        }
+        else
+        {
+            loops[index].Play();
+        }
+    }
+
+    private void sig_LoopFinished()
+    {
+        GD.Print("hihi");
+        if (queuedShift)
+        {
+            queuedShift = false;
+            NextChord();
+        }
     }
 }
