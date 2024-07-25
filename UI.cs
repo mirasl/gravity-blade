@@ -7,7 +7,7 @@ public class UI : Control
     const float SUB_SCORE_Y_INTERVAL = 84;
     const float SUB_SCORE_WAIT_TIME = 0.4f;
 
-    float displayScore = 0;
+    public float DisplayScore = 0;
     public float DistanceScore = 0;
     public int Combo {get; private set;} = 0;
     public float Multiplier {get; private set;} = 1; // increases by harmonic series to limit the power of the combo
@@ -72,6 +72,7 @@ public class UI : Control
         //     AddScoreBonus(50, "+ slide ");
         // }
 
+        DisplayScore = DistanceScore + addedScore;
         scoreNumber.Text = (DistanceScore + addedScore).ToString("000000");
         comboNumber.Text = "" + Combo;
     }

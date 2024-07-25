@@ -37,6 +37,7 @@ public class World : Spatial
 
 
     float currentSpeed = 100;
+    public float HighScore = 0;
 
     Platform lastGeneratedPlatform;
 
@@ -50,6 +51,7 @@ public class World : Spatial
     UI ui;
     Spatial platforms;
     GravitySlashes gravitySlashes;
+    Godot.Node save;
 
     PackedScene platformScene;
     PackedScene rampScene;
@@ -68,6 +70,7 @@ public class World : Spatial
         ui = GetNode<UI>("UI");
         platforms = GetNode<Spatial>("Platforms");
         gravitySlashes = GetNode<GravitySlashes>("UI/GravitySlashes");
+        save = GetNode<Godot.Node>("/root/Save");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -289,6 +292,20 @@ public class World : Spatial
         {
             dotsSpawner.SpawnRandomDot(lastAxisPoint.MoveToward(newPoint, i));
         }
+    }
+
+    public void SaveHighScore()
+    {
+        if (ui.DisplayScore > HighScore)
+        {
+            HighScore = ui.DisplayScore;
+        }
+        save.Call("save_game", HighScore);
+    }
+
+    public void LoadHighScore()
+    {
+        save.Call("load_game"); // this method sets World.HighScore public variable
     }
 
     private void sig_AddScoreBonus(float value, string text)
