@@ -37,14 +37,8 @@ public class Audio : Node
 
     public void QueueNextChord()
     {
-        // // play the slice immediately:
-        // int nextIndex = index + 1;
-        // if (nextIndex >= 20)
-        // {
-        //     nextIndex = 0;
-        // }
-        // slices[index].Stop();
-        // slices[nextIndex].Play();
+        // play the slice immediately:
+        slices[index].Play();
 
         if (!starts[index].Playing && !loops[index].Playing)
         {
@@ -58,6 +52,7 @@ public class Audio : Node
 
     private void NextChord()
     {
+        float slicePlaybackPosition = slices[index].GetPlaybackPosition();
         starts[index].Stop();
         loops[index].Stop();
         slices[index].Stop();
@@ -70,6 +65,7 @@ public class Audio : Node
 
         starts[index].Play();
         slices[index].Play();
+        slices[index].Seek(slicePlaybackPosition);
     }
 
     private void sig_StartFinished()
@@ -87,7 +83,6 @@ public class Audio : Node
 
     private void sig_LoopFinished()
     {
-        GD.Print("hihi");
         if (queuedShift)
         {
             queuedShift = false;
