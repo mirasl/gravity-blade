@@ -65,6 +65,7 @@ public class Player : KinematicBody
     protected ColorRect screenspaceOutline;
     protected MeshInstance normalOutline;
     protected Material normalOutlineMaterial;
+    protected Audio audio;
     // protected AnimationPlayer aberrationAP;
     // protected MouseLine mouseLine;
 
@@ -87,6 +88,7 @@ public class Player : KinematicBody
         screenspaceOutline = GetNode<ColorRect>("ScreenspaceOutline");
         normalOutline = GetNode<MeshInstance>("DepthOverlay/NormalOutline");
         normalOutlineMaterial = normalOutline.Mesh.SurfaceGetMaterial(0);
+        audio = GetNode<Audio>("/root/Audio");
         // aberrationAP = GetNode<AnimationPlayer>("Aberration/AnimationPlayer");
         // mouseLine = GetNode<MouseLine>("SliceCanvas/MouseLine");
 
@@ -381,6 +383,7 @@ public class Player : KinematicBody
 
     public async void RotateShift(float angle)
     {
+        audio.QueueNextChord();
         Velocity.x = 0;
         Velocity.y = 0;
         Engine.TimeScale = 1f;

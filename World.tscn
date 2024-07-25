@@ -356,7 +356,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
-frame = 1
+frame = 3
 playing = true
 centered = false
 
@@ -456,7 +456,6 @@ script = ExtResource( 20 )
 position = Vector2( 1377, 1014 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
 playing = true
 script = ExtResource( 26 )
 
@@ -464,6 +463,7 @@ script = ExtResource( 26 )
 position = Vector2( 1500, 933 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
+frame = 2
 playing = true
 script = ExtResource( 26 )
 
@@ -471,6 +471,7 @@ script = ExtResource( 26 )
 position = Vector2( 1640, 859 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
+frame = 2
 playing = true
 script = ExtResource( 26 )
 
@@ -478,7 +479,7 @@ script = ExtResource( 26 )
 position = Vector2( 1799, 800 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 3
+frame = 1
 playing = true
 script = ExtResource( 26 )
 
@@ -542,6 +543,7 @@ align = 1
 position = Vector2( 950, 550 )
 scale = Vector2( 1, 0.6 )
 frames = SubResource( 38 )
+frame = 2
 playing = true
 
 [node name="Recap" type="Control" parent="."]
@@ -569,7 +571,7 @@ anims/slide = SubResource( 39 )
 
 [node name="Frame" type="AnimatedSprite" parent="Recap"]
 frames = SubResource( 32 )
-frame = 1
+frame = 3
 playing = true
 centered = false
 
@@ -577,6 +579,7 @@ centered = false
 position = Vector2( 765, 925 )
 scale = Vector2( 0.8, 0.6 )
 frames = SubResource( 38 )
+frame = 2
 playing = true
 
 [node name="Labels" type="Control" parent="Recap"]

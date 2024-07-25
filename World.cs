@@ -44,22 +44,23 @@ public class World : Spatial
 
     Vector3 lastAxisPoint = Vector3.Zero;
 
-    Player player;
-    WorldEnvironment worldEnvironment;
-    GlobalColors globalColors;
-    DotsSpawner dotsSpawner;
-    Spatial enemies;
-    UI ui;
-    Spatial platforms;
-    GravitySlashes gravitySlashes;
-    Godot.Node save;
-    Recap recap;
+    protected Player player;
+    protected WorldEnvironment worldEnvironment;
+    protected GlobalColors globalColors;
+    protected DotsSpawner dotsSpawner;
+    protected Spatial enemies;
+    protected UI ui;
+    protected Spatial platforms;
+    protected GravitySlashes gravitySlashes;
+    protected Godot.Node save;
+    protected Recap recap;
+    protected Audio audio;
 
-    PackedScene platformScene;
-    PackedScene rampScene;
-    PackedScene bigRampScene;
-    PackedScene tunnelRingScene;
-    PackedScene enemyScene;
+    protected PackedScene platformScene;
+    protected PackedScene rampScene;
+    protected PackedScene bigRampScene;
+    protected PackedScene tunnelRingScene;
+    protected PackedScene enemyScene;
 
 
     public override void _Ready()
@@ -74,6 +75,7 @@ public class World : Spatial
         gravitySlashes = GetNode<GravitySlashes>("UI/GravitySlashes");
         save = GetNode<Godot.Node>("/root/Save");
         recap = GetNode<Recap>("Recap");
+        audio = GetNode<Audio>("/root/Audio");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -103,6 +105,7 @@ public class World : Spatial
         }
 
         LoadHighScore();
+        audio.QueueNextChord();
     }
 
     public override void _PhysicsProcess(float delta)

@@ -24,11 +24,6 @@ public class Audio : Node
 
     public override void _Process(float delta)
     {
-        if (Input.IsActionJustPressed("ui_accept"))
-        {
-            QueueNextChord();
-        }
-
         // Check if loop audio just finished a loop:
         if (loops[index].Playing)
         {
@@ -42,14 +37,14 @@ public class Audio : Node
 
     public void QueueNextChord()
     {
-        // play the slice immediately:
-        int nextIndex = index + 1;
-        if (nextIndex >= 20)
-        {
-            nextIndex = 0;
-        }
-        slices[index].Stop();
-        slices[nextIndex].Play();
+        // // play the slice immediately:
+        // int nextIndex = index + 1;
+        // if (nextIndex >= 20)
+        // {
+        //     nextIndex = 0;
+        // }
+        // slices[index].Stop();
+        // slices[nextIndex].Play();
 
         if (!starts[index].Playing && !loops[index].Playing)
         {
@@ -65,7 +60,7 @@ public class Audio : Node
     {
         starts[index].Stop();
         loops[index].Stop();
-        // slices[index].Stop();
+        slices[index].Stop();
 
         index++;
         if (index >= 20)
@@ -74,7 +69,7 @@ public class Audio : Node
         }
 
         starts[index].Play();
-        // slices[index].Play();
+        slices[index].Play();
     }
 
     private void sig_StartFinished()
