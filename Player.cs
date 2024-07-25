@@ -45,6 +45,7 @@ public class Player : KinematicBody
     bool snapped = false;
     bool onInlinePlatform = false;
     bool rushingDown = false;
+    public bool Frozen = false;
     float currentCoyoteTime = 0;
     bool eligibleForLandingBonus = false;
 
@@ -107,6 +108,10 @@ public class Player : KinematicBody
 
     public override void _PhysicsProcess(float delta)
     {
+        if (Frozen)
+        {
+            return; // big yikes lol
+        }
         // Color outlineColor = globalColors.enemy;
         // // outlineColor.v *= 1.5f;
         // normalOutlineMaterial.Set("shader_param/customColor", ColorToVector3(outlineColor));

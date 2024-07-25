@@ -38,6 +38,7 @@ public class World : Spatial
 
     float currentSpeed = 100;
     public float HighScore = 0;
+    bool gameOverCalled = false;
 
     Platform lastGeneratedPlatform;
 
@@ -317,10 +318,29 @@ public class World : Spatial
 
     public void sig_GameOver()
     {
-        recap.Active = true;
+        if (gameOverCalled)
+        {
+            return;
+        }
+        gameOverCalled = true;
+        recap.SetActive();
+        player.Frozen = true;
+        player.GetNode<PlayerCamera>("Camera").StartShake(1, 1);
         ui.Hide();
         /// !!! make an actual game over
         // GetTree().ReloadCurrentScene();
+    }
+
+    public void sig_Quit()
+    {
+        save.Call("save_game", HighScore);
+        GetTree().Quit();
+    }
+
+    public void sig_Retry()
+    {
+        save.Call("save_game", HighScore);
+        GetTree().ReloadCurrentScene();
     }
 
     private void sig_AddCombo()

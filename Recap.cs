@@ -3,16 +3,21 @@ using System;
 
 public class Recap : Control
 {
+    [Signal] delegate void Retry();
+    [Signal] delegate void Quit();
+
     [Export] Vector2 circleSelectPosition1 = new Vector2();
     [Export] Vector2 circleSelectPosition2 = new Vector2();
 
-    public bool Active = false;
+    private bool active = false;
     private bool hoveringRetry = true;
 
     protected AnimatedSprite circleSelect;
     protected GlobalColors globalColors;
     protected Control labels;
     protected AnimatedSprite frame;
+    protected ColorRect background;
+    protected AnimationPlayer backgroundAP;
 
 
     public override void _Ready()
@@ -21,11 +26,13 @@ public class Recap : Control
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         labels = GetNode<Control>("Labels");
         frame = GetNode<AnimatedSprite>("Frame");
+        background = GetNode<ColorRect>("Background");
+        backgroundAP = GetNode<AnimationPlayer>("Background/AnimationPlayer");
     }
 
     public override void _Process(float delta)
     {
-        if (!Active)
+        if (!active)
         {
             Hide();
             return;
@@ -34,10 +41,29 @@ public class Recap : Control
         Show();
         circleSelect.Show();
 
-        ProcessCircleSelectPosition();
-
         labels.Modulate = globalColors.text;
         frame.Modulate = globalColors.bg2;
+        background.Modulate = globalColors.bg2;
+
+        ProcessCircleSelectPosition();
+
+        if (Input.IsActionJustPressed("ui_accept"))
+        {
+            if (hoveringRetry)
+            {
+                EmitSignal("Retry");
+            }
+            else
+            {
+                EmitSignal("Quit");
+            }
+        }
+    }
+
+    public void SetActive()
+    {
+        active = true;
+        backgroundAP.Play("slide");
     }
 
     private void ProcessCircleSelectPosition()
