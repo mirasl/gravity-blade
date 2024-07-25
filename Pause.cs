@@ -19,11 +19,18 @@ public class Pause : Control
     Selection currentSelection = Selection.Resume;
 
     protected AnimatedSprite circleSelect;
+    protected GlobalColors globalColors;
+    protected Control labels;
+    protected ColorRect background;
 
 
     public override void _Ready()
     {
         circleSelect = GetNode<AnimatedSprite>("CircleSelect");
+        globalColors = GetNode<GlobalColors>("/root/GlobalColors");
+        labels = GetNode<Control>("Labels");
+        background = GetNode<ColorRect>("Background");
+
         circleSelect.Position = circleSelectPosition1;
 
         Hide();
@@ -40,6 +47,11 @@ public class Pause : Control
                 circleSelect.Position = circleSelectPosition1;
                 currentSelection = Selection.Resume;
             }
+            else
+            {
+                GetTree().Paused = false;
+                Hide();
+            }
         }
 
         if (Input.IsActionJustPressed("up"))
@@ -55,7 +67,7 @@ public class Pause : Control
                 currentSelection = Selection.Restart;
             }
         }
-        if (Input.IsActionJustPressed("down"))
+        else if (Input.IsActionJustPressed("down"))
         {
             if (currentSelection == Selection.Resume)
             {
@@ -85,5 +97,8 @@ public class Pause : Control
                 EmitSignal("Quit");
             }
         }
+
+        labels.Modulate = globalColors.text;
+        background.Modulate = globalColors.bg2;
     }
 }
