@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 GlobalColors="*res://GlobalColors.tscn"
+Save="*res://Save.gd"
 
 [display]
 

@@ -52,6 +52,7 @@ public class World : Spatial
     Spatial platforms;
     GravitySlashes gravitySlashes;
     Godot.Node save;
+    Recap recap;
 
     PackedScene platformScene;
     PackedScene rampScene;
@@ -71,6 +72,7 @@ public class World : Spatial
         platforms = GetNode<Spatial>("Platforms");
         gravitySlashes = GetNode<GravitySlashes>("UI/GravitySlashes");
         save = GetNode<Godot.Node>("/root/Save");
+        recap = GetNode<Recap>("Recap");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -315,8 +317,10 @@ public class World : Spatial
 
     public void sig_GameOver()
     {
+        recap.Active = true;
+        ui.Hide();
         /// !!! make an actual game over
-        GetTree().ReloadCurrentScene();
+        // GetTree().ReloadCurrentScene();
     }
 
     private void sig_AddCombo()
