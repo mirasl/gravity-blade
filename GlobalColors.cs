@@ -148,4 +148,15 @@ public class GlobalColors : Node
         // CurrentPalette = (Dictionary<string, Color>)tween.InterpolateValue(CurrentPalette, colorPalettes[CurrentIndex], 0, 
         //         0.3f, Tween.TransitionType.Sine, Tween.EaseType.Out);
     }
+
+    public void SetPalette(int index)
+    {
+        Dictionary<string, Color> dictionary = colorPalettes[index];
+        bg1 = dictionary["bg1"];
+        bg2 = dictionary["bg2"];
+        fg = dictionary["fg"];
+        text = dictionary["text"];
+        enemy = dictionary["enemy"];
+        platform = dictionary["platform"];
+    }
 }

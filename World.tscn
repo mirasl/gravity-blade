@@ -382,8 +382,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 8.0
 margin_top = 337.0
-margin_right = 24968.0
-margin_bottom = 14377.0
+margin_right = 32648.0
+margin_bottom = 18697.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/SubScores"]
 anims/RESET = SubResource( 22 )

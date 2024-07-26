@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/1.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/3.png" type="Texture" id=4]
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/2.png" type="Texture" id=5]
 [ext_resource path="res://StartScreen.cs" type="Script" id=6]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 250
@@ -31,10 +32,19 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[node name="StartScreen" type="Control"]
+[sub_resource type="ProceduralSky" id=11]
+sky_top_color = Color( 1, 0.847059, 0.968627, 1 )
+sun_latitude = 90.0
+
+[sub_resource type="Environment" id=5]
+background_mode = 2
+background_sky = SubResource( 11 )
+background_sky_orientation = Basis( -1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08 )
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_sky_contribution = 0.0
+
+[node name="StartScreen" type="Spatial"]
 pause_mode = 2
-anchor_right = 1.0
-anchor_bottom = 1.0
 script = ExtResource( 6 )
 circleSelectPosition1 = Vector2( 957, 609 )
 circleSelectPosition2 = Vector2( 957, 753 )
@@ -43,7 +53,7 @@ circleSelectPosition3 = Vector2( 957, 904 )
 [node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.494118, 0.494118, 0.494118, 1 )
+color = Color( 1, 0.360784, 0.823529, 0.568627 )
 
 [node name="Labels" type="Control" parent="."]
 margin_right = 40.0
@@ -106,5 +116,11 @@ align = 1
 position = Vector2( 960, 904 )
 scale = Vector2( 2, 0.6 )
 frames = SubResource( 38 )
-frame = 3
 playing = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 5 )
+
+[node name="Player" parent="." instance=ExtResource( 8 )]
+
+[node name="Tunnels" type="Spatial" parent="."]

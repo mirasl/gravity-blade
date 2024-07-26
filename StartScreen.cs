@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class StartScreen : Control
+public class StartScreen : Spatial
 {
     [Export] Vector2 circleSelectPosition1 = Vector2.Zero;
     [Export] Vector2 circleSelectPosition2 = Vector2.Zero;
@@ -24,9 +24,13 @@ public class StartScreen : Control
     protected GlobalColors globalColors;
     protected Control labels;
     protected ColorRect background;
+    protected Player player;
+    protected WorldEnvironment worldEnvironment;
+
+    protected PackedScene tunnelRingScene;
 
 
-    public override void _Ready()
+    public override async void _Ready()
     {
         circleSelect = GetNode<AnimatedSprite>("Labels/CircleSelect");
         hackerMode = GetNode<Label>("Labels/HackerMode");
@@ -35,6 +39,16 @@ public class StartScreen : Control
         globalColors = GetNode<GlobalColors>("/root/GlobalColors");
         labels = GetNode<Control>("Labels");
         background = GetNode<ColorRect>("Background");
+        player = GetNode<Player>("Player");
+        worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
+
+        tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
+
+        if (globalColors.HackerMode)
+        {
+            globalColors.HackerMode = false;
+            globalColors.ShiftPalette();
+        }
 
         hackerModeUnlocked = (float)save.Call("load_game") >= 50000;
         hackerModePopup.Hide();
@@ -45,6 +59,29 @@ public class StartScreen : Control
         }
 
         circleSelect.Position = circleSelectPosition1;
+        player.Frozen = true;
+
+        // foreach (Node tunnelRing in GetNode<Spatial>("Tunnels").GetChildren())
+        // {
+        //     if (!(tunnelRing is TunnelRing))
+        //     {
+        //         continue;
+        //     }
+        //     ((TunnelRing)tunnelRing).player = player;
+        //     await ToSignal(GetTree().CreateTimer(0), "timeout");
+        // }
+
+        await ToSignal(GetTree().CreateTimer(0), "timeout");
+
+        Spatial tunnels = GetNode<Spatial>("Tunnels");
+        for (int i = 1; i < 100; i++)
+        {
+            TunnelRing tunnelRing = tunnelRingScene.Instance<TunnelRing>();
+            tunnelRing.Translation = Vector3.Forward * (50 + i*i/8);
+            tunnelRing.player = player;
+            AddChild(tunnelRing);
+            GD.Print(tunnelRing.Translation.z);
+        }
     }
 
     public override void _Process(float delta)
@@ -127,8 +164,12 @@ public class StartScreen : Control
             }
         }
 
+        // globalColors.SetPalette(1);
+
         labels.Modulate = globalColors.text;
         background.Modulate = globalColors.bg2;
         circleSelect.Modulate = globalColors.text;
+        worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
+        worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
     }
 }
