@@ -1,0 +1,84 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/1.png" type="Texture" id=2]
+[ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/4.png" type="Texture" id=3]
+[ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/3.png" type="Texture" id=4]
+[ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/2.png" type="Texture" id=5]
+[ext_resource path="res://StartScreen.cs" type="Script" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 250
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 60
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 100
+font_data = ExtResource( 1 )
+
+[sub_resource type="SpriteFrames" id=38]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 5 ), ExtResource( 4 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+
+[node name="StartScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 6 )
+
+[node name="Title" type="Label" parent="."]
+margin_top = 121.0
+margin_right = 1913.0
+margin_bottom = 356.0
+custom_fonts/font = SubResource( 1 )
+text = "GRAVITY BLADE!!"
+align = 1
+
+[node name="Credit" type="Label" parent="."]
+margin_left = 5.0
+margin_top = 387.0
+margin_right = 1916.0
+margin_bottom = 444.0
+custom_fonts/font = SubResource( 2 )
+text = "- A game by Studio Chia -"
+align = 1
+
+[node name="NormalMode" type="Label" parent="."]
+margin_left = 5.0
+margin_top = 570.0
+margin_right = 1920.0
+margin_bottom = 684.0
+custom_fonts/font = SubResource( 3 )
+text = "Normal mode"
+align = 1
+
+[node name="HackerMode" type="Label" parent="."]
+margin_left = 4.0
+margin_top = 717.0
+margin_right = 1920.0
+margin_bottom = 831.0
+custom_fonts/font = SubResource( 3 )
+text = "Hacker mode"
+align = 1
+
+[node name="Quit" type="Label" parent="."]
+margin_left = 2.0
+margin_top = 866.0
+margin_right = 1917.0
+margin_bottom = 980.0
+custom_fonts/font = SubResource( 3 )
+text = "Quit"
+align = 1
+
+[node name="CircleSelect" type="AnimatedSprite" parent="."]
+position = Vector2( 957, 609 )
+scale = Vector2( 2, 0.6 )
+frames = SubResource( 38 )
+frame = 3
+playing = true

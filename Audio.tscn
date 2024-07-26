@@ -193,83 +193,83 @@ stream = ExtResource( 52 )
 
 [node name="1" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 44 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="2" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 43 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="3" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 31 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="4" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 38 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="5" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 45 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="6" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 40 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="7" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 22 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="8" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 17 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="9" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 41 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="10" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 32 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="11" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 59 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="12" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 48 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="13" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 39 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="14" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 60 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="15" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 12 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="16" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 50 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="17" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 51 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="18" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 58 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="19" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 49 )
-volume_db = -7.919
+volume_db = -14.782
 
 [node name="20" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 53 )
-volume_db = -7.919
+volume_db = -14.782
 
 [connection signal="finished" from="Starts/1" to="." method="sig_StartFinished"]
 [connection signal="finished" from="Starts/2" to="." method="sig_StartFinished"]
