@@ -55,6 +55,7 @@ public class World : Spatial
     protected Godot.Node save;
     protected Recap recap;
     protected Audio audio;
+    protected Pause pause;
 
     protected PackedScene platformScene;
     protected PackedScene rampScene;
@@ -76,6 +77,7 @@ public class World : Spatial
         save = GetNode<Godot.Node>("/root/Save");
         recap = GetNode<Recap>("Recap");
         audio = GetNode<Audio>("/root/Audio");
+        pause = GetNode<Pause>("Pause");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -108,6 +110,8 @@ public class World : Spatial
 
         LoadHighScore();
         audio.QueueNextChord();
+
+        pause.Pausable = true;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -326,6 +330,7 @@ public class World : Spatial
             return;
         }
         gameOverCalled = true;
+        pause.Pausable = false;
         if (ui.DisplayScore > HighScore)
         {
             HighScore = ui.DisplayScore;

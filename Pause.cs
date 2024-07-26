@@ -18,6 +18,8 @@ public class Pause : Control
     }
     Selection currentSelection = Selection.Resume;
 
+    public bool Pausable = true;
+
     protected AnimatedSprite circleSelect;
     protected GlobalColors globalColors;
     protected Control labels;
@@ -38,7 +40,7 @@ public class Pause : Control
 
     public override void _Process(float delta)
     {
-        if (Input.IsActionJustPressed("pause"))
+        if (Input.IsActionJustPressed("pause") && Pausable)
         {
             if (!GetTree().Paused)
             {
