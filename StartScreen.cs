@@ -57,7 +57,7 @@ public class StartScreen : Spatial
         hackerModePopup.Hide();
         if (!hackerModeUnlocked)
         {
-            hackerMode.Modulate = new Color(1,1,1,0.2f);
+            hackerMode.Modulate = new Color(1,1,1,0.392f);
             hackerModePopup.Show();
         }
 
