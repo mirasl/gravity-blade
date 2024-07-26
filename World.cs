@@ -342,7 +342,7 @@ public class World : Spatial
     public void sig_Quit()
     {
         save.Call("save_game", HighScore);
-        GetTree().Quit();
+        GetTree().ChangeScene("res://StartScreen.tscn");
     }
 
     public void sig_Retry()

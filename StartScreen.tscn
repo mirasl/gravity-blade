@@ -105,4 +105,5 @@ align = 1
 position = Vector2( 960, 904 )
 scale = Vector2( 2, 0.6 )
 frames = SubResource( 38 )
+frame = 2
 playing = true
