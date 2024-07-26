@@ -39,6 +39,7 @@ public class World : Spatial
     float currentSpeed = 100;
     public float HighScore = 0;
     bool gameOverCalled = false;
+    bool quittingWhenTransitionFinished = false;
 
     Platform lastGeneratedPlatform;
 
@@ -349,20 +350,29 @@ public class World : Spatial
     public void sig_Quit()
     {
         save.Call("save_game", HighScore);
+        quittingWhenTransitionFinished = true;
         transitionAP.Play("TransitionOut");
     }
 
     public void sig_Retry()
     {
         save.Call("save_game", HighScore);
-        GetTree().ReloadCurrentScene();
+        quittingWhenTransitionFinished = false;
+        transitionAP.Play("TransitionOut");
     }
 
     private void sig_TransitionAPFinished(string animName)
     {
         if (animName == "TransitionOut")
         {
-            GetTree().ChangeScene("res://StartScreen.tscn");
+            if (quittingWhenTransitionFinished)
+            {
+                GetTree().ChangeScene("res://StartScreen.tscn");
+            }
+            else
+            {
+                GetTree().ReloadCurrentScene();
+            }
         }
     }
 
