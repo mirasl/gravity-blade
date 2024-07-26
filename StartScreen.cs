@@ -8,6 +8,7 @@ public class StartScreen : Spatial
     [Export] Vector2 circleSelectPosition3 = Vector2.Zero;
 
     bool hackerModeUnlocked = false;
+    bool transitioningToHackerMode = false;
 
     enum Selection
     {
@@ -26,6 +27,7 @@ public class StartScreen : Spatial
     protected ColorRect background;
     protected Player player;
     protected WorldEnvironment worldEnvironment;
+    protected AnimationPlayer transitionAP;
 
     protected PackedScene tunnelRingScene;
 
@@ -41,6 +43,7 @@ public class StartScreen : Spatial
         background = GetNode<ColorRect>("Background");
         player = GetNode<Player>("Player");
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
+        transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
 
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -80,7 +83,6 @@ public class StartScreen : Spatial
             tunnelRing.Translation = Vector3.Forward * (50 + i*i/8);
             tunnelRing.player = player;
             AddChild(tunnelRing);
-            GD.Print(tunnelRing.Translation.z);
         }
     }
 
@@ -150,13 +152,13 @@ public class StartScreen : Spatial
             GetTree().Paused = false;
             if (currentSelection == Selection.NormalMode)
             {
-                GetTree().ChangeScene("res://World.tscn");
-                globalColors.HackerMode = false;
+                transitionAP.Play("TransitionOut");
+                transitioningToHackerMode = false;
             }
             else if (currentSelection == Selection.HackerMode)
             {
-                GetTree().ChangeScene("res://World.tscn");
-                globalColors.HackerMode = true;
+                transitionAP.Play("TransitionOut");
+                transitioningToHackerMode = true;
             }
             else if (currentSelection == Selection.Quit)
             {
@@ -171,5 +173,14 @@ public class StartScreen : Spatial
         circleSelect.Modulate = globalColors.text;
         worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
         worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
+    }
+
+    private void sig_TransitionAPFinished(string animName)
+    {
+        if (animName == "TransitionOut")
+        {
+            globalColors.HackerMode = transitioningToHackerMode;
+            GetTree().ChangeScene("res://World.tscn");
+        }
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
@@ -320,6 +320,65 @@ font_data = ExtResource( 3 )
 size = 70
 font_data = ExtResource( 3 )
 
+[sub_resource type="Animation" id=44]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 460, -1320 ) ]
+}
+
+[sub_resource type="Animation" id=45]
+resource_name = "TransitionIn"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.7 ),
+"transitions": PoolRealArray( 0.5, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 460, -1320 ), Vector2( 460, -1320 ), Vector2( 3356, -1320 ) ]
+}
+
+[sub_resource type="Animation" id=46]
+resource_name = "TransitionOut"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 2, 1 ),
+"update": 0,
+"values": [ Vector2( -2379, -1320 ), Vector2( 503, -1320 ) ]
+}
+
 [node name="World" type="Spatial"]
 script = ExtResource( 6 )
 
@@ -356,6 +415,7 @@ script = ExtResource( 10 )
 
 [node name="UIFrame" type="AnimatedSprite" parent="UI"]
 frames = SubResource( 20 )
+frame = 1
 playing = true
 centered = false
 
@@ -382,8 +442,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 8.0
 margin_top = 337.0
-margin_right = 32648.0
-margin_bottom = 18697.0
+margin_right = 38408.0
+margin_bottom = 21937.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/SubScores"]
 anims/RESET = SubResource( 22 )
@@ -455,7 +515,7 @@ script = ExtResource( 20 )
 position = Vector2( 1377, 1014 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 1
+frame = 2
 playing = true
 script = ExtResource( 26 )
 
@@ -463,7 +523,6 @@ script = ExtResource( 26 )
 position = Vector2( 1500, 933 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 3
 playing = true
 script = ExtResource( 26 )
 
@@ -471,7 +530,6 @@ script = ExtResource( 26 )
 position = Vector2( 1640, 859 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 3
 playing = true
 script = ExtResource( 26 )
 
@@ -479,7 +537,7 @@ script = ExtResource( 26 )
 position = Vector2( 1799, 800 )
 scale = Vector2( 0.554688, 0.539063 )
 frames = SubResource( 31 )
-frame = 2
+frame = 3
 playing = true
 script = ExtResource( 26 )
 
@@ -543,7 +601,6 @@ align = 1
 position = Vector2( 950, 550 )
 scale = Vector2( 1, 0.6 )
 frames = SubResource( 38 )
-frame = 3
 playing = true
 
 [node name="Recap" type="Control" parent="."]
@@ -571,6 +628,7 @@ anims/slide = SubResource( 39 )
 
 [node name="Frame" type="AnimatedSprite" parent="Recap"]
 frames = SubResource( 32 )
+frame = 1
 playing = true
 centered = false
 
@@ -578,7 +636,6 @@ centered = false
 position = Vector2( 765, 925 )
 scale = Vector2( 0.8, 0.6 )
 frames = SubResource( 38 )
-frame = 3
 playing = true
 
 [node name="Labels" type="Control" parent="Recap"]
@@ -644,6 +701,21 @@ custom_fonts/font = SubResource( 36 )
 text = "High Score"
 align = 1
 
+[node name="Transition" type="ColorRect" parent="."]
+margin_left = 460.0
+margin_top = -1320.0
+margin_right = 2504.0
+margin_bottom = 489.0
+rect_rotation = 29.6059
+rect_scale = Vector2( 1.28499, 1.53434 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Transition"]
+autoplay = "TransitionIn"
+anims/RESET = SubResource( 44 )
+anims/TransitionIn = SubResource( 45 )
+anims/TransitionOut = SubResource( 46 )
+
 [connection signal="AddCombo" from="Player" to="." method="sig_AddCombo"]
 [connection signal="AddScoreBonus" from="Player" to="." method="sig_AddScoreBonus"]
 [connection signal="GameOver" from="Player" to="." method="sig_GameOver"]
@@ -660,3 +732,4 @@ align = 1
 [connection signal="Restart" from="Pause" to="." method="sig_Retry"]
 [connection signal="Quit" from="Recap" to="." method="sig_Quit"]
 [connection signal="Retry" from="Recap" to="." method="sig_Retry"]
+[connection signal="animation_finished" from="Transition/AnimationPlayer" to="." method="sig_TransitionAPFinished"]

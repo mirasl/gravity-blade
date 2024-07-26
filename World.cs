@@ -56,6 +56,7 @@ public class World : Spatial
     protected Recap recap;
     protected Audio audio;
     protected Pause pause;
+    protected AnimationPlayer transitionAP;
 
     protected PackedScene platformScene;
     protected PackedScene rampScene;
@@ -78,6 +79,7 @@ public class World : Spatial
         recap = GetNode<Recap>("Recap");
         audio = GetNode<Audio>("/root/Audio");
         pause = GetNode<Pause>("Pause");
+        transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -347,13 +349,21 @@ public class World : Spatial
     public void sig_Quit()
     {
         save.Call("save_game", HighScore);
-        GetTree().ChangeScene("res://StartScreen.tscn");
+        transitionAP.Play("TransitionOut");
     }
 
     public void sig_Retry()
     {
         save.Call("save_game", HighScore);
         GetTree().ReloadCurrentScene();
+    }
+
+    private void sig_TransitionAPFinished(string animName)
+    {
+        if (animName == "TransitionOut")
+        {
+            GetTree().ChangeScene("res://StartScreen.tscn");
+        }
     }
 
     private void sig_AddCombo()

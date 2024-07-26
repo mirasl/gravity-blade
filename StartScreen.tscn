@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/1.png" type="Texture" id=2]
@@ -42,6 +42,65 @@ background_sky = SubResource( 11 )
 background_sky_orientation = Basis( -1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08 )
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.0
+
+[sub_resource type="Animation" id=44]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 460, -1320 ) ]
+}
+
+[sub_resource type="Animation" id=45]
+resource_name = "TransitionIn"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.7 ),
+"transitions": PoolRealArray( 0.5, 0.5, 1 ),
+"update": 0,
+"values": [ Vector2( 460, -1320 ), Vector2( 460, -1320 ), Vector2( 3356, -1320 ) ]
+}
+
+[sub_resource type="Animation" id=46]
+resource_name = "TransitionOut"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 2, 1 ),
+"update": 0,
+"values": [ Vector2( -2379, -1320 ), Vector2( 503, -1320 ) ]
+}
 
 [node name="StartScreen" type="Spatial"]
 pause_mode = 2
@@ -124,3 +183,20 @@ environment = SubResource( 5 )
 [node name="Player" parent="." instance=ExtResource( 8 )]
 
 [node name="Tunnels" type="Spatial" parent="."]
+
+[node name="Transition" type="ColorRect" parent="."]
+margin_left = 460.0
+margin_top = -1320.0
+margin_right = 2504.0
+margin_bottom = 489.0
+rect_rotation = 29.6059
+rect_scale = Vector2( 1.28499, 1.53434 )
+color = Color( 0, 0, 0, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Transition"]
+autoplay = "TransitionIn"
+anims/RESET = SubResource( 44 )
+anims/TransitionIn = SubResource( 45 )
+anims/TransitionOut = SubResource( 46 )
+
+[connection signal="animation_finished" from="Transition/AnimationPlayer" to="." method="sig_TransitionAPFinished"]
