@@ -94,6 +94,8 @@ public class World : Spatial
                     lastGeneratedPlatform.Rotation.z, lastGeneratedPlatform.IsAccelerator, false);
         }
 
+        HackerMode = globalColors.HackerMode;
+
         if (HackerMode)
         {
             player.GetNode<MeshInstance>("DepthOverlay/HackerOutline").Show();
