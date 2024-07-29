@@ -112,7 +112,7 @@ public class World : Spatial
         }
 
         LoadHighScore();
-        audio.QueueNextChord();
+        audio.StartGameplay();
 
         pause.Pausable = true;
     }

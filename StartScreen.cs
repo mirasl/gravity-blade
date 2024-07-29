@@ -28,6 +28,7 @@ public class StartScreen : Spatial
     protected Player player;
     protected WorldEnvironment worldEnvironment;
     protected AnimationPlayer transitionAP;
+    protected Audio audio;
 
     protected PackedScene tunnelRingScene;
 
@@ -44,6 +45,7 @@ public class StartScreen : Spatial
         player = GetNode<Player>("Player");
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
         transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
+        audio = GetNode<Audio>("/root/Audio");
 
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -84,6 +86,8 @@ public class StartScreen : Spatial
             tunnelRing.player = player;
             AddChild(tunnelRing);
         }
+
+        audio.StartTitle();
     }
 
     public override void _Process(float delta)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=2]
+[gd_scene load_steps=64 format=2]
 
 [ext_resource path="res://ASSETS/AUDIO/loops/2.wav" type="AudioStream" id=1]
 [ext_resource path="res://ASSETS/AUDIO/starts/14.wav" type="AudioStream" id=2]
@@ -61,6 +61,8 @@
 [ext_resource path="res://ASSETS/AUDIO/slices/11.wav" type="AudioStream" id=59]
 [ext_resource path="res://ASSETS/AUDIO/slices/14.wav" type="AudioStream" id=60]
 [ext_resource path="res://Audio.cs" type="Script" id=61]
+[ext_resource path="res://ASSETS/AUDIO/title/gravityBladeTitleLoop.ogg" type="AudioStream" id=62]
+[ext_resource path="res://ASSETS/AUDIO/title/gravityBladeTitleStart.ogg" type="AudioStream" id=63]
 
 [node name="Audio" type="Node"]
 script = ExtResource( 61 )
@@ -69,207 +71,255 @@ script = ExtResource( 61 )
 
 [node name="1" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 9 )
+volume_db = -10.03
 
 [node name="2" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 55 )
+volume_db = -10.03
 
 [node name="3" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 24 )
+volume_db = -10.03
 
 [node name="4" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 10 )
+volume_db = -10.03
 
 [node name="5" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 16 )
+volume_db = -10.03
 
 [node name="6" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 56 )
+volume_db = -10.03
 
 [node name="7" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 21 )
+volume_db = -10.03
 
 [node name="8" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 54 )
+volume_db = -10.03
 
 [node name="9" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 11 )
+volume_db = -10.03
 
 [node name="10" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 5 )
+volume_db = -10.03
 
 [node name="11" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 3 )
+volume_db = -10.03
 
 [node name="12" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 19 )
+volume_db = -10.03
 
 [node name="13" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 4 )
+volume_db = -10.03
 
 [node name="14" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 2 )
+volume_db = -10.03
 
 [node name="15" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 8 )
+volume_db = -10.03
 
 [node name="16" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 13 )
+volume_db = -10.03
 
 [node name="17" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 20 )
+volume_db = -10.03
 
 [node name="18" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 27 )
+volume_db = -10.03
 
 [node name="19" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 28 )
+volume_db = -10.03
 
 [node name="20" type="AudioStreamPlayer" parent="Starts"]
 stream = ExtResource( 23 )
+volume_db = -10.03
 
 [node name="Loops" type="Node" parent="."]
 
 [node name="1" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 34 )
+volume_db = -10.03
 
 [node name="2" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 1 )
+volume_db = -10.03
 
 [node name="3" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 14 )
+volume_db = -10.03
 
 [node name="4" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 6 )
+volume_db = -10.03
 
 [node name="5" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 26 )
+volume_db = -10.03
 
 [node name="6" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 25 )
+volume_db = -10.03
 
 [node name="7" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 7 )
+volume_db = -10.03
 
 [node name="8" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 57 )
+volume_db = -10.03
 
 [node name="9" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 46 )
+volume_db = -10.03
 
 [node name="10" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 35 )
+volume_db = -10.03
 
 [node name="11" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 30 )
+volume_db = -10.03
 
 [node name="12" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 42 )
+volume_db = -10.03
 
 [node name="13" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 15 )
+volume_db = -10.03
 
 [node name="14" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 33 )
+volume_db = -10.03
 
 [node name="15" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 36 )
+volume_db = -10.03
 
 [node name="16" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 18 )
+volume_db = -10.03
 
 [node name="17" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 37 )
+volume_db = -10.03
 
 [node name="18" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 29 )
+volume_db = -10.03
 
 [node name="19" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 47 )
+volume_db = -10.03
 
 [node name="20" type="AudioStreamPlayer" parent="Loops"]
 stream = ExtResource( 52 )
+volume_db = -10.03
 
 [node name="Slices" type="Node" parent="."]
 
 [node name="1" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 44 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="2" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 43 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="3" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 31 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="4" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 38 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="5" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 45 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="6" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 40 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="7" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 22 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="8" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 17 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="9" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 41 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="10" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 32 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="11" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 59 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="12" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 48 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="13" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 39 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="14" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 60 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="15" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 12 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="16" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 50 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="17" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 51 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="18" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 58 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="19" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 49 )
-volume_db = -14.782
+volume_db = -16.366
 
 [node name="20" type="AudioStreamPlayer" parent="Slices"]
 stream = ExtResource( 53 )
-volume_db = -14.782
+volume_db = -16.366
+
+[node name="Title" type="Node" parent="."]
+
+[node name="Loop" type="AudioStreamPlayer" parent="Title"]
+stream = ExtResource( 62 )
+
+[node name="Start" type="AudioStreamPlayer" parent="Title"]
+stream = ExtResource( 63 )
 
 [connection signal="finished" from="Starts/1" to="." method="sig_StartFinished"]
 [connection signal="finished" from="Starts/2" to="." method="sig_StartFinished"]
@@ -311,3 +361,4 @@ volume_db = -14.782
 [connection signal="finished" from="Loops/18" to="." method="sig_LoopFinished"]
 [connection signal="finished" from="Loops/19" to="." method="sig_LoopFinished"]
 [connection signal="finished" from="Loops/20" to="." method="sig_LoopFinished"]
+[connection signal="finished" from="Title/Start" to="." method="sig_TitleStartFinished"]
