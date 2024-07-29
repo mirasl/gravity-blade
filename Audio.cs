@@ -81,7 +81,7 @@ public class Audio : Node
         }
     }
 
-    private void NextChord(bool withSlice = true)
+    private async void NextChord(bool withSlice = true)
     {
         float slicePlaybackPosition = slices[index].GetPlaybackPosition();
         starts[index].Stop();
@@ -95,11 +95,16 @@ public class Audio : Node
         }
 
         starts[index].Play();
+        
         if (withSlice)
         {
             slices[index].Play();
             slices[index].Seek(slicePlaybackPosition);
         }
+
+        await ToSignal(GetTree().CreateTimer(0.635f), "timeout");
+
+        sig_StartFinished();
     }
 
     private void sig_StartFinished()
