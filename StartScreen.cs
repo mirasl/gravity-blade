@@ -29,6 +29,7 @@ public class StartScreen : Spatial
     protected WorldEnvironment worldEnvironment;
     protected AnimationPlayer transitionAP;
     protected Audio audio;
+    protected Label highScore;
 
     protected PackedScene tunnelRingScene;
 
@@ -46,6 +47,7 @@ public class StartScreen : Spatial
         worldEnvironment = GetNode<WorldEnvironment>("WorldEnvironment");
         transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
         audio = GetNode<Audio>("/root/Audio");
+        highScore = GetNode<Label>("Labels/HighScore");
 
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -55,7 +57,10 @@ public class StartScreen : Spatial
             globalColors.ShiftPalette();
         }
 
-        hackerModeUnlocked = (float)save.Call("load_game") >= 50000;
+        float highScoreNumber = (float)save.Call("load_game");
+        highScore.Text = "High Score: " + highScoreNumber.ToString("000000");
+
+        hackerModeUnlocked = highScoreNumber >= 50000;
         hackerModePopup.Hide();
         if (!hackerModeUnlocked)
         {

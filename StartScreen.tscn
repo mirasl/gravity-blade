@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/1.png" type="Texture" id=2]
@@ -46,6 +46,10 @@ tracks/0/keys = {
 
 [sub_resource type="DynamicFont" id=2]
 size = 60
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=51]
+size = 30
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
@@ -211,6 +215,23 @@ custom_fonts/font = SubResource( 2 )
 text = "- A game by Studio Chia -"
 align = 1
 
+[node name="HighScore" type="Label" parent="Labels"]
+margin_left = 3.0
+margin_top = 12.0
+margin_right = 1914.0
+margin_bottom = 69.0
+custom_fonts/font = SubResource( 2 )
+text = "High Score: 000000"
+align = 1
+
+[node name="BottomCredit" type="Label" parent="Labels"]
+margin_top = 1047.0
+margin_right = 1911.0
+margin_bottom = 1104.0
+custom_fonts/font = SubResource( 51 )
+text = "copyright studio chia, 2024. programming/art/music/design by mira santa lucia. enemy design by nico santa lucia."
+align = 1
+
 [node name="NormalMode" type="Label" parent="Labels"]
 margin_left = 5.0
 margin_top = 570.0
@@ -257,6 +278,7 @@ align = 1
 position = Vector2( 960, 904 )
 scale = Vector2( 2, 0.6 )
 frames = SubResource( 38 )
+frame = 2
 playing = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
