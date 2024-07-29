@@ -317,9 +317,11 @@ volume_db = -16.366
 
 [node name="Loop" type="AudioStreamPlayer" parent="Title"]
 stream = ExtResource( 62 )
+volume_db = -4.0
 
 [node name="Start" type="AudioStreamPlayer" parent="Title"]
 stream = ExtResource( 63 )
+volume_db = -4.0
 
 [connection signal="finished" from="Starts/1" to="." method="sig_StartFinished"]
 [connection signal="finished" from="Starts/2" to="." method="sig_StartFinished"]

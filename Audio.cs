@@ -60,17 +60,20 @@ public class Audio : Node
     {
         inTitle = false;
         StopAllSounds();
-        QueueNextChord();
+        QueueNextChord(false);
     }
 
-    public void QueueNextChord()
+    public void QueueNextChord(bool withSlice = true)
     {
-        // play the slice immediately:
-        slices[index].Play();
+        if (withSlice)
+        {
+            // play the slice immediately:
+            slices[index].Play();
+        }
 
         if (!starts[index].Playing && !loops[index].Playing)
         {
-            NextChord();
+            NextChord(withSlice);
         }
         else
         {
@@ -78,7 +81,7 @@ public class Audio : Node
         }
     }
 
-    private void NextChord()
+    private void NextChord(bool withSlice = true)
     {
         float slicePlaybackPosition = slices[index].GetPlaybackPosition();
         starts[index].Stop();
@@ -92,8 +95,11 @@ public class Audio : Node
         }
 
         starts[index].Play();
-        slices[index].Play();
-        slices[index].Seek(slicePlaybackPosition);
+        if (withSlice)
+        {
+            slices[index].Play();
+            slices[index].Seek(slicePlaybackPosition);
+        }
     }
 
     private void sig_StartFinished()
