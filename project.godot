@@ -10,9 +10,11 @@ config_version=4
 
 [application]
 
-config/name="Press-start"
+config/name="GravityBlade"
 run/main_scene="res://StartScreen.tscn"
-config/icon="res://icon.png"
+config/icon="res://ASSETS/Icon/Icon.png"
+config/macos_native_icon="res://ASSETS/Icon/Icon.icns"
+config/windows_native_icon="res://ASSETS/Icon/Icon.ico"
 
 [autoload]
 
@@ -96,7 +98,7 @@ up={
 
 [mono]
 
-project/assembly_name="Press-start"
+project/assembly_name="GravityBlade"
 
 [physics]
 

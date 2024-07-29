@@ -19,16 +19,17 @@ func save_game(high_score : float):
 
 
 func load_game():
-    var save_game = File.new()
-    if !save_game.file_exists(SAVE_FILE_PATH):
-        print("ERROR - save file does not exist (Save.gd)")
-        return
-    save_game.open(SAVE_FILE_PATH, File.READ)
+	var save_game = File.new()
+	if !save_game.file_exists(SAVE_FILE_PATH):
+		print("No save file found - creating new save")
+		save_game(0)
+		return load_game()
+	save_game.open(SAVE_FILE_PATH, File.READ)
 
 	# var input = save_game.get_as_text()
-    var save_data = parse_json(save_game.get_line())
+	var save_data = parse_json(save_game.get_line())
 
-    return save_data.high_score
+	return save_data.high_score
 	
 
 
