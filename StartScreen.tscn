@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://ASSETS/FONTS/GraffitiPaintBrush.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/1.png" type="Texture" id=2]
@@ -53,7 +53,11 @@ size = 30
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
-size = 100
+size = 90
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=56]
+size = 90
 font_data = ExtResource( 1 )
 
 [sub_resource type="DynamicFont" id=39]
@@ -170,12 +174,27 @@ tracks/0/keys = {
 "values": [ Vector2( -2379, -1320 ), Vector2( 503, -1320 ) ]
 }
 
+[sub_resource type="Theme" id=54]
+
+[sub_resource type="DynamicFont" id=52]
+size = 50
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=55]
+size = 70
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=53]
+size = 100
+font_data = ExtResource( 1 )
+
 [node name="StartScreen" type="Spatial"]
 pause_mode = 2
 script = ExtResource( 6 )
-circleSelectPosition1 = Vector2( 957, 609 )
-circleSelectPosition2 = Vector2( 957, 753 )
-circleSelectPosition3 = Vector2( 957, 904 )
+circleSelectPosition1 = Vector2( 957, 538 )
+circleSelectPosition2 = Vector2( 957, 668 )
+circleSelectPosition3 = Vector2( 957, 790 )
+circleSelectPosition4 = Vector2( 957, 904 )
 
 [node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
@@ -234,20 +253,29 @@ align = 1
 
 [node name="NormalMode" type="Label" parent="Labels"]
 margin_left = 5.0
-margin_top = 570.0
+margin_top = 496.0
 margin_right = 1920.0
-margin_bottom = 684.0
+margin_bottom = 610.0
 custom_fonts/font = SubResource( 3 )
 text = "Normal mode"
 align = 1
 
 [node name="HackerMode" type="Label" parent="Labels"]
 margin_left = 4.0
-margin_top = 717.0
+margin_top = 628.0
 margin_right = 1920.0
-margin_bottom = 831.0
+margin_bottom = 742.0
 custom_fonts/font = SubResource( 3 )
 text = "Hacker mode"
+align = 1
+
+[node name="Controls" type="Label" parent="Labels"]
+margin_left = 4.0
+margin_top = 753.0
+margin_right = 1920.0
+margin_bottom = 867.0
+custom_fonts/font = SubResource( 56 )
+text = "Controls"
 align = 1
 
 [node name="HackerModePopup" type="Label" parent="Labels"]
@@ -267,18 +295,18 @@ anims/float = SubResource( 49 )
 
 [node name="Quit" type="Label" parent="Labels"]
 margin_left = 2.0
-margin_top = 866.0
+margin_top = 872.0
 margin_right = 1917.0
-margin_bottom = 980.0
-custom_fonts/font = SubResource( 3 )
+margin_bottom = 986.0
+custom_fonts/font = SubResource( 56 )
 text = "Quit"
 align = 1
 
 [node name="CircleSelect" type="AnimatedSprite" parent="Labels"]
-position = Vector2( 960, 904 )
+position = Vector2( 960, 538 )
 scale = Vector2( 2, 0.6 )
 frames = SubResource( 38 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -302,5 +330,70 @@ autoplay = "TransitionIn"
 anims/RESET = SubResource( 44 )
 anims/TransitionIn = SubResource( 45 )
 anims/TransitionOut = SubResource( 46 )
+
+[node name="ControlsPopup" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Background" type="Control" parent="ControlsPopup"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Fade" type="ColorRect" parent="ControlsPopup/Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.458824, 0.458824, 0.458824, 0.52549 )
+
+[node name="ColorRect" type="ColorRect" parent="ControlsPopup/Background"]
+margin_left = 307.0
+margin_top = 235.0
+margin_right = 1637.0
+margin_bottom = 937.0
+theme = SubResource( 54 )
+
+[node name="Labels" type="Control" parent="ControlsPopup"]
+margin_left = 307.0
+margin_top = 235.0
+margin_right = 347.0
+margin_bottom = 275.0
+
+[node name="Controls" type="Label" parent="ControlsPopup/Labels"]
+margin_left = 53.0
+margin_top = 200.0
+margin_right = 1293.0
+margin_bottom = 605.0
+custom_fonts/font = SubResource( 52 )
+text = "left click ------------------ gravtiy slash (draw on screen)
+right click ----------------- normal slash (draw on screen)
+A / left arrow --------------------------------- strafe left
+D / right arrow -------------------------------- strafe right
+S / down arrow ------------------------------------ fly down
+Space ---------------------------------------------------- jump
+ESC/Tab ------------------------------------------------ pause
+"
+
+[node name="Controls3" type="Label" parent="ControlsPopup/Labels"]
+margin_left = 590.0
+margin_top = 590.2
+margin_right = 732.0
+margin_bottom = 656.2
+custom_fonts/font = SubResource( 55 )
+text = "back"
+
+[node name="Controls2" type="Label" parent="ControlsPopup/Labels"]
+margin_left = 49.0
+margin_top = 60.0
+margin_right = 1289.0
+margin_bottom = 154.0
+custom_fonts/font = SubResource( 53 )
+text = "CONTROLS"
+align = 1
+
+[node name="CircleSelect2" type="AnimatedSprite" parent="ControlsPopup/Labels"]
+position = Vector2( 655, 623.2 )
+scale = Vector2( 0.6, 0.4 )
+frames = SubResource( 38 )
+frame = 1
+playing = true
 
 [connection signal="animation_finished" from="Transition/AnimationPlayer" to="." method="sig_TransitionAPFinished"]

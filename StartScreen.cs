@@ -6,14 +6,18 @@ public class StartScreen : Spatial
     [Export] Vector2 circleSelectPosition1 = Vector2.Zero;
     [Export] Vector2 circleSelectPosition2 = Vector2.Zero;
     [Export] Vector2 circleSelectPosition3 = Vector2.Zero;
+    [Export] Vector2 circleSelectPosition4 = Vector2.Zero;
 
     bool hackerModeUnlocked = false;
     bool transitioningToHackerMode = false;
+    bool transitioning = false;
+    bool showingControls = false;
 
     enum Selection
     {
         NormalMode,
         HackerMode,
+        Controls,
         Quit
     }
     Selection currentSelection = Selection.NormalMode;
@@ -30,6 +34,9 @@ public class StartScreen : Spatial
     protected AnimationPlayer transitionAP;
     protected Audio audio;
     protected Label highScore;
+    protected Control controlsPopup;
+    protected Control controlsPopupBackground;
+    protected Control controlsPopupLabels;
 
     protected PackedScene tunnelRingScene;
 
@@ -48,6 +55,11 @@ public class StartScreen : Spatial
         transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
         audio = GetNode<Audio>("/root/Audio");
         highScore = GetNode<Label>("Labels/HighScore");
+        controlsPopup = GetNode<Control>("ControlsPopup");
+        controlsPopupBackground = GetNode<Control>("ControlsPopup/Background");
+        controlsPopupLabels = GetNode<Control>("ControlsPopup/Labels");
+
+        controlsPopup.Hide();
 
         tunnelRingScene = GD.Load<PackedScene>("res://TunnelRing.tscn");
 
@@ -113,14 +125,14 @@ public class StartScreen : Spatial
             }
         }
 
-        if (Input.IsActionJustPressed("up"))
+        if (Input.IsActionJustPressed("up") && !showingControls && !transitioning)
         {
             if (currentSelection == Selection.HackerMode)
             {
                 circleSelect.Position = circleSelectPosition1;
                 currentSelection = Selection.NormalMode;
             }
-            else if (currentSelection == Selection.Quit)
+            else if (currentSelection == Selection.Controls)
             {
                 if (hackerModeUnlocked)
                 {
@@ -133,8 +145,13 @@ public class StartScreen : Spatial
                     currentSelection = Selection.NormalMode;
                 }
             }
+            else if (currentSelection == Selection.Quit)
+            {
+                circleSelect.Position = circleSelectPosition3;
+                currentSelection = Selection.Controls;
+            }
         }
-        else if (Input.IsActionJustPressed("down"))
+        else if (Input.IsActionJustPressed("down") && !showingControls && !transitioning)
         {
             if (currentSelection == Selection.NormalMode)
             {
@@ -146,32 +163,52 @@ public class StartScreen : Spatial
                 else
                 {
                     circleSelect.Position = circleSelectPosition3;
-                    currentSelection = Selection.Quit;
+                    currentSelection = Selection.Controls;
                 }
             }
             else if (currentSelection == Selection.HackerMode)
             {
                 circleSelect.Position = circleSelectPosition3;
+                currentSelection = Selection.Controls;
+            }
+            else if (currentSelection == Selection.Controls)
+            {
+                circleSelect.Position = circleSelectPosition4;
                 currentSelection = Selection.Quit;
             }
         }
 
-        if (Input.IsActionJustPressed("ui_accept"))
+        if (Input.IsActionJustPressed("ui_accept") && !transitioning)
         {
             GetTree().Paused = false;
-            if (currentSelection == Selection.NormalMode)
+            if (showingControls)
             {
-                transitionAP.Play("TransitionOut");
-                transitioningToHackerMode = false;
+                showingControls = false;
+                controlsPopup.Hide();
             }
-            else if (currentSelection == Selection.HackerMode)
+            else
             {
-                transitionAP.Play("TransitionOut");
-                transitioningToHackerMode = true;
-            }
-            else if (currentSelection == Selection.Quit)
-            {
-                GetTree().Quit();
+                if (currentSelection == Selection.NormalMode)
+                {
+                    transitionAP.Play("TransitionOut");
+                    transitioningToHackerMode = false;
+                    transitioning = true;
+                }
+                else if (currentSelection == Selection.HackerMode)
+                {
+                    transitionAP.Play("TransitionOut");
+                    transitioningToHackerMode = true;
+                    transitioning = true;
+                }
+                else if (currentSelection == Selection.Controls)
+                {
+                    controlsPopup.Show();
+                    showingControls = true;
+                }
+                else if (currentSelection == Selection.Quit)
+                {
+                    GetTree().Quit();
+                }
             }
         }
 
@@ -182,6 +219,8 @@ public class StartScreen : Spatial
         circleSelect.Modulate = globalColors.text;
         worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
         worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
+        controlsPopupBackground.Modulate = globalColors.bg2;
+        controlsPopupLabels.Modulate = globalColors.text;
     }
 
     private void sig_TransitionAPFinished(string animName)
