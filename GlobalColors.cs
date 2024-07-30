@@ -35,7 +35,7 @@ public class GlobalColors : Node
             {"bg2", new Color("045aae")}, // blue
             {"fg", new Color("108f3e")}, // greener blue ; old 1a80a5   4cde6f
             {"text", new Color("4cde6f")},
-            {"enemy", new Color("24b357")}, // lighter blue ; old  43abd1  49e3b7
+            {"enemy", new Color("26914d")}, // lighter blue ; old  43abd1  49e3b7  24b357
             {"platform", new Color("1d42a1")},
         },
         // MUMBAI (yellow, turquoise, blue)
