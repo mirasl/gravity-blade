@@ -7,6 +7,6 @@
 
 Gravity Blade is a stylish maximalist 3D platforming game where you use your mouse to slash your sword, causing gravity to shift in the direction of your slice. It is an arcade-style game where you aim to maximize your score by racking up combos of platform landings.
 
-The game is available to play for free (with an optional donation) on itch.io [here!]([url](https://studio-chia.itch.io/gravity-blade))
+The game is available to play for free (with an optional donation) on itch.io here! https://studio-chia.itch.io/gravity-blade
 
 Thanks for checking it out!
