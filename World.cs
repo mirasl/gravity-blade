@@ -58,6 +58,8 @@ public class World : Spatial
     protected Audio audio;
     protected Pause pause;
     protected AnimationPlayer transitionAP;
+    protected Material background1Material;
+    protected Material background2Material;
 
     protected PackedScene platformScene;
     protected PackedScene rampScene;
@@ -81,6 +83,8 @@ public class World : Spatial
         audio = GetNode<Audio>("/root/Audio");
         pause = GetNode<Pause>("Pause");
         transitionAP = GetNode<AnimationPlayer>("Transition/AnimationPlayer");
+        background1Material = GetNode<MeshInstance>("Player/Background1").Mesh.SurfaceGetMaterial(0);
+        background2Material = GetNode<MeshInstance>("Player/Background2").Mesh.SurfaceGetMaterial(0);
 
         platformScene = GD.Load<PackedScene>("res://Platform.tscn");
         rampScene = GD.Load<PackedScene>("res://Ramp.tscn");
@@ -119,8 +123,12 @@ public class World : Spatial
 
     public override void _PhysicsProcess(float delta)
     {
-        worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
-        worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
+        background1Material.Set("shader_param/color", globalColors.bg1);
+        background2Material.Set("shader_param/color", globalColors.bg2);
+        // GD.Print(ColorToVector3(globalColors.bg1));
+        // GD.Print(ColorToVector3(globalColors.bg2));
+        // worldEnvironment.Environment.BackgroundSky.Set("sun_color", globalColors.bg1);
+        // worldEnvironment.Environment.BackgroundSky.Set("sky_top_color", globalColors.bg2);
 
         if (player.Translation.z - lastGeneratedPlatform.Translation.z < GENERATE_PLATFORM_DISTANCE)
         {
@@ -319,6 +327,11 @@ public class World : Spatial
     public void LoadHighScore()
     {
         HighScore = (float)save.Call("load_game");
+    }
+
+    private Vector3 ColorToVector3(Color c)
+    {
+        return new Vector3(c.r, c.g, c.b);
     }
 
     private void sig_AddScoreBonus(float value, string text)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=2]
+[gd_scene load_steps=77 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://DotsSpawner.cs" type="Script" id=2]
@@ -37,14 +37,96 @@
 [ext_resource path="res://ASSETS/SPRITES/UI/CircleSelect/3.png" type="Texture" id=35]
 [ext_resource path="res://Recap.cs" type="Script" id=36]
 
+[sub_resource type="Shader" id=53]
+code = "shader_type spatial;
+render_mode unshaded;
+
+uniform vec4 color : hint_color;
+//uniform vec3 color;
+//uniform vec3 color2;
+
+vec3 lerpVec3(vec3 a, vec3 b, float lerp)
+{
+	return a + (b-a)*lerp;
+}
+
+float distanceSquared(vec2 a, vec2 b)
+{
+	return (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
+}
+
+void fragment()
+{
+	ALBEDO = vec3(color.r, color.g, color.b);
+//	ALBEDO = color;
+//	ALBEDO = lerpVec3(color1, color2, distanceSquared(UV, vec2(0.5))*100.0);
+	ALPHA = 1.0 - distance(UV, vec2(0.5))*10.0;
+	if (ALPHA < 0.0)
+	{
+		ALPHA = 0.0;
+	}
+//	if (distanceSquared(UV, vec2(0.5))*100.0 > 0.5)
+//	{
+//		ALPHA = 0.0;
+//	}
+}
+"
+
+[sub_resource type="ShaderMaterial" id=49]
+render_priority = -5
+shader = SubResource( 53 )
+shader_param/color = Color( 0.231373, 0.0588235, 0.647059, 1 )
+
+[sub_resource type="QuadMesh" id=47]
+material = SubResource( 49 )
+size = Vector2( 2500, 2500 )
+
+[sub_resource type="Shader" id=50]
+code = "shader_type spatial;
+render_mode unshaded;
+
+uniform vec4 color : hint_color;
+//uniform vec3 color;
+//uniform vec3 color2;
+
+vec3 lerpVec3(vec3 a, vec3 b, float lerp)
+{
+	return a + (b-a)*lerp;
+}
+
+float distanceSquared(vec2 a, vec2 b)
+{
+	return (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
+}
+
+void fragment()
+{
+	ALBEDO = vec3(color.r, color.g, color.b);
+	ALPHA = 1.0;
+//	ALBEDO = lerpVec3(color1, color2, distanceSquared(UV, vec2(0.5))*100.0);
+//	ALPHA = distanceSquared(UV, vec2(0.5)*10.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=51]
+render_priority = -6
+shader = SubResource( 50 )
+shader_param/color = Color( 0.054902, 0.105882, 0.286275, 1 )
+
+[sub_resource type="QuadMesh" id=52]
+material = SubResource( 51 )
+size = Vector2( 2500, 2500 )
+
 [sub_resource type="ProceduralSky" id=11]
-sky_top_color = Color( 1, 0.847059, 0.968627, 1 )
+sky_top_color = Color( 0.054902, 0.105882, 0.286275, 1 )
+sun_color = Color( 0.376471, 0.376471, 0.376471, 1 )
 sun_latitude = 90.0
 
 [sub_resource type="Environment" id=5]
-background_mode = 2
 background_sky = SubResource( 11 )
 background_sky_orientation = Basis( -1, -8.74228e-08, 3.82137e-15, 0, -4.37114e-08, -1, 8.74228e-08, -1, 4.37114e-08 )
+background_sky_rotation = Vector3( 1.5708, -3.14159, 0 )
+background_sky_rotation_degrees = Vector3( 90, -180, 0 )
 ambient_light_color = Color( 1, 1, 1, 1 )
 ambient_light_sky_contribution = 0.0
 
@@ -384,6 +466,16 @@ script = ExtResource( 6 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 90.7112 )
+
+[node name="Background1" type="MeshInstance" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -990 )
+mesh = SubResource( 47 )
+skeleton = NodePath("../..")
+
+[node name="Background2" type="MeshInstance" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -999 )
+mesh = SubResource( 52 )
+skeleton = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 5 )
